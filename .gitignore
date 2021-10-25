@@ -2,7 +2,7 @@
 /.vscode
 *.pyc
 
-front-end/
+
 /front-end/node_modules
 *db.sqlite3
 
