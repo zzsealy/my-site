@@ -64,6 +64,8 @@ print(repr(serializer))
 一组自动确定的字段。
 默认简单实现的create()和update()方法。
 """
+
+
 class SnippetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Snippet
