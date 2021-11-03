@@ -7,10 +7,10 @@ from backend.apps.snippets.serializers import SnippetSerializer
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-from rest_framework import generics
-from rest_framework import permissions
+from rest_framework import permissions, generics, renderers, status
 from .permissions import IsOwnerOrReayOnly
+from rest_framework.decorators import api_view
+from rest_framework.reverse import reverse
 
 # Create your views here.
 
@@ -18,7 +18,7 @@ from .permissions import IsOwnerOrReayOnly
 # class JSONResponse(HttpResponse):
 #     """
 #     An HttpResponse that renders its content in JSON
-#     """ 
+#     """
 #     def __init__(self, data, **kwargs):
 #         content = JSONRenderer().render(data)
 #         kwargs['content_type'] = 'application/json'
@@ -219,3 +219,29 @@ class SnippetDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReayOnly)
+
+
+class SnippetHighlight(generics.GenericAPIView):
+    queryset = Snippet.objects.all()
+    renderer_classes = (renderers.StaticHTMLRenderer,)
+
+    def get(self, request, *args, **kwargs):
+        snippet = self.get_object()
+        return Response(snippet.highlighted)
+
+
+"""
+现在我们有'snippets'和'users'的路径，但是我们的API没有一个入口点。
+我们将使用一个常规的基于函数的视图和我们前面介绍的@api_view装饰器创建一个。在你的snippets/views.py中添加
+
+这里应该注意两件事。首先，我们使用REST框架的reverse功能来返回完全限定的URL；
+第二，URL模式是通过方便的名称来标识的，我们稍后将在snippets/urls.py中声明。
+"""
+
+
+@api_view(['GET'])
+def api_root(request, format=None):
+    return Response({
+        'users': reverse('user-list', request=request, format=format),
+        'snippets': reverse('snippet-list', request=request, format=format)
+    })
