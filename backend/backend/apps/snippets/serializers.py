@@ -67,19 +67,28 @@ print(repr(serializer))
 """
 
 
-class SnippetSerializer(serializers.ModelSerializer):
+# class SnippetSerializer(serializers.ModelSerializer):
     
+#     owner = serializers.ReadOnlyField(source='owner.username')
+#     """
+#     注意：确保你还将'owner',添加到内部Meta类的字段列表中。
+
+#     这个字段非常有趣。source参数控制哪个属性用于填充字段，并且可以指向序列化实例上的任何属性。它也可以采用如上所示点加下划线的方式，
+#     在这种情况下，它将以与Django模板语言一起使用的相似方式遍历给定的属性。
+
+#     我们添加的字段是无类型的ReadOnlyField类，区别于其他类型的字段（如CharField，BooleanField等）。无类型的ReadOnlyField始终是只读的，只能用于序列化表示，
+#     不能用于在反序列化时更新模型实例。我们也可以在这里使用CharField(read_only=True)
+#     """
+#     class Meta:
+#         model = Snippet
+#         fields = ('id', 'title', 'code', 'linenos', 'language', 'style', 'owner')
+
+
+class SnippetSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
-    """
-    注意：确保你还将'owner',添加到内部Meta类的字段列表中。
+    highlight = serializers.HyperlinkedIdentityField(view_name='snippet-highlight', format='html')
 
-    这个字段非常有趣。source参数控制哪个属性用于填充字段，并且可以指向序列化实例上的任何属性。它也可以采用如上所示点加下划线的方式，
-    在这种情况下，它将以与Django模板语言一起使用的相似方式遍历给定的属性。
-
-    我们添加的字段是无类型的ReadOnlyField类，区别于其他类型的字段（如CharField，BooleanField等）。无类型的ReadOnlyField始终是只读的，只能用于序列化表示，
-    不能用于在反序列化时更新模型实例。我们也可以在这里使用CharField(read_only=True)
-    """
     class Meta:
         model = Snippet
-        fields = ('id', 'title', 'code', 'linenos', 'language', 'style', 'owner')
-
+        fields = ('url', 'id', 'highlight', 'owner',
+                  'title', 'code', 'linenos', 'language', 'style')
