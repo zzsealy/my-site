@@ -2,6 +2,7 @@ import React from "react"
 
 
 
+
 class Login extends React.Component {
 
     initialState = { "username": '', "password": '', "remember": "n"}
@@ -43,6 +44,7 @@ class Login extends React.Component {
                     <input name="remember" value={remember} id="remember" type="checkbox"></input> remember me
                 </div>
                 <input type="submit" onClick={this.submitForm}/>
+                
             </form>
         )
     }

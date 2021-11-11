@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App'
 import Login from './Admin/login'
+import Nav from './Nav/nav'
 import {
   BrowserRouter as Router,
   Route,
@@ -23,6 +24,8 @@ ReactDOM.render((
     <Route path="/excel">
     </Route>
     <Route path='/login' component={Login}>
+    </Route>
+    <Route path="/nav" component={Nav}>
     </Route>
   </Router>),
   document.getElementById('root'))
