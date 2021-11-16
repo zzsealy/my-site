@@ -11,6 +11,7 @@ from rest_framework import permissions, generics, renderers, status
 from .permissions import IsOwnerOrReayOnly
 from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -245,3 +246,7 @@ def api_root(request, format=None):
         'users': reverse('user-list', request=request, format=format),
         'snippets': reverse('snippet-list', request=request, format=format)
     })
+
+
+def ping(request):
+    return JsonResponse({ "ping": "pong" })

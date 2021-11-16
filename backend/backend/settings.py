@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'backend.apps.api',
     'backend.apps.accounts',
     'backend.apps.snippets',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -51,7 +52,38 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
+CORS_ORIGIN_WHITELIST = (
+ 'http://127.0.0.1:8080',
+ 'http://localhost:8080',
+)
+
+CORS_ALLOW_CREDENTIALS = True # 指明在跨域访问中，后端是否支持对cookie的操作。
+CORS_ALLOW_METHODS = (
+ 'DELETE',
+ 'GET',
+ 'OPTIONS',
+ 'PATCH',
+ 'POST',
+ 'PUT',
+ 'VIEW',
+)
+
+CORS_ALLOW_HEADERS = (
+ 'XMLHttpRequest',
+ 'X_FILENAME',
+ 'accept-encoding',
+ 'authorization',
+ 'content-type',
+ 'dnt',
+ 'origin',
+ 'user-agent',
+ 'x-csrftoken',
+ 'x-requested-with',
+ 'Pragma',
+)
 
 ROOT_URLCONF = 'backend.urls'
 
