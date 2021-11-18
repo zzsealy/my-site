@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p>{{ msg }}</p>
+        <p>{{ msg.ping }}</p>
     </div>
 </template>
 
