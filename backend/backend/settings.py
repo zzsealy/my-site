@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'backend.apps.api',
     'backend.apps.accounts',
     'backend.apps.snippets',
+    'backend.apps.blog',
     'corsheaders',
 ]
 
