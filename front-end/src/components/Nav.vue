@@ -1,62 +1,92 @@
 <template>
     <div>
-        <el-container style="height: 100%;">
-            <el-aside width="auto">
-                <el-menu v-if="is_hide" default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
-                    :collapse="isCollapse" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
-                    <el-menu-item index="2">
-                        <i class="el-icon-menu"></i>
-                        <span slot="title">导航二</span>
-                    </el-menu-item>
-                    <el-menu-item index="4">
-                        <i class="el-icon-setting"></i>
-                        <span slot="title">导航四</span>
-                    </el-menu-item>
-                </el-menu>
-            </el-aside>
+        <div class="container">
+            <ul class="nav nav-tabs navbar-top">
+                <li class="li-first" role="presentation"><a href="#">首页</a></li>
+                <li role="presentation"><a href="#">随笔</a></li>
+                <li role="presentation"><a href="#">文字</a></li>
+                <li role="presentation"><a href="#">关于我</a></li>
+                <li @click="showModal = true">登陆</li>
+            </ul>
 
-            <el-container>
-                <el-header>
-                    <i class="el-icon-s-operation toggle" @click="toggleCollapse"></i>
-                </el-header>
-            </el-container>
-        </el-container>
+        </div>
+        <div v-if="showModal">
+            <transition name="modal">
+                <div class="modal-mask">
+                    <div class="modal-wrapper">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Modal title</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true" @click="showModal = false">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Modal body text goes here.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        @click="showModal = false">Close</button>
+                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </transition>
+        </div>
     </div>
+
+
 </template>
 
 <script>
     export default {
+        components: {
+        },
         data() {
             return {
-                isCollapse: false,
-                is_hide: true
+                showModal: false
             };
         },
         methods: {
-            handleOpen(key, keyPath) {
-                console.log(key, keyPath);
-            },
-            handleClose(key, keyPath) {
-                console.log(key, keyPath);
-            },
-            toggleCollapse() {
-                this.isCollapse = !this.isCollapse;
-                setTimeout(this.hide_navbar(), 1000);
-            },
-            hide_navbar(){
-                if(this.isCollapse == true){
-                    this.is_hide = false
-                } else{
-                    this.is_hide = true
-                }
-            }
-        }
+
+        },
     }
 </script>
 
 <style>
-    .el-menu-vertical-demo:not(.el-menu--collapse) {
-        width: 200px;
-        min-height: 400px;
+    .navbar-top {
+        margin-top: 5% !important;
+    }
+
+    .navbar-top li {
+        margin: 20px;
+    }
+
+    .navbar-top li a {
+        color: black;
+    }
+
+    .li-first {
+        margin-left: 600px !important;
+    }
+
+    .modal-mask {
+        position: fixed;
+        z-index: 9998;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, .5);
+        display: table;
+        transition: opacity .3s ease;
+    }
+
+    .modal-wrapper {
+        display: table-cell;
+        vertical-align: middle;
     }
 </style>

@@ -17,7 +17,7 @@
         },
         methods: {
             getMessage() {
-                const path = global.url + '/ping'
+                const path = global.URL + '/ping'
                 axios.get(path)
                     .then((res) => {
                         this.msg = res.data;
