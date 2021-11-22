@@ -1,8 +1,6 @@
 <template>
     
-        <el-col :span="12">
             <p>{{ msg.ping }}</p>
-        </el-col>
 </template>
 
 <script>
@@ -12,7 +10,7 @@
         name: 'Ping',
         data() {
             return {
-                msg: ''
+                msg: '',
             }
         },
         methods: {
