@@ -10,7 +10,12 @@ import json
 from django.contrib.auth.hashers import check_password
 from rest_framework.status import HTTP_203_NON_AUTHORITATIVE_INFORMATION, HTTP_200_OK
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
+from rest_framework.authtoken.models import Token
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.authtoken.models import Token
 # Create your views here.
 
 
@@ -30,22 +35,25 @@ class UserDetail(generics.RetrieveAPIView):
     serializer_class = UserSerializer
 
 
-@csrf_exempt
-def userLogin(request):
-    if request.method == "GET":
-        data = {"message": "login"}
-        # return HttpResponse{json.dumps(data), content_type = "application/json")
-    if request.method == "POST":
+
+class LoginView(APIView):
+    authentication_classes = (TokenAuthentication,)
+    
+    def post(self, request, format=None):
         data = json.loads(request.body.decode('utf-8'))
         username = data['username']
         password = data['password']
         try:
             user = User.objects.get(username=username)
         except ObjectDoesNotExist:
-            return JsonResponse ( {"status_code": HTTP_203_NON_AUTHORITATIVE_INFORMATION, "message": "用户不存在"} )
+            return Response ( {"status_code": HTTP_203_NON_AUTHORITATIVE_INFORMATION, "message": "用户名密码错误"} )
         if check_password(password, user.password):
-            login(request, user)
-            return JsonResponse( { "status_code": HTTP_200_OK, "message": "success"})
+            token = Token.objects.filter(user=user).first()
+            if not token:
+                token = Token.objectsj.create(user=user)
+            user.token = token.key
+            user.save()
+            return Response( data={ "status_code": HTTP_200_OK, "message": "success", 'token': token.key})
 
 
 # @login_required()
