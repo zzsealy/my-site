@@ -6,6 +6,7 @@ from django.contrib.auth import login, logout
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
 from django.middleware.csrf import get_token
+from django.conf import settings
 import json
 from django.contrib.auth.hashers import check_password
 from rest_framework.status import HTTP_203_NON_AUTHORITATIVE_INFORMATION, HTTP_200_OK
@@ -15,7 +16,8 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.authtoken.models import Token
+from django.utils.timezone import localtime
+import datetime
 # Create your views here.
 
 
@@ -35,6 +37,13 @@ class UserDetail(generics.RetrieveAPIView):
     serializer_class = UserSerializer
 
 
+def checkout_token_time(token_key): 
+    token = Token.objects.filter(key=token_key).first()
+    today = localtime()
+    past_due = token.created + datetime.timedelta(days=+settings.TOKEN_AGE)
+    if today > past_due:
+        return False # 没过期
+    return True # 过期
 
 class LoginView(APIView):
     authentication_classes = (TokenAuthentication,)
@@ -50,9 +59,8 @@ class LoginView(APIView):
         if check_password(password, user.password):
             token = Token.objects.filter(user=user).first()
             if not token:
-                token = Token.objectsj.create(user=user)
-            user.token = token.key
-            user.save()
+                token = Token.objects.create(user=user)
+                token.save()
             return Response( data={ "status_code": HTTP_200_OK, "message": "success", 'token': token.key})
 
 
