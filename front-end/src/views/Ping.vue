@@ -20,10 +20,6 @@
                     .then((res) => {
                         this.msg = res.data;
                     })
-                    .catch((error) => {
-                        // eslint-disable-next-line
-                        console.error(error);
-                    })
             }
         },
         created() {
