@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <b-alert :show="dismissCountDown" :variant="variant" dismissible v-on:dismissed="dismissCountDown=0"
+            <b-alert :show="dismissCountDown" :variant="variant" v-on:dismissed="dismissCountDown=0"
                 @dismiss-count-down="countDownChanged">
                 {{ message }} <b></b>
                 <!--
