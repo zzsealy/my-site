@@ -1,18 +1,8 @@
 <template>
     <div>
         <div>
-            <b-alert :show="dismissCountDown" :variant="variant" v-on:dismissed="dismissCountDown=0"
-                @dismiss-count-down="countDownChanged">
-                {{ message }} <b></b>
-                <!--
-                <b-progress
-                :variant="variant"
-                :max="dismissSecs"
-                :value="dismissCountDown"
-                height="4px"
-                ></b-progress>
-                -->
-            </b-alert>
+            <Alert :message="message" :variant="variant" :dismissCountDown="dismissCountDown" :dismissSecs=5>
+            </Alert>
         </div>
         <div class="login">
             <form @submit.prevent>
@@ -20,7 +10,6 @@
                     <label>用户名</label>
                     <input v-model="username" class="form-control" id="exampleInputEmail1" placeholder="用户名">
                 </div>
-                <input type="hidden" name="_token" :value="token">
                 <div class="form-group">
                     <label>密码</label>
                     <input v-model="password" type="password" class="form-control" id="exampleInputPassword1"
@@ -53,6 +42,7 @@
 <script>
     import axios from 'axios'
     import global from './Global.vue'
+    import Alert from '../components/Alert.vue'
     export default {
         name: "login",
         data() {
@@ -63,8 +53,10 @@
                 message: '',
                 variant: '',
                 dismissCountDown: 0,
-                dismissSecs: 5,
             }
+        },
+        components:{
+            Alert
         },
         methods: {
             submit() {
@@ -88,9 +80,7 @@
                         this.message = "发生错误";
                         this.variant = 'warning';
                     })
-
-                this.dismissCountDown = this.dismissSecs;
-
+                this.dismissCountDown = 5;
             },
             countDownChanged(dismissCountDown) {
                 // console.log(dismissCountDown); 

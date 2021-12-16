@@ -14,7 +14,7 @@ class Cateserializer(serializers.ModelSerializer):
 
 class Articelserializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
-    cates = serializers.ManyRelatedField()
+    # cates = serializers.ManyRelatedField()
     class Meta:
         model = Article
         field = ('title', 'content', 'created', 'owner', 'cates')
