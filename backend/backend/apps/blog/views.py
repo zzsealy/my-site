@@ -1,5 +1,5 @@
 from backend.apps.accounts.models import User
-from backend.apps.blog.serializers import articelseializer
+from backend.apps.blog.serializers import Articelserializer
 from rest_framework.views import APIView
 from rest_framework import generics
 from django.contrib.auth import login, logout
@@ -15,7 +15,8 @@ from rest_framework.response import Response
 
 
 class CateList(APIView):
-    def get(self):
+    def get(self, request):
+        print("进来了")
         cates = Category.objects.all()
         serializer = Cateserializer(cates, many=True)
         return Response(serializer.data)
