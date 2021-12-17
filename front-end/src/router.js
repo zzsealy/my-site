@@ -29,7 +29,7 @@ export default new Router({
       component: () => import('./views/Login.vue')
     },
     {
-      path: '/admin/categorys',
+      path: '/admin/categories',
       name: 'edit_cate',
       component: () => import('./views/admin/Category.vue')
     }

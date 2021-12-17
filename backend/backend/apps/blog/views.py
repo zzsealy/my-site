@@ -16,7 +16,6 @@ from rest_framework.response import Response
 
 class CateList(APIView):
     def get(self, request):
-        print("进来了")
         cates = Category.objects.all()
         serializer = Cateserializer(cates, many=True)
         return Response(serializer.data)
@@ -24,6 +23,21 @@ class CateList(APIView):
 
     def post(self, request):
         print(request.POST  )
+
+
+class Cate(APIView):
+    def get(self, request):
+        pass
+
+
+    def post(self, request):
+        data = request.data
+        cate_name = data.get('cate')
+        if cate_name:
+            cate = Category(name=cate_name)
+            cate.save()
+            return Response({"message": "添加成功"})
+
 
 
 class All_articel(APIView):

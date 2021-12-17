@@ -5,7 +5,7 @@ from backend.apps.accounts.models import User
 # Create your models here.
 
 class Category(models.Model):
-    cate = models.CharField(max_length=20)
+    name = models.CharField(max_length=20)
 
 
 class Article(models.Model):
