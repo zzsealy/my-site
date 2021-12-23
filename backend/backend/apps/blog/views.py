@@ -49,7 +49,9 @@ class Cate(APIView):
         data = request.data
         cate = Category.objects.filter(id=nid).first()
         cate_name = data.get('cate_name')
+        print("cate_name========", cate_name)
         if cate:
+            print("拿到了！！！！！！！")
             cate.name = cate_name
             cate.save()
             return Response({ "message": "修改成功" })
