@@ -1,26 +1,45 @@
 <template>
+  <div>
     <div>
-        <div>
-            <Alert :message="message" :variant="variant" :dismissCountDown="dismissCountDown" :dismissSecs=5>
-            </Alert>
-        </div>
-        <div class="login">
-            <form @submit.prevent>
-                <div class="form-group">
-                    <label>用户名</label>
-                    <input v-model="username" class="form-control" id="exampleInputEmail1" placeholder="用户名">
-                </div>
-                <div class="form-group">
-                    <label>密码</label>
-                    <input v-model="password" type="password" class="form-control" id="exampleInputPassword1"
-                        placeholder="密码">
-                </div>
-                <button @click="submit" type="submit" class="btn btn-default">提交</button>
-            </form>
-        </div>
+      <b-alert
+        :show="dismissCountDown"
+        :variant="variant"
+        dismissible
+        v-on:dismissed="dismissCountDown = 0"
+        @dismiss-count-down="countDownChanged"
+      >
+        {{ message }}
+      </b-alert>
     </div>
+    <div class="login">
+      <form @submit.prevent>
+        <div class="form-group">
+          <label>用户名</label>
+          <input
+            v-model="username"
+            class="form-control"
+            id="exampleInputEmail1"
+            placeholder="用户名"
+          />
+        </div>
+        <div class="form-group">
+          <label>密码</label>
+          <input
+            v-model="password"
+            type="password"
+            class="form-control"
+            id="exampleInputPassword1"
+            placeholder="密码"
+          />
+        </div>
+        <button @click="submit" type="submit" class="btn btn-default">
+          提交
+        </button>
+      </form>
+    </div>
+  </div>
 
-    <!-- 
+  <!-- 
 1、第一次登录的时候，前端调后端的登陆接口，发送用户名和密码
 
 2、后端收到请求，验证用户名和密码，验证成功，就给前端返回一个token
@@ -34,65 +53,61 @@
 6、后端判断请求头中有无token，有token，就拿到token并验证token，验证成功就返回数据，验证失败（例如：token过期）就返回401，请求头中没有token也返回401
 
 7、如果前端拿到状态码为401，就清除token信息并跳转到登录页面
--->
-</template>
+--></template>
 
 
 
 <script>
-    import axios from 'axios'
-    import global from './Global.vue'
-    import Alert from '../components/Alert.vue'
-    export default {
-        name: "login",
-        data() {
-            return {
-                username: '',
-                password: '',
-                token: '',
-                message: '',
-                variant: '',
-                dismissCountDown: 0,
-            }
-        },
-        components:{
-            Alert
-        },
-        methods: {
-            submit() {
-
-                const cstftoken = global.CSRFTOKEN;
-                const loginPath = global.URL + '/login';
-                const data = {
-                    "username": this.username,
-                    "password": this.password
-                }
-                axios.post(loginPath, data)
-                    .then((res) => {
-                        this.message = res.data.message;
-                        this.variant = "success"
-                        if (res.data.status_code == 203) {
-                            this.variant = 'warning';
-                        }
-
-                    })
-                    .catch((error) => {
-                        this.message = "发生错误";
-                        this.variant = 'warning';
-                    })
-                this.dismissCountDown = 5;
-            },
-            countDownChanged(dismissCountDown) {
-                // console.log(dismissCountDown); 
-                this.dismissCountDown = dismissCountDown
-            },
-        },
-    }
+import axios from "axios";
+import global from "./Global.vue";
+export default {
+  name: "login",
+  data() {
+    return {
+      username: "",
+      password: "",
+      message: "",
+      variant: "",
+      dismissCountDown: 0,
+      dismissSecs: 5,
+    };
+  },
+  methods: {
+    submit() {
+      const loginPath = global.URL + "/login";
+      const data = {
+        username: this.username,
+        password: this.password,
+      };
+      axios
+        .post(loginPath, data)
+        .then((res) => {
+          this.message = res.data.message;
+          this.variant = "success";
+          if (res.data.status_code == 203) {
+            this.variant = "warning";
+          }
+        })
+        .catch((error) => {
+          this.message = "发生错误";
+          this.variant = "warning";
+          window.consolee.error(error);
+        });
+      this.showAlert();
+    },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown;
+    },
+    showAlert() {
+      this.dismissCountDown = this.dismissSecs;
+    },
+  },
+};
 </script>
 
 <style>
-    .login {
-        width: 300px;
-        margin-left: 40%;
-    }
+.login {
+  width: 300px;
+  margin-left: 40%;
+}
 </style>

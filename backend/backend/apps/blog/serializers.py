@@ -9,7 +9,7 @@ from backend.apps.blog.models import Category, Article, Comment, Image
 class Cateserializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ('name',)
+        fields = ('id', 'name')
 
 
 class Articelserializer(serializers.ModelSerializer):

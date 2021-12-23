@@ -18,16 +18,8 @@ class CateList(APIView):
     def get(self, request):
         cates = Category.objects.all()
         serializer = Cateserializer(cates, many=True)
+        print(serializer.data)
         return Response(serializer.data)
-
-
-    def post(self, request):
-        print(request.POST  )
-
-
-class Cate(APIView):
-    def get(self, request):
-        pass
 
 
     def post(self, request):
@@ -37,6 +29,32 @@ class Cate(APIView):
             cate = Category(name=cate_name)
             cate.save()
             return Response({"message": "添加成功"})
+
+
+class Cate(APIView):
+    def get(self, request):
+        pass
+
+
+
+    def delete(self, request, nid=None):
+        del_cate = Category.objects.filter(id=nid).first()
+        if del_cate:
+            del_cate.delete()
+            return Response({'message': '删除成功'})
+        return Response({'message': '删除失败'})
+    
+
+    def put(self, request, nid):
+        data = request.data
+        cate = Category.objects.filter(id=nid).first()
+        cate_name = data.get('cate_name')
+        if cate:
+            cate.name = cate_name
+            cate.save()
+            return Response({ "message": "修改成功" })
+        return Response({ "message": "修改失败" })
+
 
 
 
