@@ -2,6 +2,7 @@ from email.mime import image
 from django.db import models
 from backend.apps.accounts.models import User
 
+
 # Create your models here.
 
 class Category(models.Model):
