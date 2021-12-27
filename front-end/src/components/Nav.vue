@@ -6,35 +6,9 @@
                 <li role="presentation"><a href="#">随笔</a></li>
                 <li role="presentation"><a href="#">文字</a></li>
                 <li role="presentation"><a href="#">关于我</a></li>
-                <li @click="showModal = true">登陆</li>
+                <li v-if="is_login" role="presentation" @click="cancelLogin"><a>注销登录</a></li>
             </ul>
 
-        </div>
-        <div v-if="showModal">
-            <transition name="modal">
-                <div class="modal-mask">
-                    <div class="modal-wrapper">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Modal title</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true" @click="showModal = false">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <p>Modal body text goes here.</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        @click="showModal = false">Close</button>
-                                    <button type="button" class="btn btn-primary">Save changes</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </transition>
         </div>
     </div>
 
@@ -42,17 +16,29 @@
 </template>
 
 <script>
+import global from "../views/Global.vue";
     export default {
         components: {
         },
         data() {
             return {
-                showModal: false
+                showModal: false,
+                is_login: false,
             };
         },
         methods: {
-
+            cancelLogin(){
+                global.logoutAction()
+            }
         },
+
+        created(){
+            this.is_login = global.state.is_login;
+        },
+
+        update(){
+            this.is_login = global.state.is_login;
+        }
     }
 </script>
 

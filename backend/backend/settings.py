@@ -27,7 +27,7 @@ DEBUG = True
 
 TOKEN_AGE = 30
 
-ALLOWED_HOSTS = ['testserver']
+# ALLOWED_HOSTS = ['testserver', 'localhost']
 
 
 # Application definition

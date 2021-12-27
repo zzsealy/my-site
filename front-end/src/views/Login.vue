@@ -75,6 +75,8 @@ export default {
   methods: {
     submit() {
       const loginPath = global.URL + "/login";
+      window.console.log(global.state.is_login);
+      window.console.log(global.state.user_id);
       const data = {
         username: this.username,
         password: this.password,
@@ -84,6 +86,12 @@ export default {
         .then((res) => {
           this.message = res.data.message;
           this.variant = "success";
+          let token = res.data.token;
+          let userId = res.data.user_id;
+          if (res.data.status_code == 200) {
+            window.localStorage.setItem("mysite-token", token);
+            window.localStorage.setItem("mysite-user-id", userId);
+          }
           if (res.data.status_code == 203) {
             this.variant = "warning";
           }
