@@ -112,9 +112,6 @@ export default {
           this.variant = "success";
           this.getCategories();
         })
-        .catch((error) => {
-          window.console.error(error);
-        });
       this.showAlert();
     },
 

@@ -9,7 +9,6 @@ from django.middleware.csrf import get_token
 import json
 from django.contrib.auth.hashers import check_password
 from rest_framework.status import HTTP_203_NON_AUTHORITATIVE_INFORMATION, HTTP_200_OK
-from django.contrib.auth.decorators import login_required
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -55,7 +54,7 @@ class LoginView(APIView):
             return Response( data={"status_code": HTTP_203_NON_AUTHORITATIVE_INFORMATION, 'message': '账号密码不正确'})
 
 
-# @login_required()
+# @login_expire()
 def userLogout(request):
     logout(request)
     return JsonResponse( { "status_code": HTTP_200_OK, "message": "success"})

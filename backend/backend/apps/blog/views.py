@@ -1,13 +1,13 @@
 from django.utils.decorators import method_decorator
 from rest_framework.views import APIView
-from rest_framework.status import HTTP_203_NON_AUTHORITATIVE_INFORMATION, HTTP_200_OK, HTTP_501_NOT_IMPLEMENTED
+from rest_framework.status import HTTP_203_NON_AUTHORITATIVE_INFORMATION, HTTP_200_OK, HTTP_401_UNAUTHORIZED
 from rest_framework.response import Response
 
 
 from backend.apps.blog.models import Category, Article, Comment, Image
 from backend.apps.blog.serializers import Cateserializer, Articelserializer, CommentSerializer, ImageSerializer
 from backend.apps.accounts.models import User
-from backend.apps.accounts.utils import login_required
+from backend.apps.accounts.utils import login_expire
 from backend.apps.blog.serializers import Articelserializer
 
 
@@ -21,12 +21,12 @@ class CateList(APIView):
         print(serializer.data)
         return Response(serializer.data)
 
-    @method_decorator(login_required)
+    @method_decorator(login_expire)
     def post(self, request):
         data = request.data
         cate_name = data.get('cate')
         if data.get("need_login", None):
-            return Response({ "status_code": HTTP_501_NOT_IMPLEMENTED })
+            return Response(status=HTTP_401_UNAUTHORIZED)
         if cate_name:
             cate = Category(name=cate_name)
             cate.save()
@@ -38,7 +38,7 @@ class Cate(APIView):
         pass
 
 
-    @method_decorator(login_required)
+    @method_decorator(login_expire)
     def delete(self, request, nid=None):
         del_cate = Category.objects.filter(id=nid).first()
         if del_cate:
@@ -47,7 +47,7 @@ class Cate(APIView):
         return Response({'message': '删除失败'})
     
 
-    @method_decorator(login_required)
+    @method_decorator(login_expire)
     def put(self, request, nid):
         data = request.data
         cate = Category.objects.filter(id=nid).first()
