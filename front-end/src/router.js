@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import category from './views/admin/Category.vue'
 
 Vue.use(Router)
 
@@ -29,9 +30,16 @@ const router = new Router({
       component: () => import('./views/Login.vue')
     },
     {
-      path: '/admin/categories',
+      path: '/admin',
       name: 'edit_cate',
-      component: () => import('./views/admin/Category.vue'),
+      component: category,
+      children: [
+        // when /admin/categories is matched
+        { path: 'categories', name:'admin-category', component: category}
+      ],
+      meta: {
+        requiresAuth: true
+      }
 
     }
   ]
@@ -41,7 +49,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const token = window.localStorage.getItem("mysite-token");
-  if (to.matched.some(record => { record.meta.requiresAuth }) && (!token || token == null)) {
+  if (to.matched.some(record => record.meta.requiresAuth ) && (!token || token == null)) {
     Vue.toasted.show("请登录", { icon: "fingerprint" })
     next({
       path: '/login/',
