@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import category from './views/admin/Category.vue'
+import Admin from './views/admin/Admin.vue'
+import Home from './views/Home.vue'
+
 
 Vue.use(Router)
 
@@ -8,6 +11,11 @@ const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
+    {
+      path: '/',
+      name: 'name',
+      component: Home
+    },
     {
       path: '/about',
       name: 'about',
@@ -31,17 +39,16 @@ const router = new Router({
     },
     {
       path: '/admin',
-      name: 'edit_cate',
-      component: category,
+      component: Admin,
       children: [
         // when /admin/categories is matched
+        // { path: '', name:'admin-info', component: AdminInfo},
         { path: 'categories', name:'admin-category', component: category}
       ],
       meta: {
         requiresAuth: true
       }
-
-    }
+    },
   ]
 })
 
@@ -60,7 +67,7 @@ router.beforeEach((to, from, next) => {
     next({
       path: from.fullPath,
     })
-  } else if (to.matched.length == 0) {
+  } else if (to.matched.length === 0) {
     // 前往的路径不存在时
     Vue.toasted.error('404: Not Found', { icon: "fingerprint" })
     if (from.name) {
