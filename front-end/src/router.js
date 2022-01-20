@@ -4,6 +4,7 @@ import category from './views/admin/Category.vue'
 import Admin from './views/admin/Admin.vue'
 import Home from './views/Home.vue'
 import Newpost from './views/admin/Newpost'
+import Postdetail from './views/admin/Postdetail'
 
 
 Vue.use(Router)
@@ -44,13 +45,16 @@ const router = new Router({
       children: [
         // when /admin/categories is matched
         // { path: '', name:'admin-info', component: AdminInfo},
-        { path: 'categories', name:'admin-category', component: category},
-        { path: 'new-post', name: 'new-post', component: Newpost}
+        { path: 'categories', name: 'admin-category', component: category },
+        { path: 'new-post', name: 'new-post', component: Newpost },
       ],
       meta: {
         requiresAuth: true
       }
     },
+    { 
+      path: '/post/:id', name: 'postDetail', component: Postdetail 
+    }
   ]
 })
 
@@ -58,7 +62,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const token = window.localStorage.getItem("mysite-token");
-  if (to.matched.some(record => record.meta.requiresAuth ) && (!token || token == null)) {
+  if (to.matched.some(record => record.meta.requiresAuth) && (!token || token == null)) {
     Vue.toasted.show("请登录", { icon: "fingerprint" })
     next({
       path: '/login/',

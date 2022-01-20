@@ -14,17 +14,17 @@ class Cateserializer(serializers.ModelSerializer):
 
 class Postserializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
-    # cates = serializers.ManyRelatedField()
+    cate = serializers.ReadOnlyField(source='cate.name')
     class Meta:
         model = Post
-        field = ('title', 'subhead', 'content', 'created', 'owner', 'cates')
+        fields = ('title', 'subhead', 'body', 'created', 'owner', 'cate')
 
 
 class ImageSerializer(serializers.ModelSerializer):
     owner_article = serializers.ReadOnlyField(source='owner.username')
     class Meta:
         model = Image
-        field = ('index', 'title', 'image', 'owner_article')
+        fields = ('index', 'title', 'image', 'owner_article')
 
 
 class CommentSerializer(serializers.ModelSerializer):

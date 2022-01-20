@@ -70,7 +70,10 @@ class Postlist(APIView):
 class Post(APIView):
 
     def get(self, request, id):
-        pass
+        post = PostModel.objects.get(id=id)
+        serializer = Postserializer(post)
+        return Response(serializer.data)
+
 
     @method_decorator(login_expire) 
     def post(self, request):

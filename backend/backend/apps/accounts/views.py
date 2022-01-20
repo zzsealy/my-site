@@ -45,10 +45,9 @@ class LoginView(APIView):
         except ObjectDoesNotExist:
             return Response ( {"status_code": HTTP_203_NON_AUTHORITATIVE_INFORMATION, "message": "用户名密码错误"} )
         if check_password(password, user.password):
-            token = Token.objects.filter(user=user).first()
-            if not token:
-                token = Token.objects.create(user=user)
-                token.save()
+            Token.objects.filter(user=user).delete()
+            token = Token.objects.create(user=user)
+            token.save()
             return Response( data={ "status_code": HTTP_200_OK, "message": "登陆成功", 'token': token.key, 'user_id': user.id})
         else:
             return Response( data={"status_code": HTTP_203_NON_AUTHORITATIVE_INFORMATION, 'message': '账号密码不正确'})
