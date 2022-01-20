@@ -14,6 +14,7 @@
     "bootstrap-vue": "^2.21.2",
     "core-js": "^2.6.5",
     "jquery": "^3.6.0",
+    "mavon-editor": "^2.10.4",
     "tinymce": "^5.10.2",
     "vue": "^2.6.10",
     "vue-nprogress": "^0.2.0",

@@ -5,6 +5,8 @@ import BootstrapVue from 'bootstrap-vue'
 import axios from './http'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
 import toasted from 'vue-toasted'
 
 let options = {
@@ -25,8 +27,9 @@ let options = {
     },
 }
 
-Vue.use(BootstrapVue);
+Vue.use(BootstrapVue)
 Vue.use(toasted, options)
+Vue.use(mavonEditor)
 Vue.config.productionTip = false;
 Vue.prototype.$axios = axios
 new Vue({

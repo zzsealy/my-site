@@ -3,7 +3,7 @@
 from asyncore import read
 from dataclasses import field
 from rest_framework import serializers
-from backend.apps.blog.models import Category, Article, Comment, Image
+from backend.apps.blog.models import Category, Post, Comment, Image
 
 
 class Cateserializer(serializers.ModelSerializer):
@@ -12,12 +12,12 @@ class Cateserializer(serializers.ModelSerializer):
         fields = ('id', 'name')
 
 
-class Articelserializer(serializers.ModelSerializer):
+class Postserializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     # cates = serializers.ManyRelatedField()
     class Meta:
-        model = Article
-        field = ('title', 'content', 'created', 'owner', 'cates')
+        model = Post
+        field = ('title', 'subhead', 'content', 'created', 'owner', 'cates')
 
 
 class ImageSerializer(serializers.ModelSerializer):

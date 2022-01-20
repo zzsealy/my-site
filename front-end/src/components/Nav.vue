@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-button v-b-toggle.sidebar-1>导航</b-button>
-    <b-sidebar v-model="visible" id="sidebar-1" title="DRQ" shadow>
+    <b-sidebar v-model="visible" id="sidebar-1" :backdrop-variant="dark" backdrop title="DRQ" shadow>
       <div class="px-3 py-2">
         <p>
           嗨，这是我的个人网站。
@@ -9,7 +9,7 @@
         <b-img src="https://picsum.photos/500/500/" fluid thumbnail></b-img>
         <div class="container">
             <ul class="nav nav-tabs navbar-top">
-                <li class="li-first" role="presentation"><a href="#">首页</a></li>
+                <li role="presentation"><a href="#">首页</a></li>
                 <li role="presentation"><a href="#">随笔</a></li>
                 <li role="presentation"><a href="#">文字</a></li>
                 <li role="presentation"><a href="#">关于我</a></li>
@@ -65,24 +65,4 @@ import global from "../views/Global.vue";
         color: black;
     }
 
-    .li-first {
-        margin-left: 600px !important;
-    }
-
-    .modal-mask {
-        position: fixed;
-        z-index: 9998;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, .5);
-        display: table;
-        transition: opacity .3s ease;
-    }
-
-    .modal-wrapper {
-        display: table-cell;
-        vertical-align: middle;
-    }
 </style>

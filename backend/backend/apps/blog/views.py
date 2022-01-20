@@ -4,11 +4,10 @@ from rest_framework.status import HTTP_203_NON_AUTHORITATIVE_INFORMATION, HTTP_2
 from rest_framework.response import Response
 
 
-from backend.apps.blog.models import Category, Article, Comment, Image
-from backend.apps.blog.serializers import Cateserializer, Articelserializer, CommentSerializer, ImageSerializer
+from backend.apps.blog.models import Category, Post as PostModel, Comment, Image
+from backend.apps.blog.serializers import Cateserializer, Postserializer, CommentSerializer, ImageSerializer
 from backend.apps.accounts.models import User
 from backend.apps.accounts.utils import login_expire
-from backend.apps.blog.serializers import Articelserializer
 
 
 # Create your views here.
@@ -63,5 +62,35 @@ class Cate(APIView):
 
 
 
-class All_articel(APIView):
+class Postlist(APIView):
     pass
+
+
+
+class Post(APIView):
+
+    def get(self, request, id):
+        pass
+
+    @method_decorator(login_expire) 
+    def post(self, request):
+        data = request.data
+        cate_id = data.get('cate_id')
+        post_title = data.get('post_title')
+        post_subhead = data.get('post_subhead')
+        post_body = data.get('post_body')
+        # 正常情况下 肯定都是存在的就直接用 get了
+        try:
+            print('data:', data)
+            print("cate_id:", cate_id)
+            cate = Category.objects.get(id=cate_id)
+            post = PostModel(title=post_title, subhead=post_subhead, body=post_body, owner=request.user, cate=cate)
+            post.save()
+            print(data)
+            return Response({"message": "成功"})
+        except Exception as e:
+            print("e:", e)
+
+
+    def put(self, request, id):
+        pass

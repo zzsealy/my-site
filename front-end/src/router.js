@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import category from './views/admin/Category.vue'
 import Admin from './views/admin/Admin.vue'
 import Home from './views/Home.vue'
+import Newpost from './views/admin/Newpost'
 
 
 Vue.use(Router)
@@ -43,7 +44,8 @@ const router = new Router({
       children: [
         // when /admin/categories is matched
         // { path: '', name:'admin-info', component: AdminInfo},
-        { path: 'categories', name:'admin-category', component: category}
+        { path: 'categories', name:'admin-category', component: category},
+        { path: 'new-post', name: 'new-post', component: Newpost}
       ],
       meta: {
         requiresAuth: true
