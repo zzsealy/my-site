@@ -5,5 +5,6 @@
 
 /front-end/node_modules
 *db.sqlite3
+*localsetting.py
 
 .DS_Store
