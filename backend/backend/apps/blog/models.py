@@ -17,11 +17,10 @@ class Post(models.Model):
     cate = models.ForeignKey(Category, related_name='posts', on_delete=models.CASCADE)
 
 
-class Image(models.Model):
-    index = models.IntegerField(blank=True, null=True)
-    title = models.CharField(max_length=20, blank=True, null=True)
+class PostImage(models.Model):
+    name = models.CharField(default=None, max_length=100)
     image = models.ImageField()
-    owner_article = models.ForeignKey(Post, related_name='images', on_delete=models.CASCADE)
+    link = models.CharField(default=None, max_length=100)
 
 
 class Comment(models.Model):
