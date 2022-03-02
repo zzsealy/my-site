@@ -14,17 +14,18 @@ class Cateserializer(serializers.ModelSerializer):
 
 class Postserializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
+    cate = serializers.ReadOnlyField(source='cate.name')
     # cates = serializers.ManyRelatedField()
     class Meta:
         model = Post
-        field = ('title', 'subhead', 'content', 'created', 'owner', 'cates')
+        fields = ('id', 'title', 'subhead', 'body', 'created', 'owner', 'cate')
 
 
 class PostImageSerializer(serializers.ModelSerializer):
     owner_article = serializers.ReadOnlyField(source='owner.username')
     class Meta:
         model = PostImage
-        field = ('id', 'link')
+        fields = ('id', 'link')
     
     def create(self, validated_data):
         link = validated_data.get('link')

@@ -1,5 +1,6 @@
-from django.conf import settings
+import os
 
+from django.conf import settings
 from django.utils.decorators import method_decorator
 from rest_framework.views import APIView
 from rest_framework.status import HTTP_203_NON_AUTHORITATIVE_INFORMATION, HTTP_200_OK, HTTP_401_UNAUTHORIZED
@@ -20,7 +21,6 @@ class CateList(APIView):
     def get(self, request):
         cates = Category.objects.all()
         serializer = Cateserializer(cates, many=True)
-        print(serializer.data)
         return Response(serializer.data)
 
     @method_decorator(login_expire)
@@ -64,7 +64,11 @@ class Cate(APIView):
 
 
 class Postlist(APIView):
-    pass
+    
+    def get(self, request):
+        posts = PostModel.objects.all()
+        serialzier = Postserializer(posts, many=True)
+        return Response(serialzier.data)
 
 
 
@@ -94,6 +98,14 @@ class Post(APIView):
         pass
 
 
+    def delete(self, request):
+        id = request.data.get('id')
+        post = PostModel.objects.filter(id=id).first()
+        if post:
+            # post.delete()
+            return Response({'message': '删除成功'})
+
+
 
 class PostImageView(APIView):
 
@@ -117,4 +129,15 @@ class PostImageView(APIView):
         name = request.data.get('name', '')
         if name:
             image = PostImage.objects.filter(name=name).last()
-            image.delete()
+            try:
+                os.remove(settings.MEDIA_ROOT + '/' + image.name)
+                image.delete()
+                return Response({
+                    'status': 200,
+                    'message': '删除成功'
+                })
+            except Exception as e:
+                return Response({
+                    'status': 500,
+                    'message': '发生错误:{}'.format(e)
+                })

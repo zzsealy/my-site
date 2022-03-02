@@ -8,5 +8,5 @@ urlpatterns = format_suffix_patterns([
     path('posts', Postlist.as_view(), name="posts"),
     path('post', Post.as_view(), name='add_post_view'),
     path('post/<int:id>', Post.as_view(), name='post_view'),
-    path('postimage', PostImageView.as_view(), name='postimage-delete' )
+    path('postimage', PostImageView.as_view(), name='postimage-delete'),
 ])
