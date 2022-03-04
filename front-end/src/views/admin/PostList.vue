@@ -25,7 +25,7 @@
                             <td>{{ post.title }}</td>
                             <td>{{ post.subhead }}</td>
                             <td>{{ post.cate }}</td>
-                            <td @click="editPost(post.id)">
+                            <td @click="goEditPage(post.id)">
                                 <b-button variant="warning">编辑</b-button>
                             </td>
                             <td @click="delPost(post.id, post.title)">
@@ -82,9 +82,11 @@
                         this.posts = posts
                     })
             },
-            editPost(id) {
-
+            goEditPage(id) {
+                let path = '/admin/edit-post/' + id
+                this.$router.push(path);
             },
+            
             delPost(id, title) {
                 this.$bvModal.msgBoxConfirm('删除:' + title, + '?', {
                     okTitle: '确定',
@@ -100,6 +102,7 @@
                                         this.message = res.data.message;
                                         this.variant = "success";
                                         this.showAlert();
+                                        this.getAllPost();
                                     }
                                 })
                         }
@@ -116,7 +119,7 @@
             },
         },
         created() {
-            this.getAllPost()
+            this.getAllPost();
         }
     }
 </script>

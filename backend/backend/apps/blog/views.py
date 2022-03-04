@@ -68,6 +68,8 @@ class Postlist(APIView):
     def get(self, request):
         posts = PostModel.objects.all()
         serialzier = Postserializer(posts, many=True)
+        for data in serialzier.data:
+            data['created'] = data['created'].replace('T', ' ').split('.')[0]
         return Response(serialzier.data)
 
 
@@ -75,7 +77,13 @@ class Postlist(APIView):
 class Post(APIView):
 
     def get(self, request, id):
-        pass
+        if id:
+            post = PostModel.objects.filter(id=id).first()
+            seriialzer = Postserializer(post)
+            res_data = seriialzer.data
+            res_data['cate_id'] = post.cate.id
+            return Response(res_data)
+
 
     @method_decorator(login_expire) 
     def post(self, request):
@@ -102,7 +110,7 @@ class Post(APIView):
         id = request.data.get('id')
         post = PostModel.objects.filter(id=id).first()
         if post:
-            # post.delete()
+            post.delete()
             return Response({'message': '删除成功'})
 
 

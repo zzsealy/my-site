@@ -41,6 +41,7 @@
         this.$axios.post(path, postData)
           .then((res) => {
             window.console.log(res);
+            this.$toasted.success('文章发布成功');
           })
 
       },
@@ -49,7 +50,7 @@
         this.$axios.get(path)
           .then((res) => {
             let cates = []
-            res.data.forEach(element => {;
+            res.data.forEach(element => {
               cates.push({ 'value': element.id, 'text': element.name })
             });
             this.cates = cates
