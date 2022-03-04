@@ -9,29 +9,41 @@
                     </b-card-text>
                 </b-card>
                 </b-col>
-                <b-col md="8">
+                <!-- <b-col md="8">
                     <div class="index-post" v-for="(post, index) in posts" :key="post.id">
                         <h2>{{ post.title }}</h2>
                         <p class="post-body">{{ post.subhead }}</p>
                         <span class="post-cate">分类: {{ post.cate }}</span>
                         <span class="post-time">{{ post.created }}</span>
                     </div>
-                </b-col>
+                </b-col> -->
+                <postabstract :posts="posts"></postAbstract>
             </b-row>
         </b-container>
+        
     </div>
 </template>
 <script>
     import global from './Global.vue'
-    export default ({
+    import PostAbstractList from '../components/Post-Abstract-List.vue'
+    export default {
         name: 'Home',
+        components: {
+            postabstract: PostAbstractList
+        },
         data() {
             return {
-                posts: '',
+                posts: '分角色附件二十、',
                 imagePath: ''
 
             };
         },
+
+        mounted() {
+            this.getAllPost();
+            this.setProfileImage();
+        },
+
         methods: {
             getAllPost() {
                 const path = global.URL + "/posts";
@@ -64,12 +76,8 @@
             }
 
         },
-        created() {
-            this.getAllPost();
-            this.setProfileImage();
-        }
 
-    })
+    }
 </script>
 
 
