@@ -3,7 +3,7 @@
             <div class="index-post" v-for="(post, index) in posts" :key="post.id">
                 <h2>{{ post.title }}</h2>
                 <p class="post-body">{{ post.subhead }}</p>
-                <span class="post-cate">分类: {{ post.cate }}</span>
+                <strong>分类: </strong><span class="post-cate">{{ post.cate }}</span>
                 <span class="post-time">{{ post.created }}</span>
             </div>
         </b-col>
@@ -28,3 +28,9 @@
         // }
     }
 </script>
+
+<style>
+    .post-cate{
+        color: #6699ff;
+    }
+</style>

@@ -5,6 +5,8 @@ from django.utils.decorators import method_decorator
 from rest_framework.views import APIView
 from rest_framework.status import HTTP_203_NON_AUTHORITATIVE_INFORMATION, HTTP_200_OK, HTTP_401_UNAUTHORIZED
 from rest_framework.response import Response
+from elasticsearch import Elasticsearch
+from elasticsearch_dsl import Search, Q
 
 
 from backend.apps.blog.models import Category, Post as PostModel, Comment, PostImage
@@ -71,6 +73,20 @@ class Postlist(APIView):
         for data in serialzier.data:
             data['created'] = data['created'].replace('T', ' ').split('.')[0]
         return Response(serialzier.data)
+
+    def post(self, request):
+        try:
+            data = request.data
+            search_value = data.get('searchValue')
+            es = Elasticsearch()
+            s = Search(using = es, index='post')
+            q = Q("multi_match", query=search_value, fields=['title', 'subhead', 'body', 'cate'])
+            res = s.query(q).execute()
+            search_results_dict_list = res.to_dict()['hits']['hits']
+            return Response({'search_result_list': search_results_dict_list})
+        except Exception as e:
+            return Response({'search_result_list': []})
+
 
 
 

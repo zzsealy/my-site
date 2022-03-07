@@ -12,6 +12,8 @@
                 <li role="presentation"><a href="#">关于我</a></li>
                 <li v-if="is_login"><router-link to="/admin">后台</router-link></li>
                 <li v-if="is_login" role="presentation" @click="cancelLogin"><a>注销登录</a></li>
+                <!-- <input class="search_input" type="text" v-mode="search_value">
+                <button class="search_button">搜索</button> -->
             </ul>
 
         </div>
@@ -59,5 +61,7 @@ import global from "../views/Global.vue";
     .navbar-top li a {
         color: black;
     }
+
+    
 
 </style>

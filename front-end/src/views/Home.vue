@@ -1,5 +1,7 @@
 <template>
     <div>
+        <input class="search_input" type="text" v-model="searchValue">
+        <b-button @click="search" variant="outline-primary" class="search_button">搜索</b-button>
         <b-container fluid>
             <b-row>
                 </b-col md="2">
@@ -20,7 +22,7 @@
                 <postabstract :posts="posts"></postAbstract>
             </b-row>
         </b-container>
-        
+
     </div>
 </template>
 <script>
@@ -34,8 +36,8 @@
         data() {
             return {
                 posts: '分角色附件二十、',
-                imagePath: ''
-
+                imagePath: '',
+                searchValue: ''
             };
         },
 
@@ -71,6 +73,37 @@
                         this.posts = posts
                     })
             },
+            search() {
+                const searchPath = global.URL + "/posts";
+                this.$axios.post(searchPath, { 'searchValue': this.searchValue })
+                    .then((res) => {
+                        this.handleSearchResult(res.data.search_result_list);
+                    })
+
+            },
+
+            handleSearchResult(searchResultList) {
+                let posts = [];
+                if (searchResultList.length > 0) {
+                    searchResultList.forEach(result => {
+                        posts.push({
+                            'id': result._id,
+                            'title': result._source.title,
+                            'subhead': result._source.subhead,
+                            'body': result._source.body,
+                            'cate': result._source.cate,
+                            'created': result._source.created
+                        })
+                    })
+                } else {
+                    posts = [{
+                        'title': '搜索结果为空！！！！！'
+                    }]
+                }
+                
+
+                this.posts = posts;
+            },
             setProfileImage() {
                 this.imagePath = global.URL + '/media/' + 'profile-photo.jpg';
             }
@@ -82,16 +115,31 @@
 
 
 <style>
-.index-post {
-    border-bottom: 1px dashed rgba(0,0,0,0.2);
-}
-.post-cate {
-    text-align: left;
-}
-.post-time {
-    float: right;
-}
-.post-body {
-    color: #9c9c9c;
-}
+    .index-post {
+        border-bottom: 1px dashed rgba(0, 0, 0, 0.2);
+    }
+
+    .post-cate {
+        text-align: left;
+    }
+
+    .post-time {
+        float: right;
+    }
+
+    .post-body {
+        color: #9c9c9c;
+    }
+
+    .search_input {
+        height: 35px;
+        margin: 10px !important;
+        border: #4569ff 1px solid;
+    }
+
+    .search_button {
+        height: 35px;
+        /* margin-top: 10px !important; */
+        color: cadetblue;
+    }
 </style>
