@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from backend.localsetting import *
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +29,7 @@ DEBUG = True
 
 TOKEN_AGE = 30
 
-# ALLOWED_HOSTS = ['testserver', 'localhost']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -114,12 +116,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+
 
 
 # Password validation
@@ -155,6 +152,10 @@ USE_L10N = True
 USE_TZ = True
 
 
+
+
+PROJECT_DIR = Path(__file__).resolve().parent
+STATIC_ROOT= os.path.join(PROJECT_DIR,'static_media/')
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
@@ -177,3 +178,6 @@ REST_FRAMEWORK = {
 }
 
 AUTH_USER_MODEL = 'accounts.User'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')     #设置静态文件路径为主目录下的media文件夹
+MEDIA_URL = '/media/'

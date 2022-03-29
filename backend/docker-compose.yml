@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  db:
+      image: mysql:5.7
+      ports:
+        - '3306:3306'
+      environment:
+        MYSQL_DATABASE: 'mysite'
+        MYSQL_USER: 'root'
+        MYSQL_PASSWORD: 'drq12345.'
+        MYSQL_ROOT_PASSWORD: 'drq12345.'
+
+  web:
+    build: .
+    command: gunicorn backend.wsgi --bind 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8002:8000"
+    depends_on: 
+      - db

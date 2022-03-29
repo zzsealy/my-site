@@ -4,7 +4,9 @@ import category from './views/admin/Category.vue'
 import Admin from './views/admin/Admin.vue'
 import Home from './views/Home.vue'
 import Newpost from './views/admin/Newpost'
-import Postdetail from './views/admin/Postdetail'
+import PostList from './views/admin/PostList'
+import EditPost from './views/admin/EditPost.vue'
+import PostDetail from './views/PostDetail.vue'
 
 
 Vue.use(Router)
@@ -40,13 +42,20 @@ const router = new Router({
       component: () => import('./views/Login.vue')
     },
     {
+      path: '/post/:id',
+      name: 'postDetail',
+      component: PostDetail,
+    },
+    {
       path: '/admin',
       component: Admin,
       children: [
         // when /admin/categories is matched
         // { path: '', name:'admin-info', component: AdminInfo},
-        { path: 'categories', name: 'admin-category', component: category },
+        { path: 'categories', name:'admin-category', component: category},
         { path: 'new-post', name: 'new-post', component: Newpost },
+        { path: 'post-list', name: 'post-list', component: PostList },
+        { path: 'edit-post/:id', name: 'edit-post', component: EditPost}
       ],
       meta: {
         requiresAuth: true
