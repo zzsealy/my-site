@@ -9,10 +9,10 @@ from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search, Q
 
 
-from backend.apps.blog.models import Category, Post as PostModel, Comment, PostImage
-from backend.apps.blog.serializers import Cateserializer, Postserializer, CommentSerializer, PostImageSerializer
-from backend.apps.accounts.models import User
-from backend.apps.accounts.utils import login_expire
+from blog.models import Category, Post as PostModel, Comment, PostImage
+from blog.serializers import Cateserializer, Postserializer, CommentSerializer, PostImageSerializer
+from accounts.models import User
+from accounts.utils import login_expire
 
 
 

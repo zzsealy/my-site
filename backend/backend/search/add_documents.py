@@ -2,7 +2,7 @@ from elasticsearch_dsl import Index, connections
 from elasticsearch import Elasticsearch
 
 # from apps.blog.models import Post
-from backend.apps.blog.models import Post
+from blog.models import Post
 
 
 posts = Post.objects.all()

@@ -1,5 +1,5 @@
 from django.urls import path
-from backend.apps.blog.views import CateList, Cate, Postlist, Post, PostImageView
+from blog.views import CateList, Cate, Postlist, Post, PostImageView
 from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = format_suffix_patterns([

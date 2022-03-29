@@ -3,7 +3,7 @@ from asyncore import read
 from gettext import install
 from importlib_metadata import requires
 from rest_framework import serializers
-from backend.apps.snippets.models import Snippet, LANGUAGE_CHOICES, STYLE_CHOICES
+from snippets.models import Snippet, LANGUAGE_CHOICES, STYLE_CHOICES
 from rest_framework import permissions
 
 """

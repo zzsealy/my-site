@@ -1,9 +1,9 @@
-# from backend.apps.snippets.models import Snippet
-# from backend.apps.snippets.serializers import SnippetSerializer
+# from snippets.models import Snippet
+# from snippets.serializers import SnippetSerializer
 # from rest_framework.decorators import api_view
 
-from backend.apps.snippets.models import Snippet
-from backend.apps.snippets.serializers import SnippetSerializer
+from snippets.models import Snippet
+from snippets.serializers import SnippetSerializer
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response

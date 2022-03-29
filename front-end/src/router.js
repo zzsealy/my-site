@@ -62,7 +62,7 @@ const router = new Router({
       }
     },
     { 
-      path: '/post/:id', name: 'postDetail', component: Postdetail 
+      path: '/post/:id', name: 'postDetail', component: PostDetail 
     }
   ]
 })

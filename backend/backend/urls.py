@@ -22,8 +22,8 @@ from backend.settings import MEDIA_ROOT
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    path('', include('backend.apps.snippets.urls')),
-    path('', include('backend.apps.accounts.urls')),
-    path('', include('backend.apps.blog.urls')),
+    path('', include('snippets.urls')),
+    path('', include('accounts.urls')),
+    path('', include('blog.urls')),
     re_path('^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
 ]

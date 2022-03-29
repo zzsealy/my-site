@@ -13,10 +13,12 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 from backend.localsetting import *
 import os
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+APPS_FATHER_DIR = Path(__file__).resolve().parent
+sys.path.insert(0,os.path.join(APPS_FATHER_DIR, "apps"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -44,10 +46,10 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
     'rest_framework.authtoken',
-    'backend.apps.api',
-    'backend.apps.accounts',
-    'backend.apps.snippets',
-    'backend.apps.blog',
+    'api',
+    'accounts',
+    'snippets',
+    'blog',
     'corsheaders',
 ]
 

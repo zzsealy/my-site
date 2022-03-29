@@ -3,7 +3,7 @@
 from asyncore import read
 from dataclasses import field
 from rest_framework import serializers
-from backend.apps.blog.models import Category, Post, Comment, PostImage
+from blog.models import Category, Post, Comment, PostImage
 
 
 class Cateserializer(serializers.ModelSerializer):

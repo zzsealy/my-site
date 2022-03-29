@@ -1,5 +1,5 @@
 
-from backend.apps.accounts.models import User
+from accounts.models import User
 from .serializers import UserSerializer
 from rest_framework import generics
 from django.contrib.auth import login, logout
