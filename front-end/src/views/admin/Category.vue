@@ -103,7 +103,7 @@ export default {
     submit() {
       const path = global.URL + "/categories";
       const data = {
-        cate: this.newCate,
+        "name": this.newCate,
       };
       this.$axios
         .post(path, data)
@@ -142,7 +142,7 @@ export default {
     submitEditCate(cateId) {
       const path = global.URL + "/category/" + cateId;
       const data = {
-        cate_name: this.changeCateName,
+        "name": this.changeCateName,
       };
       this.$axios
         .put(path, data)

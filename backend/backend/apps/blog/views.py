@@ -1,9 +1,10 @@
 import os
 
 from django.conf import settings
+from django.http import Http404
 from django.utils.decorators import method_decorator
 from rest_framework.views import APIView
-from rest_framework.status import HTTP_203_NON_AUTHORITATIVE_INFORMATION, HTTP_200_OK, HTTP_401_UNAUTHORIZED
+from rest_framework.status import HTTP_203_NON_AUTHORITATIVE_INFORMATION, HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_404_NOT_FOUND
 from rest_framework.response import Response
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search, Q
@@ -28,18 +29,24 @@ class CateList(APIView):
     @method_decorator(login_expire)
     def post(self, request):
         data = request.data
-        cate_name = data.get('cate')
+        serializer = Cateserializer(data=data)
+        
         if data.get("need_login", None):
             return Response(status=HTTP_401_UNAUTHORIZED)
-        if cate_name:
-            cate = Category(name=cate_name)
-            cate.save()
+        if serializer.is_valid():
+            serializer.save()
             return Response({"status_code": HTTP_200_OK, "message": "添加成功"})
 
 
 class Cate(APIView):
-    def get(self, request):
-        pass
+    def get(self, request, nid=None):
+        if nid:
+            cate = Category.objects.filter(id=nid).first()
+            if cate:
+                serializer = Cateserializer(cate)
+                return Response(data=serializer.data, status=HTTP_200_OK)
+            return Response(status=HTTP_404_NOT_FOUND, data={"message": "id不存在"})
+        return Response(status=HTTP_200_OK)
 
 
     @method_decorator(login_expire)
@@ -55,12 +62,12 @@ class Cate(APIView):
     def put(self, request, nid):
         data = request.data
         cate = Category.objects.filter(id=nid).first()
-        cate_name = data.get('cate_name')
         if cate:
-            cate.name = cate_name
-            cate.save()
-            return Response({ "message": "修改成功" })
-        return Response({ "message": "修改失败" })
+            serializer = Cateserializer(instance=cate, data=data)
+            if serializer.is_valid():
+                cate = serializer.save()
+            return Response(data={ "message": "修改成功", "name": cate.name }, status=HTTP_200_OK)
+        return Response(data={ "message": "修改失败" }, status=HTTP_404_NOT_FOUND)
 
 
 
