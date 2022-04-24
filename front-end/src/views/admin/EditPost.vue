@@ -6,11 +6,11 @@
                     <b-button @click="submitPost" variant="outline-primary">提交</b-button>
                     <b-form-select v-model="selected" :options="cates" size="sm" class="mt-3"></b-form-select>
                 </div><br>
-                <b-form-input v-model="postTitle" type="text" placeholder="标题"></b-form-input><br>
-                <b-form-input v-model="postSubhead" type="text" placeholder="摘要"></b-form-input><br>
+                <b-form-input v-model="title" type="text" placeholder="标题"></b-form-input><br>
+                <b-form-input v-model="subhead" type="text" placeholder="摘要"></b-form-input><br>
             </div> <br>
 
-            <mavon-editor ref=md v-model="postBody" @imgAdd="$imgAdd" @imgDel="$imgDel" />
+            <mavon-editor ref=md v-model="body" @imgAdd="$imgAdd" @imgDel="$imgDel" />
         </form>
     </div>
 </template>
@@ -23,10 +23,10 @@
         data() {
             return {
                 selected: null,
-                postTitle: '',
-                postSubhead: '',
-                postBody: '',
-                cates: '',
+                title: '',
+                subhead: '',
+                body: '',
+                cate: '',
             };
         },
         methods: {
@@ -36,10 +36,10 @@
                     .then((res) => {
                         if (res.status == 200) {
                             let data = res.data;
-                            this.postTitle = data.title;
-                            this.postSubhead = data.subhead;
-                            this.selected = data.cate_id;
-                            this.postBody = data.body;
+                            this.title = data.title;
+                            this.subhead = data.subhead;
+                            this.selected = data.cate;
+                            this.body = data.body;
                         }
                     })
             },
@@ -54,6 +54,23 @@
                         this.cates = cates
                     })
             },
+            submitPost() { // 提交修改
+                let id = this.$route.params.id;
+                const postEditPath = global.URL + '/post/' + id;
+                let data = {
+                    title: this.title,
+                    subhead: this.subhead,
+                    body: this.body,
+                    cate: this.selected,
+                    owner: global.state.user_id
+                } 
+                this.$axios.put(postEditPath, data)
+                    .then((res) => {
+                        if(res.status==200){
+                            this.$router.push("/admin/post-list")
+                        }
+                    })
+            }
         },
         created() {
             let id = this.$route.params.id;

@@ -28,3 +28,16 @@ def login_expire(func):
             print("error:", e)
         return func(request, *args, **kwargs)
     return wrapper
+
+
+def login_require(request):
+    try:
+        token = request.META['HTTP_AUTHORIZATION']
+        if checkout_token_time(token, request):
+            # token 过期， 需要登录
+            return True
+    except Exception as e:
+        # 需要token验证 但是传入没有token， 则需要登录
+        request.data["need_login"] = True
+        return True
+    return False

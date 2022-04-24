@@ -32,10 +32,11 @@
     methods: {
       submitPost() {
         let postData = {
-          'cate_id': this.selected,
-          'post_title': this.postTitle,
-          'post_subhead': this.postSubhead,
-          'post_body': this.postBody,
+          'title': this.postTitle,
+          'subhead': this.postSubhead,
+          'body': this.postBody,
+          'cate': this.selected,
+          'owner': global.state.user_id
         }
         const path = global.URL + '/post';
         this.$axios.post(path, postData)

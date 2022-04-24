@@ -1,5 +1,4 @@
 import os
-
 from django.conf import settings
 from django.http import Http404
 from django.utils.decorators import method_decorator
@@ -8,11 +7,11 @@ from rest_framework.status import HTTP_203_NON_AUTHORITATIVE_INFORMATION, HTTP_2
 from rest_framework.response import Response
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search, Q
+from backend.apps.accounts.utils import login_require
 
 
 from blog.models import Category, Post as PostModel, Comment, PostImage
 from blog.serializers import Cateserializer, Postserializer, CommentSerializer, PostImageSerializer
-from accounts.models import User
 from accounts.utils import login_expire
 
 
@@ -31,8 +30,9 @@ class CateList(APIView):
         data = request.data
         serializer = Cateserializer(data=data)
         
-        if data.get("need_login", None):
+        if login_require(request):
             return Response(status=HTTP_401_UNAUTHORIZED)
+
         if serializer.is_valid():
             serializer.save()
             return Response({"status_code": HTTP_200_OK, "message": "添加成功"})
@@ -49,17 +49,23 @@ class Cate(APIView):
         return Response(status=HTTP_200_OK)
 
 
-    @method_decorator(login_expire)
     def delete(self, request, nid=None):
+    
+        if login_require(request):
+            return Response(status=HTTP_401_UNAUTHORIZED)
+
         del_cate = Category.objects.filter(id=nid).first()
         if del_cate:
             del_cate.delete()
-            return Response({'message': '删除成功'})
-        return Response({'message': '删除失败'})
+            return Response(status=HTTP_200_OK, data={'message': '删除成功'})
+        return Response(status=HTTP_404_NOT_FOUND, data={'message': '删除失败'})
     
 
-    @method_decorator(login_expire)
     def put(self, request, nid):
+
+        if login_require(request):
+            return Response(status=HTTP_401_UNAUTHORIZED)
+
         data = request.data
         cate = Category.objects.filter(id=nid).first()
         if cate:
@@ -81,7 +87,7 @@ class Postlist(APIView):
             data['created'] = data['created'].replace('T', ' ').split('.')[0]
         return Response(serialzier.data)
 
-    def post(self, request):
+    def post(self, request): # 搜索框的搜索， 查询到是ES。
         try:
             data = request.data
             search_value = data.get('searchValue')
@@ -99,37 +105,47 @@ class Postlist(APIView):
 
 class Post(APIView):
 
-    def get(self, request, id):
+    def get(self, request, id=None):
         if id:
             post = PostModel.objects.filter(id=id).first()
             seriialzer = Postserializer(post)
-            res_data = seriialzer.data
-            res_data['cate_id'] = post.cate.id
-            return Response(res_data)
+            return Response(seriialzer.data)
+        return Response(status=HTTP_200_OK)
 
-
-    @method_decorator(login_expire) 
+    """
+    { 
+        "body": "testbody",
+        "cate": 7,
+        "subhead": "test",
+        "title": "testhead",
+        "owner": 1
+    }
+    """
     def post(self, request):
+
+        if login_require(request):
+            return Response(status=HTTP_401_UNAUTHORIZED)
         data = request.data
-        cate_id = data.get('cate_id')
-        post_title = data.get('post_title')
-        post_subhead = data.get('post_subhead')
-        post_body = data.get('post_body')
-        # 正常情况下 肯定都是存在的就直接用 get了
-        try:
-            cate = Category.objects.get(id=cate_id)
-            post = PostModel(title=post_title, subhead=post_subhead, body=post_body, owner=request.user, cate=cate)
-            post.save()
-            return Response({"message": "成功"})
-        except Exception as e:
-            print("e:", e)
+        postserializer = Postserializer(data=data)
+        if postserializer.is_valid():
+            postserializer.save()
+        return Response(status=HTTP_200_OK, data=postserializer.data)
 
 
     def put(self, request, id):
-        pass
+        post = PostModel.objects.filter(id=id).first()
+        serializer = Postserializer(instance=post, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=HTTP_200_OK, data={"message": "修改成功"})
+        return Response(status=500)
 
 
     def delete(self, request):
+
+        if login_require(request):
+            return Response(status=HTTP_401_UNAUTHORIZED)
+
         id = request.data.get('id')
         post = PostModel.objects.filter(id=id).first()
         if post:

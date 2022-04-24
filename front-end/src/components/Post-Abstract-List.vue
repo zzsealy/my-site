@@ -1,7 +1,7 @@
 <template>
         <b-col md="8">
             <div class="index-post" v-for="(post, index) in posts" :key="post.id">
-                <h2>{{ post.title }}</h2>
+                <h2 class="post-title"><router-link :to="{name: 'postDetail', params: {'id': post.id}}"> {{ post.title }} </router-link></h2>
                 <p class="post-body">{{ post.subhead }}</p>
                 <strong>分类: </strong><span class="post-cate">{{ post.cate }}</span>
                 <span class="post-time">{{ post.created }}</span>
@@ -32,5 +32,9 @@
 <style>
     .post-cate{
         color: #6699ff;
+    }
+
+    .post-title a{
+        color: black;
     }
 </style>
