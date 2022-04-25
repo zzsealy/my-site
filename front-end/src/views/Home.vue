@@ -1,27 +1,13 @@
 <template>
     <div>
-        <input class="search_input" type="text" v-model="searchValue">
-        <b-button @click="search" variant="outline-primary" class="search_button">搜索</b-button>
-        <b-container fluid>
-            <b-row>
-                </b-col md="2">
-                <b-card title="DRQ丶" :img-src="imagePath" img-alt="Image" img-top tag="article"
-                    style="width: 300px; height: 280px;" class="mb-2">
-                    <b-card-text>
-                    </b-card-text>
-                </b-card>
-                </b-col>
-                <!-- <b-col md="8">
-                    <div class="index-post" v-for="(post, index) in posts" :key="post.id">
-                        <h2>{{ post.title }}</h2>
-                        <p class="post-body">{{ post.subhead }}</p>
-                        <span class="post-cate">分类: {{ post.cate }}</span>
-                        <span class="post-time">{{ post.created }}</span>
-                    </div>
-                </b-col> -->
-                <postabstract :posts="posts"></postAbstract>
-            </b-row>
-        </b-container>
+        <!-- <input class="search_input" type="text" v-model="searchValue">
+        <b-button @click="search" variant="outline-primary" class="search_button">搜索</b-button> -->
+        <el-row :gutter="20">
+            <el-col :span="15" :offset="3" style="padding: 0px;">
+                    <postabstract :posts="posts"></postAbstract>
+            </el-col>
+            <div style="float:left;width: 1px;height: 1000px; background: #000;"></div> 
+        </el-row>
 
     </div>
 </template>
@@ -115,21 +101,7 @@
 
 
 <style>
-    .index-post {
-        border-bottom: 1px dashed rgba(0, 0, 0, 0.2);
-    }
 
-    .post-cate {
-        text-align: left;
-    }
-
-    .post-time {
-        float: right;
-    }
-
-    .post-body {
-        color: #9c9c9c;
-    }
 
     .search_input {
         height: 35px;

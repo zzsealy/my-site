@@ -13,6 +13,7 @@
     "axios": "^0.24.0",
     "bootstrap-vue": "^2.21.2",
     "core-js": "^2.6.5",
+    "element-ui": "^2.15.8",
     "jquery": "^3.6.0",
     "mavon-editor": "^2.10.4",
     "tinymce": "^5.10.2",
