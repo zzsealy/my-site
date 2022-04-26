@@ -4,18 +4,21 @@
           嗨，这是我的个人网站。
         </p> -->
         <el-row :gutter="20">
-            <el-col :span="10" :offset="3" style="padding: 0px;">
-                    <hr class="nav-hr">
+            
+            <el-col :span="10" :offset="4" style="padding: 0px;">
+                <h1>drq's Diary</h1>
+            <p class="header-p">故事太多 需要有个地方记录</p>
+            <hr class="nav-hr">
             </el-col>
-            <el-col :span="10" style="padding: 0px;">
+            <el-col :span="10" style="padding: 0px;" class="nav-block">
                 <ul class="nav navbar-top">
-                    <div @click="clickNav('home')" class="nav-div" v-bind:class = "{ active: homeActive}"><li role="presentation"><a href="#">首页</a></li></div>
-                    <div @click="clickNav('cate')" class="nav-div" v-bind:class = "{ active: cateActive}"><li role="presentation"><a href="#">归档</a></li></div>
-                    <div @click="clickNav('sentence')" class="nav-div" v-bind:class = "{ active: sentenceActive}"><li role="presentation"><a href="#">短句</a></li></div>
-                    <div @click="clickNav('history')" class="nav-div" v-bind:class = "{ active: historyActive}"><li role="presentation"><a href="#">历史</a></li></div>
-                    <div @click="clickNav('about')" class="nav-div" v-bind:class = "{ active: aboutActive}"><li role="presentation"><a href="#">关于我</a></li></div>
-                    <div @click="clickNav('admin')" class="nav-div" v-bind:class = "{ active: adminActive}"><li v-if="is_login"><router-link to="/admin">后台</router-link></li></div>
-                    <div class="nav-div"><li v-if="is_login" role="presentation" @click="cancelLogin"><a>注销登录</a></li></div>
+                    <a to="#" @click="clickNav('home')"     class="nav-a" v-bind:class = "{ nav_active: homeActive}">     <i>首页</i></a>
+                    <a to="#" @click="clickNav('cate')"     class="nav-a" v-bind:class = "{ nav_active: cateActive}">     <i>归档</i></a>
+                    <a to="#" @click="clickNav('sentence')" class="nav-a" v-bind:class = "{ nav_active: sentenceActive}"> <i>短句</i></a>
+                    <a to="#" @click="clickNav('history')"  class="nav-a" v-bind:class = "{ nav_active: historyActive}">  <i>历史</i></a>
+                    <a to="#" @click="clickNav('about')"    class="nav-a" v-bind:class = "{ nav_active: aboutActive}">    <i>关于</i></a>
+                    <a to="/admin" @click="clickNav('admin')" class="nav-a" v-bind:class = "{ nav_active: adminActive}">  <i v-if="is_login">后台</i></a>
+                    <a class="nav-a"><li v-if="is_login"  @click="cancelLogin"><a>注销登录</a></li></a>
                 </ul>
             </el-col>
           </el-row>
@@ -95,13 +98,18 @@ import global from "../views/Global.vue";
 <style>
 
     .header {
-        margin-top: 5% !important;
+        margin-top: 3% !important;
     }
 
     .navbar-top li {
         margin: 20px 20px 0px 20px;
         padding: 0px;
     }
+
+    /* .navbar-top {
+        position: absolute;
+        margin-top: 4.5%;
+    } */
 
     .navbar-top li a {
         color: black;
@@ -110,16 +118,28 @@ import global from "../views/Global.vue";
 
     .nav-hr {
         padding-right: 0px;
-        margin-top: 44px;
+        margin-bottom: 0;
     }
 
-    .nav-div {
+    .nav-block {
+        position: relative;
+        top: 66px;
+    }
+
+    .nav-a {
+        padding: 3px 20px 3px;
         border-bottom: 1px solid #C8C8C8;
+        color: black;
+        text-decoration: none;
     }
 
-    .active {
+    .nav_active {
         border: 1px solid black;
         border-bottom-color: #fff;
+    }
+
+    .header-p {
+        margin-bottom: 0px;
     }
 
 

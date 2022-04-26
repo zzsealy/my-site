@@ -3,7 +3,7 @@
         <!-- <input class="search_input" type="text" v-model="searchValue">
         <b-button @click="search" variant="outline-primary" class="search_button">搜索</b-button> -->
         <el-row :gutter="20">
-            <el-col :span="15" :offset="3" style="padding: 0px;">
+            <el-col :span="15" :offset="4" style="padding: 0px;">
                     <postabstract :posts="posts"></postAbstract>
             </el-col>
             <!-- document.getElementById('post-block').childNodes.length  这个是 统计元素子元素的数量-->
