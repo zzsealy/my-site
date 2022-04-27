@@ -2,14 +2,6 @@
     <div>
         <b-container fluid>
             <b-row>
-                </b-col md="2">
-                <b-card title="DRQ丶" :img-src="imagePath" img-alt="Image" img-top
-                    tag="article" style="width: 300px; height: 280px;" class="mb-2">
-                    <b-card-text>
-                        
-                    </b-card-text>
-                </b-card>
-                </b-col>
                 <b-col md="8" >
                     <h1>{{ postTitle }}</h1>
                     <p v-html="postBody"></p>

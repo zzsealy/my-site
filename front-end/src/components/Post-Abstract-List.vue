@@ -1,14 +1,12 @@
 <template>
-        <el-row>
-            <el-col :span="18" class="grid-content post-block" id="post-block">
+    <div>
             <div class="index-post" v-for="(post, index) in posts" :key="post.id">
                 <h2 class="post-title"><router-link :to="{name: 'postDetail', params: {'id': post.id}}"> {{ post.title }} </router-link></h2>
                 <span class="post-time">{{ post.created }}</span>
                 <p class="post-body">{{ post.subhead }}</p>
-                <div class="read-all-post"><span >阅读全文》</span></div>
+                <div class="read-all-post"><span ><router-link :to="{name: 'postDetail', params: {'id': post.id}}"> 阅读全文》</router-link></span></div>
             </div>
-            </el-col>
-        </el-row>
+            </div>
 </template>
 
 
@@ -54,9 +52,18 @@
         margin-top: 25px;
     }
 
-    .read-all-post {
+    .read-all-post span a {
         float: right;
-        margin-bottom: 5px;
+        /* margin-bottom: 5px; */
+        border: 1px solid #C8C8C8;
+        font-size: 15px;
+        padding: 5px 10px;
+        border-radius: 7px;
+        margin-right: 40px;
+        text-decoration: none;
+        color: #808080;
+    }
+    .read-all-post {
         display: inline;
     }
 </style>

@@ -1,13 +1,16 @@
 <template>
-    <div class="body">
+    <div class="docu-body">
         <!-- <input class="search_input" type="text" v-model="searchValue">
         <b-button @click="search" variant="outline-primary" class="search_button">搜索</b-button> -->
         <el-row :gutter="20">
-            <el-col :span="15" :offset="4" style="padding: 0px;">
-                    <postabstract :posts="posts"></postAbstract>
+            <el-col :span="14" :offset="4" style="padding: 0px;">
+                <postabstract :posts="posts"></postAbstract>
             </el-col>
             <!-- document.getElementById('post-block').childNodes.length  这个是 统计元素子元素的数量-->
-            <div style="float:left;width: 1px;height: 1000px; background: #000;"></div> 
+            <el-col :span="4" style="padding: 0px;">
+                <div class="divi-line" style="float:left;width: 1px;height: 1000px; background: #C8C8C8;"></div>
+                <sider></sider>
+            </el-col>
         </el-row>
 
     </div>
@@ -15,10 +18,12 @@
 <script>
     import global from './Global.vue'
     import PostAbstractList from '../components/Post-Abstract-List.vue'
+    import Sider from '../components/Sider.vue'
     export default {
         name: 'Home',
         components: {
-            postabstract: PostAbstractList
+            postabstract: PostAbstractList,
+            sider: Sider
         },
         data() {
             return {
@@ -87,7 +92,7 @@
                         'title': '搜索结果为空！！！！！'
                     }]
                 }
-                
+
 
                 this.posts = posts;
             },
@@ -102,8 +107,6 @@
 
 
 <style>
-
-
     .search_input {
         height: 35px;
         margin: 10px !important;
@@ -114,5 +117,13 @@
         height: 35px;
         /* margin-top: 10px !important; */
         color: cadetblue;
+    }
+
+    .divi-line {
+        margin-left: 3.5px;
+    }
+
+    .docu-body {
+        margin-top: 20px;
     }
 </style>
