@@ -12,17 +12,17 @@
             </el-col>
             <el-col :span="10" style="padding: 0px;" class="nav-block">
                 <ul class="nav navbar-top">
-                    <a to="#" @click="clickNav('home')" class="nav-a" v-bind:class="{ nav_active: homeActive}">
+                    <a href="/" @click="clickNav('home')" class="nav-a" v-bind:class="{ nav_active: homeActive}">
                         <i class="el-icon-s-home">首页</i></a>
-                    <a to="#" @click="clickNav('cate')" class="nav-a" v-bind:class="{ nav_active: cateActive}">
+                    <a href="/cate/" @click="clickNav('cate')" class="nav-a" v-bind:class="{ nav_active: cateActive}">
                         <i class="el-icon-s-order">归档</i></a>
-                    <a to="#" @click="clickNav('sentence')" class="nav-a" v-bind:class="{ nav_active: sentenceActive}">
+                    <a href="/verses/" @click="clickNav('sentence')" class="nav-a" v-bind:class="{ nav_active: sentenceActive}">
                         <i class="el-icon-water-cup">短句</i></a>
-                    <a to="#" @click="clickNav('history')" class="nav-a" v-bind:class="{ nav_active: historyActive}">
+                    <a href="#" @click="clickNav('history')" class="nav-a" v-bind:class="{ nav_active: historyActive}">
                         <i class="el-icon-time">历史</i></a>
-                    <a to="#" @click="clickNav('about')" class="nav-a" v-bind:class="{ nav_active: aboutActive}">
+                    <a href="/about/" @click="clickNav('about')" class="nav-a" v-bind:class="{ nav_active: aboutActive}">
                         <i class="el-icon-user-solid">关于</i></a>
-                    <a to="/admin" @click="clickNav('admin')" class="nav-a" v-bind:class="{ nav_active: adminActive}">
+                    <a href="/admin/" @click="clickNav('admin')" class="nav-a" v-bind:class="{ nav_active: adminActive}">
                         <i v-if="is_login">后台</i></a>
                     <a class="nav-a">
                         <li v-if="is_login" @click="cancelLogin"><a>注销登录</a></li>

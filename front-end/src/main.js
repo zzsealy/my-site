@@ -11,6 +11,7 @@ import toasted from 'vue-toasted'
 //引入element-ui的组件与样式
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import common_func from './views/common/common_func'
 
 let options = {
     // 主题样式 primary/outline/bubble
@@ -35,7 +36,8 @@ Vue.use(toasted, options)
 Vue.use(mavonEditor)
 Vue.use(ElementUI);
 Vue.config.productionTip = false;
-Vue.prototype.$axios = axios
+Vue.prototype.$axios = axios;
+Vue.prototype.common_func = common_func;
 new Vue({
   router,
   render: h => h(App)

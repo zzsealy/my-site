@@ -1,10 +1,10 @@
 <template>
     <div>
             <div class="index-post" v-for="(post, index) in posts" :key="post.id">
-                <h2 class="post-title"><router-link :to="{name: 'postDetail', params: {'id': post.id}}"> {{ post.title }} </router-link></h2>
+                <h2 class="post-title"><a :href="'post/' + post.id"> {{ post.title }} </a></h2>
                 <span class="post-time">{{ post.created }}</span>
                 <p class="post-body">{{ post.subhead }}</p>
-                <div class="read-all-post"><span ><router-link :to="{name: 'postDetail', params: {'id': post.id}}"> 阅读全文》</router-link></span></div>
+                <div class="read-all-post"><span ><a :href="'post/' + post.id"> 阅读全文》</a></span></div>
             </div>
             </div>
 </template>

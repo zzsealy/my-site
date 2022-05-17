@@ -5,6 +5,9 @@
         <el-input  class="search-input" type="text" name="" id=""  placeholder="Search"> </el-input>
         <!-- :prefix-icon="el-icon-search" -->
         </div>
+        <div v-for="cate in cates" :key="cate.id">
+            <p>{{cate}}</p>
+        </div>
     </div>
 </template>
 
@@ -12,6 +15,7 @@
 <script>
 export default {
     name: 'Sider',
+    props: ['cates'],
     data() {
 
     },
