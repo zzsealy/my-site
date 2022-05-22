@@ -69,8 +69,7 @@ export default {
       });
     },
     getCategories() {
-        debugger;
-      let catesPromise  = this.common_func.getCates()
+      let catesPromise = this.common_func.getCates()
       catesPromise.then((res) => { this.cates = res.data})
     },
     search() {

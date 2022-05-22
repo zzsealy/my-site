@@ -71,7 +71,6 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const token = window.localStorage.getItem("mysite-token");
-  debugger;
   if (to.matched.some(record => record.meta.requiresAuth) && (!token || token == null)) {
     Vue.toasted.show("请登录", { icon: "fingerprint" })
     next({

@@ -10,7 +10,7 @@
           class="divi-line"
           style="float: left; width: 1px; height: 1000px; background: #c8c8c8"
         ></div>
-        <sider></sider>
+        <sider :cates="cates" :showPostNav=true :postNavList="postNavList"></sider>
       </el-col>
     </el-row>
   </div>
@@ -30,6 +30,8 @@ export default {
       postSubhead: "",
       postBody: "",
       imagePath: "",
+      cates: "",
+      postNavList: "",
     };
   },
   methods: {
@@ -41,11 +43,29 @@ export default {
         this.postSubhead = data.subhead;
         const markdownIt = mavonEditor.getMarkdownIt();
         this.postBody = markdownIt.render(data.body);
+        this.postNavList = this.createPostNavList();
       });
     },
     setProfileImage() {
       this.imagePath = global.URL + "/media/" + "profile-photo.jpg";
     },
+    getCategories() {
+      let catesPromise = this.common_func.getCates()
+      catesPromise.then((res) => { this.cates = res.data})
+    },
+    createPostNavList() {
+      let navList = []
+      let h2IdList = this.postBody.match(/_\d{1,5}/g);
+      h2IdList.forEach(h2Id => {
+        let befor = h2Id + "\"></a>";
+        let after = "</h2>";
+        let splitBefore = this.postBody.split(befor);
+        let title = splitBefore[1].split('<')[0];
+        navList.push({'id': h2Id, 'title': title})
+      });
+      return navList
+
+    }
   },
 
   created() {
@@ -53,6 +73,10 @@ export default {
     this.getPostDetail(id);
     this.setProfileImage();
   },
+
+  mounted() {
+    this.getCategories();
+  }
 };
 </script>
 
