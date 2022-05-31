@@ -12,7 +12,7 @@
           class="divi-line"
           style="float: left; width: 1px; height: 1000px; background: #c8c8c8"
         ></div>
-        <sider :cates="cates"></sider>
+        <sider :cates="cates" :showPostNav=false :activeName="activeName"></sider>
       </el-col>
     </el-row>
   </div>
@@ -32,7 +32,8 @@ export default {
       posts: "",
       imagePath: "",
       searchValue: "",
-      cates: ''
+      cates: '',
+      activeName: ['1']
     };
   },
 

@@ -1,6 +1,5 @@
 import os
 from django.conf import settings
-from django.http import Http404
 from django.utils.decorators import method_decorator
 from rest_framework.views import APIView
 from rest_framework.status import HTTP_203_NON_AUTHORITATIVE_INFORMATION, HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_404_NOT_FOUND

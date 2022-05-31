@@ -19,6 +19,7 @@ import sys
 BASE_DIR = Path(__file__).resolve().parent.parent
 APPS_FATHER_DIR = Path(__file__).resolve().parent
 sys.path.insert(0,os.path.join(APPS_FATHER_DIR, "apps"))
+sys.path.insert(0,os.path.join(APPS_FATHER_DIR, "middleware"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -62,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'handler_middleware.Middleware',
 ]
 
 CORS_ORIGIN_WHITELIST = (
@@ -183,3 +185,7 @@ AUTH_USER_MODEL = 'accounts.User'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')     #设置静态文件路径为主目录下的media文件夹
 MEDIA_URL = '/media/'
+
+NEEDVERIFICATIONLIST = {
+
+}

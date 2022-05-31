@@ -12,9 +12,9 @@
                         {{cate.name}}
                     </div>
                 </el-collapse-item>
-                <el-collapse-item title="文章导航" name="2" @change="handleChange">
+                <el-collapse-item v-if="showPostNav" title="文章导航" name="2" @change="handleChange">
                     <div v-for="nav in postNavList" :key="nav.id">
-                        <a v-bind:href= "'#' + nav.id ">{{ nav.title }}</a>
+                        <a class="post-nav-a" v-bind:href= "'#' + nav.id ">{{ nav.title }}</a>
                     </div>
                 </el-collapse-item>
             </el-collapse>
@@ -27,10 +27,11 @@
 <script>
     export default {
         name: 'Sider',
-        props: ['cates', 'showPostNav', 'postNavList'],
+        props: ['cates', 'showPostNav', 'postNavList', 'activeName'],
         data() {
             return {
-                activeNames: ['1'],
+                activeNames: this.activeName,
+                showPostNav: this.showPostNav
             }
         },
         methods: {
@@ -61,5 +62,14 @@
 
     .sider-cate-text {
         margin-top: 20px;
+    }
+
+    .post-nav-a {
+        color: #808080;
+        text-decoration: none;
+    }
+    .post-nav-a:hover {
+        color: black;
+        text-decoration: underline;
     }
 </style>

@@ -10,7 +10,7 @@
           class="divi-line"
           style="float: left; width: 1px; height: 1000px; background: #c8c8c8"
         ></div>
-        <sider :cates="cates" :showPostNav=true :postNavList="postNavList"></sider>
+        <sider :cates="cates" :showPostNav=true :postNavList="postNavList" :activeName="activeName"></sider>
       </el-col>
     </el-row>
   </div>
@@ -32,6 +32,7 @@ export default {
       imagePath: "",
       cates: "",
       postNavList: "",
+      activeName: ['2']
     };
   },
   methods: {
