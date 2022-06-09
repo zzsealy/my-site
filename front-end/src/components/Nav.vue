@@ -54,7 +54,8 @@
         },
         methods: {
             cancelLogin() {
-                global.logoutAction()
+                global.logoutAction();
+                location.reload();
             },
             clickNav(navName) {
                 this.cancelClickStstus()

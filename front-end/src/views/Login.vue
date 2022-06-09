@@ -1,16 +1,5 @@
 <template>
   <div>
-    <div>
-      <b-alert
-        :show="dismissCountDown"
-        :variant="variant"
-        dismissible
-        v-on:dismissed="dismissCountDown = 0"
-        @dismiss-count-down="countDownChanged"
-      >
-        {{ message }}
-      </b-alert>
-    </div>
     <div class="login">
       <form @submit.prevent>
         <div class="form-group">
@@ -38,22 +27,7 @@
       </form>
     </div>
   </div>
-
-  <!-- 
-1、第一次登录的时候，前端调后端的登陆接口，发送用户名和密码
-
-2、后端收到请求，验证用户名和密码，验证成功，就给前端返回一个token
-
-3、前端拿到token，将token存储到localStorage和vuex中，并跳转路由页面
-
-4、前端每次跳转路由，就判断 localStroage 中有无 token ，没有就跳转到登录页面，有则跳转到对应路由页面
-
-5、每次调后端接口，都要在请求头中加token
-
-6、后端判断请求头中有无token，有token，就拿到token并验证token，验证成功就返回数据，验证失败（例如：token过期）就返回401，请求头中没有token也返回401
-
-7、如果前端拿到状态码为401，就清除token信息并跳转到登录页面
---></template>
+</template>
 
 
 
@@ -67,7 +41,7 @@ export default {
       username: "",
       password: "",
       message: "",
-      variant: "",
+      type: "",
       dismissCountDown: 0,
       dismissSecs: 5,
     };
@@ -85,20 +59,28 @@ export default {
         .post(loginPath, data)
         .then((res) => {
           this.message = res.data.message;
-          this.variant = "success";
+          this.type = "success";
           let token = res.data.token;
           let userId = res.data.user_id;
           if (res.data.status_code == 200) {
             window.localStorage.setItem("mysite-token", token);
             window.localStorage.setItem("mysite-user-id", userId);
+            this.$notify({
+              title: '登陆成功',
+              message: '你登陆成功啦',
+              type: 'success'
+            });
+            setTimeout(this.$router.push({name:'home'}), 2000);
           }
           if (res.data.status_code == 203) {
             this.variant = "warning";
+            this.$notify.error({
+              title: '登陆失败',
+              message: '账号或者密码错误'
+            });
           }
         })
         .catch((error) => {
-          this.message = "发生错误";
-          this.variant = "warning";
           window.consolee.error(error);
         });
       this.showAlert();
