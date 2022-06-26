@@ -14,7 +14,7 @@
                 <ul class="nav navbar-top">
                     <a href="/" @click="clickNav('home')" class="nav-a" v-bind:class="{ nav_active: homeActive}">
                         <i class="el-icon-s-home">首页</i></a>
-                    <a href="/cate/" @click="clickNav('cate')" class="nav-a" v-bind:class="{ nav_active: cateActive}">
+                    <a href="/cates/" @click="clickNav('cate')" class="nav-a" v-bind:class="{ nav_active: cateActive}">
                         <i class="el-icon-s-order">归档</i></a>
                     <a href="/verses/" @click="clickNav('sentence')" class="nav-a" v-bind:class="{ nav_active: sentenceActive}">
                         <i class="el-icon-water-cup">短句</i></a>

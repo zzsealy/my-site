@@ -187,3 +187,23 @@ class PostImageView(APIView):
                     'status': 500,
                     'message': '发生错误:{}'.format(e)
                 })
+
+
+class TimePostDataView(APIView):
+
+    def get(self, request):
+        get_data = request.GET
+        posts = PostModel.objects.all().order_by('created')
+        time_post_data = {}
+        for post in posts:
+            created_time = post.created
+            year = created_time.year
+            # post指的是文章
+            post_data = {'id': post.id, 'title': post.title, 'date':  created_time.strftime('%Y-%m-%d')} 
+            if year in time_post_data.keys():
+                pass
+            else:
+                time_post_data[year] = []
+
+            time_post_data[year].append(post_data)
+        return Response({'time_post_data': time_post_data})
