@@ -70,7 +70,7 @@
 
 <script>
 // import axios from 'axios'
-import global from "../Global.vue";
+import store from "../store.js";
 export default {
   name: "Category",
   data() {
@@ -86,7 +86,7 @@ export default {
 
   methods: {
     getCategories() {
-      const path = global.URL + "/categories";
+      const path = store.URL + "/categories";
       this.$axios
         .get(path)
         .then((res) => {
@@ -101,7 +101,7 @@ export default {
     },
 
     submit() {
-      const path = global.URL + "/categories";
+      const path = store.URL + "/categories";
       const data = {
         "name": this.newCate,
       };
@@ -116,7 +116,7 @@ export default {
     },
 
     delCate(cateId) {
-      const path = global.URL + "/category/" + cateId;
+      const path = store.URL + "/category/" + cateId;
       this.$axios
         .delete(path)
         .then((res) => {
@@ -140,7 +140,7 @@ export default {
     },
 
     submitEditCate(cateId) {
-      const path = global.URL + "/category/" + cateId;
+      const path = store.URL + "/category/" + cateId;
       const data = {
         "name": this.changeCateName,
       };

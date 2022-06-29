@@ -16,7 +16,7 @@
   </div>
 </template>
 <script>
-import global from "./Global.vue";
+import store from "./store.js";
 import { mavonEditor } from "mavon-editor";
 import Sider from "../components/Sider.vue";
 export default {
@@ -37,7 +37,7 @@ export default {
   },
   methods: {
     getPostDetail(id) {
-      let postDetailPath = global.URL + "/post/" + id;
+      let postDetailPath = store.URL + "/post/" + id;
       this.$axios.get(postDetailPath).then((res) => {
         let data = res.data;
         this.postTitle = data.title;
@@ -48,7 +48,7 @@ export default {
       });
     },
     setProfileImage() {
-      this.imagePath = global.URL + "/media/" + "profile-photo.jpg";
+      this.imagePath = store.URL + "/media/" + "profile-photo.jpg";
     },
     getCategories() {
       let catesPromise = this.common_func.getCates()
@@ -59,7 +59,6 @@ export default {
       let h2IdList = this.postBody.match(/_\d{1,5}/g);
       h2IdList.forEach(h2Id => {
         let befor = h2Id + "\"></a>";
-        let after = "</h2>";
         let splitBefore = this.postBody.split(befor);
         let title = splitBefore[1].split('<')[0];
         navList.push({'id': h2Id, 'title': title})

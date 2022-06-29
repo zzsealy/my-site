@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import router from './router'
-import state from './views/Global.vue'
+import store from './views/store.js'
 
 
 // 基础配置
@@ -27,7 +27,7 @@ axios.interceptors.response.use(function (response) {
     // 处理响应失败的
     switch (error.response.status) {
         case 401:
-            state.logoutAction();
+            store.logoutAction();
             if (router.currentRoute.path !== '/login') {
                 Vue.toasted.error('401: 认证已失效，请先登录', { icon: 'fingerprint' })
                 router.replace({

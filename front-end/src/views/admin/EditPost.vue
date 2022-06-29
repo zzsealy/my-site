@@ -17,7 +17,7 @@
 
 
 <script>
-    import global from '../Global.vue'
+    import store from '../store.js'
     export default {
         name: "EditPost",
         data() {
@@ -31,7 +31,7 @@
         },
         methods: {
             getPostDataById(id) {
-                let getPodtDataPath = global.URL + '/post/' + id;
+                let getPodtDataPath = store.URL + '/post/' + id;
                 this.$axios.get(getPodtDataPath)
                     .then((res) => {
                         if (res.status == 200) {
@@ -44,7 +44,7 @@
                     })
             },
             getAllCate() {
-                const path = global.URL + "/categories";
+                const path = store.URL + "/categories";
                 this.$axios.get(path)
                     .then((res) => {
                         let cates = []
@@ -56,13 +56,13 @@
             },
             submitPost() { // 提交修改
                 let id = this.$route.params.id;
-                const postEditPath = global.URL + '/post/' + id;
+                const postEditPath = store.URL + '/post/' + id;
                 let data = {
                     title: this.title,
                     subhead: this.subhead,
                     body: this.body,
                     cate: this.selected,
-                    owner: global.state.user_id
+                    owner: state.user_id
                 } 
                 this.$axios.put(postEditPath, data)
                     .then((res) => {

@@ -1,8 +1,7 @@
-<script type="text/javascript">
-    const URL = "http://localhost:8001";
-    export default
-    {
-      URL,
+    
+export default {
+      URL: 'http://localhost:8001',
+      debug: true,
       state: {
         is_login: window.localStorage.getItem('mysite-token') ? true : false,
         user_id: window.localStorage.getItem('mysite-user-id')
@@ -17,5 +16,3 @@
         this.state.user_id = 0;
       }
     }
-
-</script>

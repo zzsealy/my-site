@@ -35,7 +35,7 @@
 </template>
 
 <script>
-    import global from "../views/Global.vue";
+    import store from "../views/store.js";
     export default {
         components: {
         },
@@ -54,7 +54,7 @@
         },
         methods: {
             cancelLogin() {
-                global.logoutAction();
+                store.logoutAction();
                 location.reload();
             },
             clickNav(navName) {
@@ -95,11 +95,11 @@
         },
 
         created() {
-            this.is_login = global.state.is_login;
+            this.is_login = store.state.is_login;
         },
 
         update() {
-            this.is_login = global.state.is_login;
+            this.is_login = store.state.is_login;
         }
     }
 </script>

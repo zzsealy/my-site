@@ -17,7 +17,7 @@
 
 
 <script>
-  import global from '../Global.vue'
+  import store from '../store.js'
   export default {
     name: "Addpost",
     data() {
@@ -36,9 +36,9 @@
           'subhead': this.postSubhead,
           'body': this.postBody,
           'cate': this.selected,
-          'owner': global.state.user_id
+          'owner': state.user_id
         }
-        const path = global.URL + '/post';
+        const path = store.URL + '/post';
         this.$axios.post(path, postData)
           .then((res) => {
             window.console.log(res);
@@ -47,7 +47,7 @@
 
       },
       getAllCate(){
-        const path = global.URL + "/categories";
+        const path = store.URL + "/categories";
         this.$axios.get(path)
           .then((res) => {
             let cates = []
@@ -61,8 +61,8 @@
             // 第一步.将图片上传到服务器.
            var formdata = new FormData();
            formdata.append('image', $file);
-           const imageUrl = global.URL + '/postimage'
-           let backendUrl = global.URL;
+           const imageUrl = store.URL + '/postimage'
+           let backendUrl = store.URL;
            this.$axios({
                url: imageUrl,
                method: 'post',
@@ -82,7 +82,7 @@
         $imgDel(pos){
           let name = pos[1].name;
           let delData = {'name':name}
-          const imageUrl = global.URL + '/postimage';
+          const imageUrl = store.URL + '/postimage';
           this.$axios.delete(imageUrl, {'data': delData})
             .then((data) => {
             window.console.log(data.message)

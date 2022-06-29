@@ -44,7 +44,7 @@
 
 
 <script>
-    import global from '../Global.vue'
+    import store from '../store.js'
     export default {
         name: 'PostList',
         data() {
@@ -58,7 +58,7 @@
         },
         methods: {
             getAllPost() {
-                const path = global.URL + "/posts";
+                const path = store.URL + "/posts";
                 this.$axios.get(path)
                     .then((res) => {
                         let posts = []
@@ -94,7 +94,7 @@
                 })
                     .then(value => {
                         if(value==true){
-                            const delPath = global.URL + '/post';
+                            const delPath = store.URL + '/post';
                             let data = {'id':id}
                             this.$axios.delete(delPath, {'data': data})
                                 .then((res) => {
@@ -107,9 +107,9 @@
                                 })
                         }
                     })
-                    .catch(err => {
-                        // An error occurred
-                    })
+                    // .catch(err => {
+                    //     // An error occurred
+                    // })
             },
             countDownChanged(dismissCountDown) {
             this.dismissCountDown = dismissCountDown;

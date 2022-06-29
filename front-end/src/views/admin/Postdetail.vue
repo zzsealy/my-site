@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import global from '../Global.vue'
+import store from '../store.js'
 
 export default {
     
@@ -19,7 +19,7 @@ export default {
 
     methods: {
        getPostDetail(postId){
-           const path = global.URL + '/post/' + postId;
+           const path = store.URL + '/post/' + postId;
            this.$axios.get(path)
             .then((res) => {
                 this.postDetail = res.data;

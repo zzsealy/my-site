@@ -11,7 +11,7 @@
 
 
 <script>
-    // import global from './Global.vue'
+    // import global from './store.js'
     export default {
         name: 'PostAbstractList',
         props: ['posts'],

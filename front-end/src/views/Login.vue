@@ -33,7 +33,7 @@
 
 <script>
 import axios from "axios";
-import global from "./Global.vue";
+import store from "./store.js";
 export default {
   name: "login",
   data() {
@@ -48,9 +48,9 @@ export default {
   },
   methods: {
     submit() {
-      const loginPath = global.URL + "/login";
-      window.console.log(global.state.is_login);
-      window.console.log(global.state.user_id);
+      const loginPath = store.URL + "/login";
+      window.console.log(store.state.is_login);
+      window.console.log(store.state.user_id);
       const data = {
         username: this.username,
         password: this.password,

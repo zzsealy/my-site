@@ -18,7 +18,7 @@
   </div>
 </template>
 <script>
-import global from "./Global.vue";
+import store from "./store.js";
 import PostAbstractList from "../components/Post-Abstract-List.vue";
 import Sider from "../components/Sider.vue";
 export default {
@@ -45,7 +45,8 @@ export default {
 
   methods: {
     getAllPost() {
-      const path = global.URL + "/posts";
+      debugger;
+      const path = store.URL + "/posts";
       this.$axios.get(path).then((res) => {
         let posts = [];
         res.data.forEach((element) => {
@@ -74,7 +75,7 @@ export default {
       catesPromise.then((res) => { this.cates = res.data})
     },
     search() {
-      const searchPath = global.URL + "/posts";
+      const searchPath = store.URL + "/posts";
       this.$axios
         .post(searchPath, { searchValue: this.searchValue })
         .then((res) => {
@@ -106,7 +107,7 @@ export default {
       this.posts = posts;
     },
     setProfileImage() {
-      this.imagePath = global.URL + "/media/" + "profile-photo.jpg";
+      this.imagePath = store.URL + "/media/" + "profile-photo.jpg";
     },
   },
 };
