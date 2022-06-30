@@ -18,7 +18,7 @@
   </div>
 </template>
 <script>
-import store from "./store.js";
+import {store} from "./store.js";
 import PostAbstractList from "../components/Post-Abstract-List.vue";
 import Sider from "../components/Sider.vue";
 export default {

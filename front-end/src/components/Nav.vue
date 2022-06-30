@@ -12,17 +12,17 @@
             </el-col>
             <el-col :span="10" style="padding: 0px;" class="nav-block">
                 <ul class="nav navbar-top">
-                    <a href="/" @click="clickNav('home')" class="nav-a" v-bind:class="{ nav_active: homeActive}">
+                    <a href="/" @click="clickNav('home')" class="nav-a" v-bind:class="{ nav_active: navStatus.homeActive}">
                         <i class="el-icon-s-home">首页</i></a>
-                    <a href="/cates/" @click="clickNav('cate')" class="nav-a" v-bind:class="{ nav_active: cateActive}">
+                    <a href="/cates/" @click="clickNav('cate')" class="nav-a" v-bind:class="{ nav_active: navStatus.cateActive}">
                         <i class="el-icon-s-order">归档</i></a>
-                    <a href="/verses/" @click="clickNav('sentence')" class="nav-a" v-bind:class="{ nav_active: sentenceActive}">
+                    <a href="/verses/" @click="clickNav('sentence')" class="nav-a" v-bind:class="{ nav_active: navStatus.sentenceActive}">
                         <i class="el-icon-water-cup">短句</i></a>
-                    <a href="#" @click="clickNav('history')" class="nav-a" v-bind:class="{ nav_active: historyActive}">
+                    <a href="#" @click="clickNav('history')" class="nav-a" v-bind:class="{ nav_active: navStatus.historyActive}">
                         <i class="el-icon-time">历史</i></a>
-                    <a href="/about/" @click="clickNav('about')" class="nav-a" v-bind:class="{ nav_active: aboutActive}">
+                    <a href="/about/" @click="clickNav('about')" class="nav-a" v-bind:class="{ nav_active: navStatus.aboutActive}">
                         <i class="el-icon-user-solid">关于</i></a>
-                    <a href="/admin/" @click="clickNav('admin')" class="nav-a" v-bind:class="{ nav_active: adminActive}">
+                    <a href="/admin/" @click="clickNav('admin')" class="nav-a" v-bind:class="{ nav_active: navStatus.adminActive}">
                         <i v-if="is_login">后台</i></a>
                     <a class="nav-a">
                         <li v-if="is_login" @click="cancelLogin"><a>注销登录</a></li>
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-    import store from "../views/store.js";
+    import {store, navStatus, mutations} from "../views/store.js";
     export default {
         components: {
         },
@@ -44,12 +44,13 @@
                 showModal: false,
                 is_login: false,
                 visible: true,
-                homeActive: false,
-                cateActive: false,
-                sentenceActive: false,
-                historyActive: false,
-                aboutActive: false,
-                adminActive: false
+                navStatus: navStatus
+                // homeActive: false,
+                // cateActive: false,
+                // sentenceActive: false,
+                // historyActive: false,
+                // aboutActive: false,
+                // adminActive: false
             };
         },
         methods: {
@@ -57,41 +58,16 @@
                 store.logoutAction();
                 location.reload();
             },
+            
+            cancelClickStstus: mutations.cancelStatus,
+            toggleNav: mutations.toggleStatus,
+
             clickNav(navName) {
-                this.cancelClickStstus()
+                // this.cancelClickStstus()
                 this.toggleNav(navName);
             },
 
-            toggleNav(navName) {
-                switch (navName) {
-                    case "home":
-                        this.homeActive = true;
-                        break;
-                    case "cate":
-                        this.cateActive = true;
-                        break;
-                    case "sentence":
-                        this.sentenceActive = true;
-                        break;
-                    case "history":
-                        this.historyActive = true;
-                        break;
-                    case "about":
-                        this.aboutActive = true;
-                        break;
-                    case "admin":
-                        this.adminActive = true;
-                        break;
-                }
-            },
-            cancelClickStstus() {
-                this.homeActive = false;
-                this.cateActive = false;
-                this.sentenceActive = false;
-                this.historyActive = false;
-                this.adminActive = false;
-                this.aboutActive = false;
-            }
+            
         },
 
         created() {

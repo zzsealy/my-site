@@ -26,7 +26,7 @@
             // }
         },
         created() {
-            this.getTimePostData();
+            // this.getTimePostData();
         }
     }
 </script>

@@ -16,7 +16,7 @@
   </div>
 </template>
 <script>
-import store from "./store.js";
+import {store} from "./store.js";
 import { mavonEditor } from "mavon-editor";
 import Sider from "../components/Sider.vue";
 export default {

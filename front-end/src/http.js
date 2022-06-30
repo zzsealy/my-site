@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import router from './router'
-import store from './views/store.js'
+import {store} from './views/store.js'
 
 
 // 基础配置
