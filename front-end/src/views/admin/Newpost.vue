@@ -17,7 +17,6 @@
 
 
 <script>
-  import {store} from '../store.js'
   export default {
     name: "Addpost",
     data() {
@@ -38,7 +37,7 @@
           'cate': this.selected,
           'owner': state.user_id
         }
-        const path = store.URL + '/post';
+        const path = this.$store.state.URL + '/post';
         this.$axios.post(path, postData)
           .then((res) => {
             window.console.log(res);
@@ -47,7 +46,7 @@
 
       },
       getAllCate(){
-        const path = store.URL + "/categories";
+        const path = this.$store.state.URL + "/categories";
         this.$axios.get(path)
           .then((res) => {
             let cates = []
@@ -61,8 +60,8 @@
             // 第一步.将图片上传到服务器.
            var formdata = new FormData();
            formdata.append('image', $file);
-           const imageUrl = store.URL + '/postimage'
-           let backendUrl = store.URL;
+           const imageUrl = this.$store.state.URL + '/postimage'
+           let backendUrl = this.$store.state.URL;
            this.$axios({
                url: imageUrl,
                method: 'post',
@@ -82,7 +81,7 @@
         $imgDel(pos){
           let name = pos[1].name;
           let delData = {'name':name}
-          const imageUrl = store.URL + '/postimage';
+          const imageUrl = this.$store.state.URL + '/postimage';
           this.$axios.delete(imageUrl, {'data': delData})
             .then((data) => {
             window.console.log(data.message)

@@ -17,7 +17,6 @@
 
 
 <script>
-    import {store} from '../store.js'
     export default {
         name: "EditPost",
         data() {
@@ -31,7 +30,7 @@
         },
         methods: {
             getPostDataById(id) {
-                let getPodtDataPath = store.URL + '/post/' + id;
+                let getPodtDataPath = this.$store.state.URL + '/post/' + id;
                 this.$axios.get(getPodtDataPath)
                     .then((res) => {
                         if (res.status == 200) {
@@ -44,7 +43,7 @@
                     })
             },
             getAllCate() {
-                const path = store.URL + "/categories";
+                const path = this.$store.state.URL + "/categories";
                 this.$axios.get(path)
                     .then((res) => {
                         let cates = []
@@ -56,7 +55,7 @@
             },
             submitPost() { // 提交修改
                 let id = this.$route.params.id;
-                const postEditPath = store.URL + '/post/' + id;
+                const postEditPath = this.$store.state.URL + '/post/' + id;
                 let data = {
                     title: this.title,
                     subhead: this.subhead,

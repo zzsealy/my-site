@@ -16,7 +16,6 @@
   </div>
 </template>
 <script>
-import {store} from "./store.js";
 import { mavonEditor } from "mavon-editor";
 import Sider from "../components/Sider.vue";
 export default {
@@ -37,7 +36,7 @@ export default {
   },
   methods: {
     getPostDetail(id) {
-      let postDetailPath = store.URL + "/post/" + id;
+      let postDetailPath = this.$store.state.URL + "/post/" + id;
       this.$axios.get(postDetailPath).then((res) => {
         let data = res.data;
         this.postTitle = data.title;
@@ -48,7 +47,7 @@ export default {
       });
     },
     setProfileImage() {
-      this.imagePath = store.URL + "/media/" + "profile-photo.jpg";
+      this.imagePath = this.$store.state.URL + "/media/" + "profile-photo.jpg";
     },
     getCategories() {
       let catesPromise = this.common_func.getCates()

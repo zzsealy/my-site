@@ -70,7 +70,6 @@
 
 <script>
 // import axios from 'axios'
-import {store} from "../store.js";
 export default {
   name: "Category",
   data() {
@@ -86,7 +85,7 @@ export default {
 
   methods: {
     getCategories() {
-      const path = store.URL + "/categories";
+      const path = this.$store.state.URL + "/categories";
       this.$axios
         .get(path)
         .then((res) => {
@@ -101,7 +100,7 @@ export default {
     },
 
     submit() {
-      const path = store.URL + "/categories";
+      const path = this.$store.state.URL + "/categories";
       const data = {
         "name": this.newCate,
       };
@@ -116,7 +115,7 @@ export default {
     },
 
     delCate(cateId) {
-      const path = store.URL + "/category/" + cateId;
+      const path = this.$store.state.URL + "/category/" + cateId;
       this.$axios
         .delete(path)
         .then((res) => {
@@ -140,7 +139,7 @@ export default {
     },
 
     submitEditCate(cateId) {
-      const path = store.URL + "/category/" + cateId;
+      const path = this.$store.state.URL + "/category/" + cateId;
       const data = {
         "name": this.changeCateName,
       };

@@ -44,7 +44,6 @@
 
 
 <script>
-    import {store} from '../store.js'
     export default {
         name: 'PostList',
         data() {
@@ -58,7 +57,7 @@
         },
         methods: {
             getAllPost() {
-                const path = store.URL + "/posts";
+                const path = this.$store.state.URL + "/posts";
                 this.$axios.get(path)
                     .then((res) => {
                         let posts = []
@@ -94,7 +93,7 @@
                 })
                     .then(value => {
                         if(value==true){
-                            const delPath = store.URL + '/post';
+                            const delPath = this.$store.state.URL + '/post';
                             let data = {'id':id}
                             this.$axios.delete(delPath, {'data': data})
                                 .then((res) => {

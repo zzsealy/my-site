@@ -12,6 +12,7 @@ import toasted from 'vue-toasted'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import common_func from './views/common/common_func'
+import store from './store.js'
 
 let options = {
     // 主题样式 primary/outline/bubble
@@ -40,6 +41,7 @@ Vue.prototype.$axios = axios;
 Vue.prototype.common_func = common_func;
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount('#app')
 

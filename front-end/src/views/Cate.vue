@@ -7,7 +7,6 @@
 </template>
 
 <script>
-    import global from './store.js'
     export default {
         name: 'Cate',
         data() {

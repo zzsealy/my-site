@@ -33,7 +33,6 @@
 
 <script>
 import axios from "axios";
-import {store} from "./store.js";
 export default {
   name: "login",
   data() {
@@ -48,7 +47,7 @@ export default {
   },
   methods: {
     submit() {
-      const loginPath = store.URL + "/login";
+      const loginPath = this.$store.state.URL + "/login";
       window.console.log(store.state.is_login);
       window.console.log(store.state.user_id);
       const data = {

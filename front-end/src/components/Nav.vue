@@ -35,7 +35,6 @@
 </template>
 
 <script>
-    import {store, navStatus, mutations} from "../views/store.js";
     export default {
         components: {
         },
@@ -44,7 +43,7 @@
                 showModal: false,
                 is_login: false,
                 visible: true,
-                navStatus: navStatus
+                navStatus: this.$store.state.navStatus
                 // homeActive: false,
                 // cateActive: false,
                 // sentenceActive: false,
@@ -55,12 +54,16 @@
         },
         methods: {
             cancelLogin() {
-                store.logoutAction();
+                this.$store.commit('logoutAction', {});
                 location.reload();
             },
             
-            cancelClickStstus: mutations.cancelStatus,
-            toggleNav: mutations.toggleStatus,
+            cancelClickStstus() { 
+                this.$store.commit('cancelStatus', {});
+            },
+            toggleNav(navName) {
+                this.$store.commit('toggleStatus', {navName: navName});
+            },
 
             clickNav(navName) {
                 // this.cancelClickStstus()
@@ -71,12 +74,8 @@
         },
 
         created() {
-            this.is_login = store.state.is_login;
+            this.is_login = this.$store.state.is_login;
         },
-
-        update() {
-            this.is_login = store.state.is_login;
-        }
     }
 </script>
 
