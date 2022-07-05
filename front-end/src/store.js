@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
@@ -8,14 +9,15 @@ export default new Vuex.Store({
     debug: true,
     is_login: window.localStorage.getItem('mysite-token') ? true : false,
     user_id: window.localStorage.getItem('mysite-user-id'),
-    navStatus:{
-      homeActive: false,
-      cateActive: false,
-      sentenceActive: false,
-      historyActive: false,
-      aboutActive: false,
-      adminActive: false
-  },
+    navStatusState: {
+        homeActive: false,
+        cateActive: false,
+        sentenceActive: false,
+        historyActive: false,
+        aboutActive: false,
+        adminActive: false
+      },
+  
   },
   getters: {},
   mutations: {
@@ -29,35 +31,37 @@ export default new Vuex.Store({
       state.user_id = 0;
     },
     toggleStatus(state, payload) {
-      navName = payload.navName;
+      let navName = payload.navName;
+      
       switch (navName) {
           case "home":
-              state.navStatus.homeActive = true;
+              state.navStatusState.homeActive = true;
               break;
           case "cate":
-              state.navStatus.cateActive = true;
+              state.navStatusState.cateActive = true;
               break;
           case "sentence":
-              state.navStatus.sentenceActive = true;
+              state.navStatusState.sentenceActive = true;
               break;
           case "history":
-              state.navStatus.historyActive = true;
+              state.navStatusState.historyActive = true;
               break;
           case "about":
-              state.navStatus.aboutActive = true;
+              state.navStatusState.aboutActive = true;
               break;
           case "admin":
-              state.navStatus.adminActive = true;
+              state.navStatusState.adminActive = true;
               break;
       }
+      window.sessionStorage.setItem("nav_status", JSON.stringify(state.navStatusState))
     },
     cancelStatus(state, payload){
-      state.navStatus.homeActive = false;
-      state.navStatus.cateActive = false;
-      state.navStatus.sentenceActive = false;
-      state.navStatus.historyActive = false;
-      state.navStatus.adminActive = false;
-      state.navStatus.aboutActive = false;
+      state.navStatusState.homeActive = false;
+      state.navStatusState.cateActive = false;
+      state.navStatusState.sentenceActive = false;
+      state.navStatusState.historyActive = false;
+      state.navStatusState.adminActive = false;
+      state.navStatusState.aboutActive = false;
     },
 
   },

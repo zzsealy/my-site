@@ -43,7 +43,7 @@
                 showModal: false,
                 is_login: false,
                 visible: true,
-                navStatus: this.$store.state.navStatus
+                navStatus: ''
                 // homeActive: false,
                 // cateActive: false,
                 // sentenceActive: false,
@@ -68,6 +68,7 @@
             clickNav(navName) {
                 // this.cancelClickStstus()
                 this.toggleNav(navName);
+                this.navStatus = JSON.parse(window.sessionStorage.getItem("nav_status"));
             },
 
             
@@ -75,6 +76,7 @@
 
         created() {
             this.is_login = this.$store.state.is_login;
+            this.navStatus = JSON.parse(window.sessionStorage.getItem("nav_status"));
         },
     }
 </script>

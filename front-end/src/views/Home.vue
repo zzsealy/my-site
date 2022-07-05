@@ -44,7 +44,6 @@ export default {
 
   methods: {
     getAllPost() {
-      debugger;
       const path = this.$store.state.URL + "/posts";
       this.$axios.get(path).then((res) => {
         let posts = [];

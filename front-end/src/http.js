@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import axios from 'axios'
 import router from './router'
-import {store} from './views/store.js'
 
 
 // 基础配置
@@ -11,6 +10,15 @@ axios.defaults.baseURL = 'http://localhost:8001'
 // 增加 request interceptor
 
 axios.interceptors.request.use(function (config) {
+    // let navStatus = {
+    //     homeActive: false,
+    //     cateActive: false,
+    //     sentenceActive: false,
+    //     historyActive: false,
+    //     aboutActive: false,
+    //     adminActive: false
+    //   }
+    // window.sessionStorage.setItem("nav_status", navStatus)
     const token = window.localStorage.getItem('mysite-token')
     if (token) {
         config.headers.Authorization = `${token}`
@@ -27,7 +35,7 @@ axios.interceptors.response.use(function (response) {
     // 处理响应失败的
     switch (error.response.status) {
         case 401:
-            store.logoutAction();
+            this.$store.commit('logoutAction', {});
             if (router.currentRoute.path !== '/login') {
                 Vue.toasted.error('401: 认证已失效，请先登录', { icon: 'fingerprint' })
                 router.replace({

@@ -1,11 +1,9 @@
-import {store} from "../store.js";
 import axios from '../../http'
+import store from '../../store'
 
 export default {
   getCates: function (){
-    let cates = ''
-    const path = store.URL + "/categories";
+    const path = store.state.URL + "/categories";
     return axios.get(path)
-        
           }
 }
