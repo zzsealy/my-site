@@ -43,7 +43,14 @@
                 showModal: false,
                 is_login: false,
                 visible: true,
-                navStatus: ''
+                navStatus: {
+                    homeActive: false,
+                    cateActive: false,
+                    sentenceActive: false,
+                    historyActive: false,
+                    aboutActive: false,
+                    adminActive: false
+                },
                 // homeActive: false,
                 // cateActive: false,
                 // sentenceActive: false,
@@ -76,7 +83,19 @@
 
         created() {
             this.is_login = this.$store.state.is_login;
-            this.navStatus = JSON.parse(window.sessionStorage.getItem("nav_status"));
+            let nav_status = JSON.parse(window.sessionStorage.getItem("nav_status"));
+            if (nav_status) {
+                this.navStatus = nav_status;
+            } else {
+                this.navStatus = {
+                    homeActive: false,
+                    cateActive: false,
+                    sentenceActive: false,
+                    historyActive: false,
+                    aboutActive: false,
+                    adminActive: false
+                }
+            }
         },
     }
 </script>
