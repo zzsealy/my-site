@@ -7,7 +7,7 @@ import Newpost from './views/admin/Newpost'
 import PostList from './views/admin/PostList'
 import EditPost from './views/admin/EditPost.vue'
 import PostDetail from './views/PostDetail.vue'
-import Cate from './views/Cate.vue'
+import Record from './views/Record.vue'
 
 
 Vue.use(Router)
@@ -22,9 +22,9 @@ const router = new Router({
       component: Home
     },
     {
-      path: '/cates',
-      name: 'cate',
-      component: Cate
+      path: '/records',
+      name: 'record',
+      component: Record
     },
     {
       path: '/about',
