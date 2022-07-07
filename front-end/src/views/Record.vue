@@ -1,10 +1,14 @@
 <template>
     <div class="docu-body">
-        <!-- <input class="search_input" type="text" v-model="searchValue">
-            <b-button @click="search" variant="outline-primary" class="search_button">搜索</b-button> -->
         <el-row :gutter="20">
             <el-col :span="14" :offset="4" style="padding: 0px">
-                <h1>1111</h1>
+                <!-- <h1>1111</h1> -->
+                <div v-for="(postDataList, key, index) in timePostData">
+                    <h1>{{ key }}</h1>
+                    <ul>
+                        <li class="post-title" v-for="postData in postDataList"> <a :href="'/post/' + postData.id" >{{ postData.title }}</a></li>
+                    </ul>
+                </div>
             </el-col>
             <!-- document.getElementById('post-block').childNodes.length  这个是 统计元素子元素的数量-->
             <el-col :span="4" style="padding: 0px">
@@ -21,26 +25,38 @@
     export default {
         name: 'Cate',
         components: {
-            postabstract: PostAbstractList,
             sider: Sider,
         },
         data() {
             return {
-                cates: ''
+                cates: '',
+                timePostData: ''
             }
         },
         methods: {
-            // getTimePostData(){
-            // const catePostByTimeUrl = global.URL + '/time_post_data'
-            // let timePostData = this.$axios.get(catePostByTimeUrl)
-            //                     .then((res) => {
-            //                         // {"year": [{"time": "title"}, {"time": "title"}] }
-            //                         window.console.log(res)
-            //                     })
-            // }
+            getTimePostData(){
+            const catePostByTimeUrl = this.$store.state.URL + '/time_post_data'
+            let timePostData = this.$axios.get(catePostByTimeUrl)
+                .then((res) => {
+                    // {"year": [{"time": "title"}, {"time": "title"}] }
+                    this.timePostData = res.data.time_post_data;
+                })
+            }
         },
         created() {
-            // this.getTimePostData();
+            this.getTimePostData();
         }
     }
 </script>
+
+<style>
+    .post-title a{
+        color: #686868;
+        text-decoration: none;
+    }
+
+    .post-title :hover {
+        color: #686868;
+        text-decoration: underline;
+    }
+</style>

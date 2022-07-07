@@ -16,7 +16,7 @@ class Cateserializer(serializers.ModelSerializer):
 class Postserializer(serializers.ModelSerializer):
 
     """
-    传入的外键id值， 自动取到实例。
+    传入的外键id值,自动取到实例。
     """
     class Meta:
         model = Post

@@ -4,8 +4,6 @@ from django.utils.decorators import method_decorator
 from rest_framework.views import APIView
 from rest_framework.status import HTTP_203_NON_AUTHORITATIVE_INFORMATION, HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_404_NOT_FOUND
 from rest_framework.response import Response
-from elasticsearch import Elasticsearch
-from elasticsearch_dsl import Search, Q
 from backend.apps.accounts.utils import login_require
 
 
@@ -80,7 +78,11 @@ class Cate(APIView):
 class Postlist(APIView):
     
     def get(self, request):
+        get_data = request.GET
+        cate_name = get_data.get('cate')
         posts = PostModel.objects.all()
+        if cate_name:
+            posts = posts.filter(cate__name=cate_name)
         serialzier = Postserializer(posts, many=True)
         for data in serialzier.data:
             data['created'] = data['created'].replace('T', ' ').split('.')[0]
@@ -90,12 +92,6 @@ class Postlist(APIView):
         try:
             data = request.data
             search_value = data.get('searchValue')
-            es = Elasticsearch()
-            s = Search(using = es, index='post')
-            q = Q("multi_match", query=search_value, fields=['title', 'subhead', 'body', 'cate'])
-            res = s.query(q).execute()
-            search_results_dict_list = res.to_dict()['hits']['hits']
-            return Response({'search_result_list': search_results_dict_list})
         except Exception as e:
             return Response({'search_result_list': []})
 

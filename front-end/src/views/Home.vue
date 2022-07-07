@@ -44,7 +44,21 @@ export default {
 
   methods: {
     getAllPost() {
-      const path = this.$store.state.URL + "/posts";
+      let queryParams = this.$route.query;
+      // let a = window.location.href;
+      let cate = queryParams.cate;
+      let pag = queryParams.pag;
+      debugger;
+      let path = this.$store.state.URL + "/posts";
+      if(cate || pag) {
+        path = path + '?' 
+        if(cate) {
+          path = path + 'cate=' + cate + "&";
+        }
+        if(pag){
+          path = path + 'pag=' + pag;
+        }
+      }
       this.$axios.get(path).then((res) => {
         let posts = [];
         res.data.forEach((element) => {
