@@ -22,6 +22,21 @@ const router = new Router({
       component: Home
     },
     {
+      path: '/cate/:cate',
+      name: 'homeCate',
+      component: Home
+    },
+    {
+      path: '/page/:page',
+      name: 'homePage',
+      component: Home
+    },
+    {
+      path: '/cate/:cate/page/:page',
+      name: 'homeCatePage',
+      component: Home
+    },
+    {
       path: '/records',
       name: 'record',
       component: Record

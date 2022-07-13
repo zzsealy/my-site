@@ -32,7 +32,8 @@ export default {
       imagePath: "",
       searchValue: "",
       cates: '',
-      activeName: ['1']
+      activeName: ['1'],
+      pageList: []
     };
   },
 
@@ -40,25 +41,23 @@ export default {
     this.getAllPost();
     this.setProfileImage();
     this.getCategories();
+    this.getPagingCount();
   },
 
   methods: {
     getAllPost() {
-      let queryParams = this.$route.query;
-      // let a = window.location.href;
-      let cate = queryParams.cate;
-      let pag = queryParams.pag;
-      debugger;
-      let path = this.$store.state.URL + "/posts";
-      if(cate || pag) {
-        path = path + '?' 
-        if(cate) {
-          path = path + 'cate=' + cate + "&";
-        }
-        if(pag){
-          path = path + 'pag=' + pag;
-        }
+      let params = this.$route.params;
+      let path = this.$store.state.URL + "/posts?";
+      let cate = params.cate||false;
+      let page = params.page||false;
+      if(cate){
+        path = path + "cate=" + cate + '&';
       }
+
+      if(page){
+          path = path + 'page=' + page;
+      }
+
       this.$axios.get(path).then((res) => {
         let posts = [];
         res.data.forEach((element) => {
@@ -85,6 +84,21 @@ export default {
     getCategories() {
       let catesPromise = this.common_func.getCates()
       catesPromise.then((res) => { this.cates = res.data})
+    },
+    getPagingCount() {
+      let params = this.$route.params;
+      let cate = params.cate||false;
+      let pagingNumUrl = this.$store.state.URL + '/paging_data?'
+      if(cate){
+        pagingNumUrl = pagingNumUrl + "cate=" + cate;
+      } else {
+        pagingNumUrl = pagingNumUrl + "cate=all";
+      }
+      this.$axios.get(pagingNumUrl)
+        .then((res) => {
+          debugger;
+          this.pageList = res.data.page_list;
+        })
     },
     search() {
       const searchPath = this.$store.state.URL + "/posts";

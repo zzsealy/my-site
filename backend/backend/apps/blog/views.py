@@ -1,4 +1,5 @@
 import os
+from urllib import request
 from django.conf import settings
 from django.utils.decorators import method_decorator
 from rest_framework.views import APIView
@@ -83,6 +84,13 @@ class Postlist(APIView):
         posts = PostModel.objects.all()
         if cate_name:
             posts = posts.filter(cate__name=cate_name)
+        page = get_data.get('page') # 页数
+        if page:
+            page = int(page)
+            post_account_each_page = settings.PAGING_LENGTH
+            post_index_start = (page-1)*post_account_each_page
+            post_index_end = page*post_account_each_page
+            posts = posts[post_index_start: post_index_end]
         serialzier = Postserializer(posts, many=True)
         for data in serialzier.data:
             data['created'] = data['created'].replace('T', ' ').split('.')[0]
@@ -96,6 +104,18 @@ class Postlist(APIView):
             return Response({'search_result_list': []})
 
 
+class PostPaging(APIView):
+
+    def get(self, request): # 返回页数
+        cate = request.GET.get('cate')
+        if cate == 'all':
+            posts = PostModel.objects.all()
+        else:
+            posts = PostModel.objects.filter(cate__name=cate)
+        paging_len = settings.PAGING_LENGTH
+        page_acount = int(posts.count() / paging_len) + 1
+        page_list = [x+1 for x in range(page_acount)]
+        return Response({'page_list': page_list})
 
 
 class Post(APIView):
