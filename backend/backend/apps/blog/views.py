@@ -112,10 +112,7 @@ class PostPaging(APIView):
             posts = PostModel.objects.all()
         else:
             posts = PostModel.objects.filter(cate__name=cate)
-        paging_len = settings.PAGING_LENGTH
-        page_acount = int(posts.count() / paging_len) + 1
-        page_list = [x+1 for x in range(page_acount)]
-        return Response({'page_list': page_list})
+        return Response({'post_count': posts.count()})
 
 
 class Post(APIView):

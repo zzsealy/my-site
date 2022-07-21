@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     getPostDetail(id) {
-      let postDetailPath = this.$store.state.URL + "/post/" + id;
+      let postDetailPath = this.$store.state.URL + "/post/" + id + '/';
       this.$axios.get(postDetailPath).then((res) => {
         let data = res.data;
         this.postTitle = data.title;

@@ -5,6 +5,8 @@
     <el-row :gutter="20">
       <el-col :span="14" :offset="4" style="padding: 0px">
         <postabstract :posts="posts"></postabstract>
+        <el-pagination background :page-size="pageSize" :page-count="pageCount" layout="prev, pager, next" :total="postTotalCount"
+        @current-change="getPostByPageCate"></el-pagination>
       </el-col>
       <!-- document.getElementById('post-block').childNodes.length  这个是 统计元素子元素的数量-->
       <el-col :span="4" style="padding: 0px">
@@ -33,26 +35,23 @@ export default {
       searchValue: "",
       cates: '',
       activeName: ['1'],
-      pageList: []
+      pageSize: 10,
+      postTotalCount: '', // 总共的文章数
+      pageCount: '', // 页数
+      cate: 'all' // 当前分类
     };
   },
 
   mounted() {
-    this.getAllPost();
+    this.getPagingCount(); // 获取当前分类下的总文章数
     this.setProfileImage();
     this.getCategories();
-    this.getPagingCount();
   },
 
   methods: {
-    getAllPost() {
-      let params = this.$route.params;
+    getPostByPageCate(page=1) {
       let path = this.$store.state.URL + "/posts?";
-      let cate = params.cate||false;
-      let page = params.page||false;
-      if(cate){
-        path = path + "cate=" + cate + '&';
-      }
+      path = path + "cate=" + this.cate + '&';
 
       if(page){
           path = path + 'page=' + page;
@@ -79,6 +78,7 @@ export default {
           }
         });
         this.posts = posts;
+        this.postTotalCount = posts.length;
       });
     },
     getCategories() {
@@ -86,8 +86,12 @@ export default {
       catesPromise.then((res) => { this.cates = res.data})
     },
     getPagingCount() {
+      /*
+      当前分类的页数，
+      */
       let params = this.$route.params;
       let cate = params.cate||false;
+      this.cate = cate;
       let pagingNumUrl = this.$store.state.URL + '/paging_data?'
       if(cate){
         pagingNumUrl = pagingNumUrl + "cate=" + cate;
@@ -96,9 +100,10 @@ export default {
       }
       this.$axios.get(pagingNumUrl)
         .then((res) => {
-          debugger;
-          this.pageList = res.data.page_list;
+          this.postTotalCount = res.data.post_count;  // 文章数量
+          this.pageCount = Math.ceil(this.postTotalCount/this.pageSize) // 页数
         })
+      this.getPostByPageCate(cate);
     },
     search() {
       const searchPath = this.$store.state.URL + "/posts";
@@ -129,7 +134,6 @@ export default {
           },
         ];
       }
-
       this.posts = posts;
     },
     setProfileImage() {
