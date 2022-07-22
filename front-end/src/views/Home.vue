@@ -51,12 +51,13 @@ export default {
   methods: {
     getPostByPageCate(page=1) {
       let path = this.$store.state.URL + "/posts?";
-      path = path + "cate=" + this.cate + '&';
-
+      if(this.cate){
+        path = path + "cate=" + this.cate + '&';
+      }
       if(page){
           path = path + 'page=' + page;
       }
-
+      path = path + '&page_size=' + this.pageSize;
       this.$axios.get(path).then((res) => {
         let posts = [];
         res.data.forEach((element) => {
@@ -78,7 +79,6 @@ export default {
           }
         });
         this.posts = posts;
-        this.postTotalCount = posts.length;
       });
     },
     getCategories() {
@@ -103,7 +103,7 @@ export default {
           this.postTotalCount = res.data.post_count;  // 文章数量
           this.pageCount = Math.ceil(this.postTotalCount/this.pageSize) // 页数
         })
-      this.getPostByPageCate(cate);
+      this.getPostByPageCate(); // 获取第一页的文章
     },
     search() {
       const searchPath = this.$store.state.URL + "/posts";

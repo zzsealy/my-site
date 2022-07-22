@@ -87,7 +87,7 @@ class Postlist(APIView):
         page = get_data.get('page') # 页数
         if page:
             page = int(page)
-            post_account_each_page = settings.PAGING_LENGTH
+            post_account_each_page = int(get_data.get('page_size'))# 每页条目数
             post_index_start = (page-1)*post_account_each_page
             post_index_end = page*post_account_each_page
             posts = posts[post_index_start: post_index_end]
