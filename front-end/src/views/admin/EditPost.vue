@@ -30,7 +30,7 @@
         },
         methods: {
             getPostDataById(id) {
-                let getPodtDataPath = this.$store.state.URL + '/post/' + id;
+                let getPodtDataPath = this.$store.state.URL + '/post/' + id + '/';
                 this.$axios.get(getPodtDataPath)
                     .then((res) => {
                         if (res.status == 200) {

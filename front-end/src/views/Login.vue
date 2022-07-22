@@ -48,8 +48,6 @@ export default {
   methods: {
     submit() {
       const loginPath = this.$store.state.URL + "/login";
-      window.console.log(store.state.is_login);
-      window.console.log(store.state.user_id);
       const data = {
         username: this.username,
         password: this.password,

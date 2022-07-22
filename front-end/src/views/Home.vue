@@ -89,7 +89,7 @@ export default {
       /*
       当前分类的页数，
       */
-      let params = this.$route.params;
+      let params = this.$route.query;
       let cate = params.cate||false;
       this.cate = cate;
       let pagingNumUrl = this.$store.state.URL + '/paging_data?'
