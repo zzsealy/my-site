@@ -17,7 +17,9 @@
                                         分类
                                     </span>
                                     <el-dropdown-menu slot="dropdown">
-                                        <el-dropdown-item command="生活" icon="el-icon-circle-check">生活</el-dropdown-item>
+                                        <el-dropdown-item :command="cate.name" v-for="cate in cates" :key="cate.id" icon="el-icon-circle-check">
+                                        {{ cate.name }}</el-dropdown-item>
+                                    <!-- <el-dropdown-item :command="'生活'" icon="el-icon-circle-check">生活</el-dropdown-item> -->
                                     </el-dropdown-menu>
                                 </el-dropdown>
                             </th>
@@ -61,7 +63,8 @@
                 pageSize: 10,
                 postTotalCount: '', // 总共的文章数
                 pageCount: '', // 页数
-                cate: 'all' // 当前分类
+                cate: 'all', // 当前分类
+                cates: ''
             }
         },
         methods: {
@@ -122,6 +125,11 @@
                 this.$router.push(path);
             },
 
+            getCategories() {
+                let catesPromise = this.common_func.getCates()
+                catesPromise.then((res) => { this.cates = res.data})
+            },
+
             delPost(id, title) {
                 this.$bvModal.msgBoxConfirm('删除:' + title, + '?', {
                     okTitle: '确定',
@@ -160,6 +168,7 @@
         },
         created() {
             this.getPagingCount();
+            this.getCategories();
         }
     }
 </script>
