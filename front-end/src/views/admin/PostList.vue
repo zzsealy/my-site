@@ -14,12 +14,12 @@
                             <th>
                                 <el-dropdown :split-button="true" trigger="click" @command="handleCommand">
                                     <span class="">
-                                        分类
+                                        {{ nowCate }}
                                     </span>
                                     <el-dropdown-menu slot="dropdown">
+                                        <el-dropdown-item command="all" icon="el-icon-circle-check">全部</el-dropdown-item>
                                         <el-dropdown-item :command="cate.name" v-for="cate in cates" :key="cate.id" icon="el-icon-circle-check">
                                         {{ cate.name }}</el-dropdown-item>
-                                    <!-- <el-dropdown-item :command="'生活'" icon="el-icon-circle-check">生活</el-dropdown-item> -->
                                     </el-dropdown-menu>
                                 </el-dropdown>
                             </th>
@@ -64,7 +64,8 @@
                 postTotalCount: '', // 总共的文章数
                 pageCount: '', // 页数
                 cate: 'all', // 当前分类
-                cates: ''
+                cates: '',
+                nowCate: '全部'
             }
         },
         methods: {
@@ -120,7 +121,8 @@
                     })
                 this.getPostByPageCate(); // 获取第一页的文章
             },
-            goEditPage(id) {
+
+            goEditPage(id) { // 跳转到编辑文章页面
                 let path = '/admin/edit-post/' + id;
                 this.$router.push(path);
             },
@@ -161,14 +163,26 @@
                 this.dismissCountDown = this.dismissSecs;
             },
 
-            handleCommand(value) {
-                let a = "2131"
-                debugger;
+            handleCommand(cate) {
+                // let nowPath = this.$route.path + '?cate=' + cate;
+                // this.$router.push(nowPath);
+                if(cate == 'all'){
+                    this.$router.push({name: 'post-list'})
+                } else {
+                    this.$router.push({name: 'post-list', query: {cate:cate}})
+                }
+                this.$router.go(0)
+                
             }
         },
         created() {
             this.getPagingCount();
             this.getCategories();
+            let nowCate = this.$route.query.cate;
+            if(nowCate) {
+
+                this.nowCate = nowCate;
+            }
         }
     }
 </script>
