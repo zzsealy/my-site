@@ -8,8 +8,8 @@ from rest_framework.response import Response
 from backend.apps.accounts.utils import login_require
 
 
-from blog.models import Category, Post as PostModel, Comment, PostImage
-from blog.serializers import Cateserializer, Postserializer, CommentSerializer, PostImageSerializer
+from blog.models import Category, Post as PostModel, Comment, PostImage, Sentence
+from blog.serializers import Cateserializer, Postserializer, CommentSerializer, PostImageSerializer, SentenceSerializer
 from accounts.utils import login_expire
 
 
@@ -220,3 +220,32 @@ class TimePostDataView(APIView):
 
             time_post_data[year].append(post_data)
         return Response({'time_post_data': time_post_data})
+
+
+
+class SentenceList(APIView):
+
+    def get(self, request):
+        get_data = request.GET
+        cate = get_data.get('cate')
+        if cate:
+            sentences = Sentence.objects.filter(cate=cate)
+        else:
+            sentences = Sentence.objects.all()
+        serializer = SentenceSerializer(sentences)
+        return Response(data = {'sentences': serializer.data})
+
+
+
+class SentenceView(APIView):
+
+    def get(self, request):
+        pass
+
+
+    def post(self, request):
+        post_data = request.data
+        serializer = SentenceSerializer(data=post_data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(status=HTTP_200_OK)

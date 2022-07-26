@@ -31,6 +31,21 @@ class Comment(models.Model):
     owner_article = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
 
 
+class SentenceCate(models.Model):
+    name = models.CharField(max_length=20)
+
+
+class Sentence(models.Model):
+    body = models.TextField()
+    author = models.CharField(blank=True, null=True, max_length=50)
+    create_time = models.DateField(auto_now_add=True)
+    cate = models.ForeignKey(SentenceCate, related_name='sentences', on_delete=models.CASCADE)
+
+
+
+
+
+
 
 
 

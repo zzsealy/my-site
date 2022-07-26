@@ -2,10 +2,11 @@
     <div>
             <div class="index-post" v-for="(post, index) in posts" :key="post.id">
                 <h2 class="post-title"><a :href="'post/' + post.id"> {{ post.title }} </a></h2>
-                <span class="post-time">{{ post.created }}</span>
-                <p class="post-body">{{ post.subhead }}</p>
+                <div><span class="post-time"><i class="el-icon-date"></i>{{ post.created }}</span></div>
+                <p class="post-subhead">{{ post.subhead }}</p>
                 <div class="read-all-post"><span ><a :href="'post/' + post.id"> 阅读全文》</a></span></div>
             </div>
+            <el-divider></el-divider>
             </div>
 </template>
 
@@ -32,7 +33,7 @@
 <style>
 
     .post-title a{
-        color: #686868;
+        color: #000000;
         text-decoration: none;
     }
     .post-cate {
@@ -41,15 +42,17 @@
 
     .post-time {
         color: #808080;
+        margin-left: 5px;
     }
 
-    .post-body {
-        color: #9c9c9c;
+    .post-subhead {
+        color: #3a3535;
         display: inline;
+        /* margin-left: 10px; */
     }
 
     .index-post {
-        margin-top: 25px;
+        margin-bottom: 45px;
     }
 
     .read-all-post span a {
