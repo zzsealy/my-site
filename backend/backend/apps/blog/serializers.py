@@ -41,7 +41,7 @@ class CommentSerializer(serializers.ModelSerializer):
     owner_article = serializers.ReadOnlyField(source='owner.username')
     class Meta:
         model = Comment
-        field = ('name', 'content', 'created', 'email', 'owner_article')
+        fields = ('name', 'content', 'created', 'email', 'owner_article')
 
 
 
@@ -49,7 +49,7 @@ class SentenceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Sentence
-        field = ('body', 'author', 'cate')
+        fields = "__all__"
 
 
 class SentenceCateSerializer(serializers.ModelSerializer):

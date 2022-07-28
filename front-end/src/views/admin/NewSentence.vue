@@ -19,9 +19,36 @@
                   :value="item.value">
                 </el-option>
             </el-select> -->
-            <div class="submit-button">
-                <b-button @click="submitSentence">提交</b-button>
-            </div><br>
+            <b-button class="submit-button" @click="submitSentence">提交</b-button>
+            <table>
+                <tr class="table-title">
+                    <th>句子</th>
+                    <th>作者</th>
+                    <th>
+                        <!-- <el-dropdown :split-button="true" trigger="click" @command="handleCommand">
+                            <span class="">
+                                {{ nowCate }}
+                            </span>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item command="all" icon="el-icon-circle-check">全部</el-dropdown-item>
+                                <el-dropdown-item :command="cate.name" v-for="cate in cates" :key="cate.id" icon="el-icon-circle-check">
+                                {{ cate.name }}</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown> -->
+                        类别
+                    </th>
+                    <th>操作</th>
+                </tr>
+                <tr :class="sentence.class" v-for="(sentence, index) in sentences" :key="sentence.id">
+                    <!-- <td v-for="post in posts" :key="post"></td> -->
+                    <td>{{ sentence.body }}</td>
+                    <td>{{ sentence.author }}</td>
+                    <td>{{ sentence.cate }}</td>
+                    <td @click="delPost(post.id, post.title)">
+                        <b-button variant="danger">删除</b-button>
+                    </td>
+                </tr>
+            </table>
         </b-container>
     </div>
 </template>
@@ -35,6 +62,7 @@
                 author: '',
                 selected: '',
                 sentenceCates: [],
+                sentences: ''
                 // options: [{"value":1},{"value":2}],
                 // value: ''
             }
@@ -45,8 +73,7 @@
                 this.$axios.post(path, { 'body': this.sentenceBody, 'author': this.author, 'cate': this.selected })
                     .then((res) => {
                         let data = res.data;
-                        window.console(data)
-                        if (res.data.status_code == 200) {
+                        if (res.status == 200) {
                             this.$toasted.success('句子发表成功');
                         }
                     })
@@ -57,13 +84,22 @@
                     .then((res) => {
                         let sentenceCates = res.data;
                         this.sentenceCates = sentenceCates;
-                        this.selected = sentenceCates[0].id
+                        this.selected = sentenceCates[0].id;
+                    })
+            },
+            getSentence(cate=''){
+                let path = this.$store.state.URL + '/sentences';
+                this.$axios.get(path)
+                    .then((res) => {
+                        let sentences = res.data;
+                        this.sentences = sentences;
                     })
             }
         },
 
         created() {
             this.getSentenceCate();
+            this.getSentence();
         }
     }
 </script>
@@ -75,5 +111,8 @@
     .author-input {
         margin-right: 10px;
         width: 500px !important;
+    }
+    .submit-button {
+        margin-left: 10px;
     }
 </style>

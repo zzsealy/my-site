@@ -234,8 +234,8 @@ class SentenceList(APIView):
             sentences = Sentence.objects.filter(cate=cate)
         else:
             sentences = Sentence.objects.all()
-        serializer = SentenceSerializer(sentences)
-        return Response(data = {'sentences': serializer.data})
+        serializer = SentenceSerializer(sentences, many=True)
+        return Response(serializer.data)
 
 
 
