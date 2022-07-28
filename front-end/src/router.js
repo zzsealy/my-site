@@ -8,6 +8,7 @@ import PostList from './views/admin/PostList'
 import EditPost from './views/admin/EditPost.vue'
 import PostDetail from './views/PostDetail.vue'
 import Record from './views/Record.vue'
+import NewSentence from './views/admin/NewSentence'
 
 
 Vue.use(Router)
@@ -76,7 +77,8 @@ const router = new Router({
         { path: 'categories', name:'admin-category', component: category},
         { path: 'new-post', name: 'new-post', component: Newpost },
         { path: 'post-list', name: 'post-list', component: PostList },
-        { path: 'edit-post/:id', name: 'edit-post', component: EditPost}
+        { path: 'edit-post/:id', name: 'edit-post', component: EditPost },
+        { path: 'new-sentence', name:'new-sentence', component: NewSentence}
       ],
       meta: {
         requiresAuth: true

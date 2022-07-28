@@ -3,13 +3,15 @@ from urllib import request
 from django.conf import settings
 from django.utils.decorators import method_decorator
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 from rest_framework.status import HTTP_203_NON_AUTHORITATIVE_INFORMATION, HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_404_NOT_FOUND
 from rest_framework.response import Response
 from backend.apps.accounts.utils import login_require
 
 
-from blog.models import Category, Post as PostModel, Comment, PostImage, Sentence
-from blog.serializers import Cateserializer, Postserializer, CommentSerializer, PostImageSerializer, SentenceSerializer
+from blog.models import Category, Post as PostModel, Comment, PostImage, Sentence, SentenceCate
+from blog.serializers import Cateserializer, Postserializer, CommentSerializer, PostImageSerializer, SentenceSerializer,\
+    SentenceCateSerializer
 from accounts.utils import login_expire
 
 
@@ -249,3 +251,11 @@ class SentenceView(APIView):
         if serializer.is_valid():
             serializer.save()
         return Response(status=HTTP_200_OK)
+
+
+@api_view(['GET'])
+def SentenceCateList(request):
+    if request.method == 'GET':
+        sentence_cates = SentenceCate.objects.all()
+        serializer = SentenceCateSerializer(sentence_cates, many=True)
+        return Response(serializer.data)

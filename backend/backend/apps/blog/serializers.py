@@ -3,7 +3,7 @@
 from asyncore import read
 from dataclasses import field
 from rest_framework import serializers
-from blog.models import Category, Post, Comment, PostImage, Sentence
+from blog.models import Category, Post, Comment, PostImage, Sentence, SentenceCate
 from accounts.models import User
 
 
@@ -49,5 +49,12 @@ class SentenceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Sentence
-        field = '__all__'
+        field = ('body', 'author', 'cate')
+
+
+class SentenceCateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SentenceCate
+        fields = "__all__"
 

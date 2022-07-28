@@ -10,14 +10,13 @@
         <b-col ></b-col>
         <b-col >个人信息管理</b-col>
       </b-row> -->
-      <el-row class="tac">
-        <el-col :span="3">
+      <!-- <el-row class="tac"> -->
           <h5>后台管理页面</h5>
           <el-menu
-            default-active="2"
-            class="el-menu-vertical-demo"
-            @open="handleOpen"
-            @close="handleClose">
+            default-active="activeIndex"
+            class="el-menu-menu-demo"
+            @select="handleSelect"
+            mode="horizontal">
             <el-menu-item index="1"> <!-- 创建文章的时候， 隐藏导航-->
               <div @click="clickManagePost();toSubAdmin('new-post')">写文章</div>
             </el-menu-item>
@@ -27,9 +26,12 @@
             <el-menu-item index="3">
               <div slot="title" @click="toSubAdmin('admin-category')">文章类别管理</div>
             </el-menu-item>
+            <el-menu-item index="4">
+              <div slot="title" @click="toSubAdmin('new-sentence')">写个句子</div>
+            </el-menu-item>
           </el-menu>
-        </el-col>
-      </el-row>
+        <!-- </el-col> -->
+      <!-- </el-row> -->
     </b-container>
     </div>
     <router-view></router-view>
