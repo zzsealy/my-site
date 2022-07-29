@@ -4,7 +4,13 @@
             <div class="form-header">
                 <div class="submit-button">
                     <b-button @click="submitPost" variant="outline-primary">提交</b-button>
-                    <b-form-select v-model="selected" :options="cates" size="sm" class="mt-3"></b-form-select>
+                    <el-select v-model="selected">
+                        <el-option 
+                        v-for="cate in cates"
+                        :key="cate.name" 
+                        :label="cate.name" 
+                        :value="cate.id"></el-option>
+                    </el-select>
                 </div><br>
                 <b-form-input v-model="title" type="text" placeholder="标题"></b-form-input><br>
                 <b-form-input v-model="subhead" type="text" placeholder="摘要"></b-form-input><br>

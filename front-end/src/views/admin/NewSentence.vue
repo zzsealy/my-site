@@ -19,7 +19,8 @@
                   :value="item.value">
                 </el-option>
             </el-select> -->
-            <b-button class="submit-button" @click="submitSentence">提交</b-button>
+            <b-button v-show="showEditButton" class="edit-button" @click="editSentenceSubmit">提交修改</b-button>
+            <b-button v-show="showCreateButton" class="submit-button" @click="createSentence">提交</b-button>
             <table>
                 <tr class="table-title">
                     <th>句子</th>
@@ -38,12 +39,16 @@
                         类别
                     </th>
                     <th>操作</th>
+                    <th>操作</th>
                 </tr>
                 <tr :class="sentence.class" v-for="(sentence, index) in sentences" :key="sentence.id">
                     <!-- <td v-for="post in posts" :key="post"></td> -->
                     <td>{{ sentence.body }}</td>
                     <td>{{ sentence.author }}</td>
-                    <td>{{ sentence.cate }}</td>
+                    <td>{{ sentence.cate_name }}</td>
+                    <td @click="setEditSentence(sentence.id, sentence.body, sentence.author, sentence.cate)">
+                        <b-button variant="warning">编辑</b-button>
+                    </td>
                     <td @click="delPost(post.id, post.title)">
                         <b-button variant="danger">删除</b-button>
                     </td>
@@ -58,6 +63,9 @@
         name: 'AddSentence',
         data() {
             return {
+                showEditButton: false,
+                showCreateButton: true,
+                sentenceId: '',
                 sentenceBody: '',
                 author: '',
                 selected: '',
@@ -68,7 +76,7 @@
             }
         },
         methods: {
-            submitSentence(body, author, cate='all') {
+            createSentence(body, author, cate='all') {
                 let path = this.$store.state.URL + '/sentence' + '?cate=' + cate;
                 this.$axios.post(path, { 'body': this.sentenceBody, 'author': this.author, 'cate': this.selected })
                     .then((res) => {
@@ -94,6 +102,17 @@
                         let sentences = res.data;
                         this.sentences = sentences;
                     })
+            },
+            setEditSentence(sentenceId, sentenceBody, sentenceAuthor, sentenceCate) {
+                this.sentenceId = sentenceId;
+                this.sentenceBody = sentenceBody;
+                this.author = sentenceAuthor;
+                this.selected = sentenceCate;
+                this.showEditButton = true;
+                this.showCreateButton = false;
+            },
+            editSentenceSubmit() {
+                let path = this.$store.state.URL + '/sentence/' + this.SentenceId;
             }
         },
 

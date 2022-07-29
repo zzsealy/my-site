@@ -14,6 +14,7 @@ class Cateserializer(serializers.ModelSerializer):
 
 
 class Postserializer(serializers.ModelSerializer):
+    cate = serializers.ReadOnlyField(source = 'cate.name')
 
     """
     传入的外键id值,自动取到实例。
@@ -46,7 +47,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class SentenceSerializer(serializers.ModelSerializer):
-
+    cate_name = serializers.ReadOnlyField(source='cate.name')
     class Meta:
         model = Sentence
         fields = "__all__"
