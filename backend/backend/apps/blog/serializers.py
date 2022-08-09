@@ -51,6 +51,10 @@ class SentenceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sentence
         fields = "__all__"
+    
+    def update(self, id, update_info):
+        update_info['cate'] = SentenceCate.objects.get(id=update_info['cate'])
+        Sentence.objects.filter(id=id).update(**update_info)
 
 
 class SentenceCateSerializer(serializers.ModelSerializer):

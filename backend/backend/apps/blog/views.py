@@ -1,4 +1,5 @@
 import os
+from unittest.mock import sentinel
 from urllib import request
 from django.conf import settings
 from django.utils.decorators import method_decorator
@@ -251,6 +252,16 @@ class SentenceView(APIView):
         if serializer.is_valid():
             serializer.save()
         return Response(status=HTTP_200_OK)
+
+    def put(self, request, id):
+        post_data = request.data
+        serializer = SentenceSerializer()
+        try:
+            serializer.update(id, post_data)
+            return Response(status=HTTP_200_OK)
+        except Exception as e:
+            print("更新sentence错误:", e)
+            return Response(status=299)
 
 
 @api_view(['GET'])

@@ -180,7 +180,6 @@
             this.getCategories();
             let nowCate = this.$route.query.cate;
             if(nowCate) {
-
                 this.nowCate = nowCate;
             }
         }

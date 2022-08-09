@@ -112,7 +112,19 @@
                 this.showCreateButton = false;
             },
             editSentenceSubmit() {
-                let path = this.$store.state.URL + '/sentence/' + this.SentenceId;
+                debugger;
+                let path = this.$store.state.URL + '/sentence/' + this.sentenceId;
+                let postData = {'body': this.sentenceBody, 'author': this.author, 'cate': this.selected}
+                this.$axios.put(path, postData)
+                    .then((res) => {
+                        if(res.status == 200){
+                            this.$toasted.success('修改句子成功!');
+                            this.getSentence()
+                        } else {
+                            window.console.log("失败！！！！！！！！！")
+                            this.$toasted.error('更新失败')
+                        }
+                    })
             }
         },
 
