@@ -1,6 +1,6 @@
 from django.urls import path
 from blog.views import CateList, Cate, Postlist, PostPaging, Post, PostImageView, TimePostDataView, SentenceList, SentenceView, \
-    SentenceCateList
+    SentenceCateList, SentenceCateCreate, SentenceCateEdit
 from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = format_suffix_patterns([
@@ -15,5 +15,7 @@ urlpatterns = format_suffix_patterns([
     path('sentences', SentenceList.as_view(), name='sentences'), # 句子过滤分类 所有
     path('sentence', SentenceView.as_view(), name='sentence'), # 句子 增删改查
     path('sentence/<int:id>', SentenceView.as_view(), name='edit_sentence'),
-    path('sentence_cates', SentenceCateList, name='sentence_cates') # 句子类别的过滤，分类,所有 视图
+    path('sentence_cates', SentenceCateList, name='sentence_cates'), # 句子类别的过滤，分类,所有 视图
+    path('sentence_cate', SentenceCateCreate, name='create_sentence_cate'),
+    path('sentence_cate/<int:id>', SentenceCateEdit, name='edit_sentence_cate')
 ])

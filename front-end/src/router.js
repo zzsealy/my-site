@@ -9,6 +9,7 @@ import EditPost from './views/admin/EditPost.vue'
 import PostDetail from './views/PostDetail.vue'
 import Record from './views/Record.vue'
 import NewSentence from './views/admin/NewSentence'
+import SentenceCate from './views/admin/sentenceCate'
 
 
 Vue.use(Router)
@@ -78,7 +79,8 @@ const router = new Router({
         { path: 'new-post', name: 'new-post', component: Newpost },
         { path: 'post-list', name: 'post-list', component: PostList },
         { path: 'edit-post/:id', name: 'edit-post', component: EditPost },
-        { path: 'new-sentence', name:'new-sentence', component: NewSentence}
+        { path: 'new-sentence', name:'new-sentence', component: NewSentence},
+        { path: 'sentence-cate', name: 'sentence-cate', component: SentenceCate}
       ],
       meta: {
         requiresAuth: true

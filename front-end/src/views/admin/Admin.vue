@@ -29,6 +29,10 @@
             <el-menu-item index="4">
               <div slot="title" @click="toSubAdmin('new-sentence')">写个句子</div>
             </el-menu-item>
+            <el-menu-item index="5">
+              <div slot="title" @click="toSubAdmin('sentence-cate')">短句分类</div>
+            </el-menu-item>
+
           </el-menu>
         <!-- </el-col> -->
       <!-- </el-row> -->

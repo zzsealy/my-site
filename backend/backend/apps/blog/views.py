@@ -3,6 +3,7 @@ from unittest.mock import sentinel
 from urllib import request
 from django.conf import settings
 from django.utils.decorators import method_decorator
+from elastic_transport import Serializer
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.status import HTTP_203_NON_AUTHORITATIVE_INFORMATION, HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_404_NOT_FOUND
@@ -270,3 +271,33 @@ def SentenceCateList(request):
         sentence_cates = SentenceCate.objects.all()
         serializer = SentenceCateSerializer(sentence_cates, many=True)
         return Response(serializer.data)
+
+
+@api_view(['POST'])
+def SentenceCateCreate(request):
+    if request.method == 'POST':
+        post_data = request.data
+        serializer = SentenceCateSerializer(data=post_data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(status=HTTP_200_OK)
+
+
+@api_view(['PUT']) 
+def SentenceCateEdit(request, id):
+    if request.method == 'PUT':
+        id_cate = SentenceCate.objects.get(id=id)
+        post_data = request.data
+        name = post_data.get('name')
+        cate = SentenceCate.objects.filter(name=name).first() # 如果要修改的分类名字已经存在，就把当前cate下的所有的句子移动到要修改成的分类下。
+        if cate:
+            sentences = Sentence.objects.filter(cate=id_cate)
+            for sentence in sentences:
+                sentence.cate = cate
+                sentence.save()
+            id_cate.delete()
+            return Response(status=250)
+        else: # 只是修改分类名称
+            id_cate.name = name
+            id_cate.save()
+            return Response(status=HTTP_200_OK)
