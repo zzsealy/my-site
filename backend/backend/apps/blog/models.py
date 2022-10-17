@@ -7,6 +7,9 @@ from accounts.models import User
 class Category(models.Model):
     name = models.CharField(max_length=20)
 
+    class Meta:
+        db_table = 'category'
+
 
 class Post(models.Model):
     title = models.CharField(max_length=50)
@@ -16,11 +19,17 @@ class Post(models.Model):
     owner = models.ForeignKey(User, related_name='posts', on_delete=models.CASCADE)
     cate = models.ForeignKey(Category, related_name='posts', on_delete=models.CASCADE)
 
+    class Meta:
+        db_table = 'post'
+
 
 class PostImage(models.Model):
     name = models.CharField(default=None, max_length=100)
     image = models.ImageField()
     link = models.CharField(default=None, max_length=100)
+
+    class Meta:
+        db_table = 'post_img'
 
 
 class Comment(models.Model):
@@ -30,9 +39,15 @@ class Comment(models.Model):
     email = models.EmailField(blank=True, null=True)
     owner_article = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
 
+    class Meta:
+        db_table = 'comment'  # 评论
+
 
 class SentenceCate(models.Model):
     name = models.CharField(max_length=20)
+
+    class Meta:
+        db_table = 'sentence_cate'
 
 
 class Sentence(models.Model):
@@ -40,6 +55,9 @@ class Sentence(models.Model):
     author = models.CharField(blank=True, null=True, max_length=50)
     create_time = models.DateField(auto_now_add=True)
     cate = models.ForeignKey(SentenceCate, related_name='sentences', on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'sentence'
 
 
 

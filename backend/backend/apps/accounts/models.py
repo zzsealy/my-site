@@ -8,6 +8,9 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    phonenumber = models.CharField('手机号', max_length=11, 
+    phone_number = models.CharField('手机号', max_length=11, 
                                    validators=[MinLengthValidator(11)], blank=True)
+    
+    class Meta:
+        db_table = "user"
 
