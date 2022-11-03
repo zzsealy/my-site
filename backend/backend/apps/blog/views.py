@@ -3,7 +3,6 @@ from unittest.mock import sentinel
 from urllib import request
 from django.conf import settings
 from django.utils.decorators import method_decorator
-from elastic_transport import Serializer
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.status import HTTP_203_NON_AUTHORITATIVE_INFORMATION, HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_404_NOT_FOUND
