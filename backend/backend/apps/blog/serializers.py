@@ -14,14 +14,13 @@ class Cateserializer(serializers.ModelSerializer):
 
 
 class Postserializer(serializers.ModelSerializer):
-    cate = serializers.ReadOnlyField(source = 'cate.name')
 
     """
     传入的外键id值,自动取到实例。
     """
     class Meta:
         model = Post
-        fields = ('id', 'title', 'subhead', 'body', 'created', 'owner', 'cate')
+        fields = ('id', 'title', 'subhead', 'body', 'created', 'owner_id', 'cate_id')
 
 
 class PostImageSerializer(serializers.ModelSerializer):
