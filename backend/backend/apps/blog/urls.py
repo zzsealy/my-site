@@ -1,12 +1,12 @@
 from django.urls import path
-from blog.views import CateList, Cate, Postlist, PostPaging, Post, PostImageView, TimePostDataView, SentenceList, SentenceView, \
+from blog.views import CateList, Cate, PostList, PostPaging, Post, PostImageView, TimePostDataView, SentenceList, SentenceView, \
     SentenceCateList, SentenceCateCreate, SentenceCateEdit
 from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = format_suffix_patterns([
     path('categories', CateList.as_view(), name="categories"),
     path('category/<int:nid>', Cate.as_view(), name="category"),
-    path('posts', Postlist.as_view(), name="posts"), # 所有post
+    path('posts', PostList.as_view(), name="posts"), # 所有post
     path('paging_data', PostPaging.as_view(), name='post_paging'), # 分页数据
     path('post', Post.as_view(), name='add_post_view'),
     path('post/<int:id>/', Post.as_view(), name='post_view'),

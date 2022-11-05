@@ -7,13 +7,13 @@ from blog.models import Category, Post, Comment, PostImage, Sentence, SentenceCa
 from accounts.models import User
 
 
-class Cateserializer(serializers.ModelSerializer):
+class CateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ('id', 'name')
 
 
-class Postserializer(serializers.ModelSerializer):
+class PostSerializer(serializers.ModelSerializer):
 
     """
     传入的外键id值,自动取到实例。

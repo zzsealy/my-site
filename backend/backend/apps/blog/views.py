@@ -5,13 +5,13 @@ from django.conf import settings
 from django.utils.decorators import method_decorator
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
-from rest_framework.status import HTTP_203_NON_AUTHORITATIVE_INFORMATION, HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_404_NOT_FOUND
+from rest_framework.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_404_NOT_FOUND
 from rest_framework.response import Response
 from backend.apps.accounts.utils import login_require
 
 
 from blog.models import Category, Post as PostModel, Comment, PostImage, Sentence, SentenceCate
-from blog.serializers import Cateserializer, Postserializer, CommentSerializer, PostImageSerializer, SentenceSerializer,\
+from blog.serializers import CateSerializer, PostSerializer, CommentSerializer, PostImageSerializer, SentenceSerializer,\
     SentenceCateSerializer
 from accounts.utils import login_expire
 
@@ -23,13 +23,13 @@ from accounts.utils import login_expire
 class CateList(APIView):
     def get(self, request):
         cates = Category.objects.all()
-        serializer = Cateserializer(cates, many=True)
+        serializer = CateSerializer(cates, many=True)
         return Response(serializer.data)
 
     @method_decorator(login_expire)
     def post(self, request):
         data = request.data
-        serializer = Cateserializer(data=data)
+        serializer = CateSerializer(data=data)
         
         if login_require(request):
             return Response(status=HTTP_401_UNAUTHORIZED)
@@ -44,7 +44,7 @@ class Cate(APIView):
         if nid:
             cate = Category.objects.filter(id=nid).first()
             if cate:
-                serializer = Cateserializer(cate)
+                serializer = CateSerializer(cate)
                 return Response(data=serializer.data, status=HTTP_200_OK)
             return Response(status=HTTP_404_NOT_FOUND, data={"message": "id不存在"})
         return Response(status=HTTP_200_OK)
@@ -70,7 +70,7 @@ class Cate(APIView):
         data = request.data
         cate = Category.objects.filter(id=nid).first()
         if cate:
-            serializer = Cateserializer(instance=cate, data=data)
+            serializer = CateSerializer(instance=cate, data=data)
             if serializer.is_valid():
                 cate = serializer.save()
             return Response(data={ "message": "修改成功", "name": cate.name }, status=HTTP_200_OK)
@@ -79,7 +79,7 @@ class Cate(APIView):
 
 
 
-class Postlist(APIView):
+class PostList(APIView):
     
     def get(self, request):
         get_data = request.GET
@@ -94,10 +94,10 @@ class Postlist(APIView):
             post_index_start = (page-1)*post_account_each_page
             post_index_end = page*post_account_each_page
             posts = posts[post_index_start: post_index_end]
-        serialzier = Postserializer(posts, many=True)
-        for data in serialzier.data:
+        serializer = PostSerializer(posts, many=True)
+        for data in serializer.data:
             data['created'] = data['created'].replace('T', ' ').split('.')[0]
-        return Response(serialzier.data)
+        return Response(serializer.data)
 
     def post(self, request): # 搜索框的搜索， 查询到是ES。
         try:
@@ -123,16 +123,16 @@ class Post(APIView):
     def get(self, request, id=None):
         if id:
             post = PostModel.objects.filter(id=id).first()
-            seriialzer = Postserializer(post)
-            return Response(seriialzer.data)
+            serializer = PostSerializer(post)
+            return Response(serializer.data)
         return Response(status=HTTP_200_OK)
 
     """
     { 
-        "body": "testbody",
+        "body": "test body",
         "cate": 7,
         "subhead": "test",
-        "title": "testhead",
+        "title": "test head",
         "owner": 1
     }
     """
@@ -141,15 +141,15 @@ class Post(APIView):
         if login_require(request):
             return Response(status=HTTP_401_UNAUTHORIZED)
         data = request.data
-        postserializer = Postserializer(data=data)
-        if postserializer.is_valid():
-            postserializer.save()
-        return Response(status=HTTP_200_OK, data=postserializer.data)
+        post_serializer = PostSerializer(data=data)
+        if post_serializer.is_valid():
+            post_serializer.save()
+        return Response(status=HTTP_200_OK, data=post_serializer.data)
 
 
     def put(self, request, id):
         post = PostModel.objects.filter(id=id).first()
-        serializer = Postserializer(instance=post, data=request.data)
+        serializer = PostSerializer(instance=post, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(status=HTTP_200_OK, data={"message": "修改成功"})
@@ -178,11 +178,11 @@ class PostImageView(APIView):
         image = request.FILES.get('image', None)
         image_name = image.name
         post_name_image = PostImage.objects.filter(name=image_name).first()
-        postimage_instance = PostImage(image=image)
-        link = '/media/' + str(postimage_instance.image)
-        postimage_instance.link = link
-        postimage_instance.name = image_name
-        postimage_instance.save()
+        post_image_instance = PostImage(image=image)
+        link = '/media/' + str(post_image_instance.image)
+        post_image_instance.link = link
+        post_image_instance.name = image_name
+        post_image_instance.save()
         print(request.data)
         return Response({'url': link})
         # return Response({'message': '图片名字已经存在'})
