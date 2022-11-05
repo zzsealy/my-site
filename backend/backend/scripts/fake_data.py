@@ -26,7 +26,7 @@ class FakeData():
             cate = random.choice(self.cates)
             owner = User.objects.all()[0]
             create_data = {
-                'title': self.fake.sentence(),
+                'title': self.fake.verse(),
                 'subhead': body[:50],
                 'body': body,
                 'cate': cate,

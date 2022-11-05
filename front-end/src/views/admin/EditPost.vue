@@ -32,6 +32,7 @@
                 subhead: '',
                 body: '',
                 cate: '',
+                cates: '',
             };
         },
         methods: {
@@ -54,20 +55,19 @@
                     .then((res) => {
                         let cates = []
                         res.data.forEach(element => {
-                            cates.push({ 'value': element.id, 'text': element.name })
+                            cates.push({ 'value': element.id, 'name': element.name })
                         });
                         this.cates = cates
                     })
             },
             submitPost() { // 提交修改
                 let id = this.$route.params.id;
-                const postEditPath = this.$store.state.URL + '/post/' + id;
+                const postEditPath = this.$store.state.URL + '/post/' + id + '/';
                 let data = {
                     title: this.title,
                     subhead: this.subhead,
                     body: this.body,
                     cate: this.selected,
-                    owner: state.user_id
                 } 
                 this.$axios.put(postEditPath, data)
                     .then((res) => {

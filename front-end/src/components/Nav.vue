@@ -16,7 +16,7 @@
                         <i class="el-icon-s-home">首页</i></a>
                     <a href="/records/" @click="clickNav('cate')" class="nav-a" v-bind:class="{ nav_active: navStatus.cateActive}">
                         <i class="el-icon-s-order">归档</i></a>
-                    <a href="/verses/" @click="clickNav('sentence')" class="nav-a" v-bind:class="{ nav_active: navStatus.sentenceActive}">
+                    <a href="/verses/" @click="clickNav('verse')" class="nav-a" v-bind:class="{ nav_active: navStatus.verseActive}">
                         <i class="el-icon-water-cup">短句</i></a>
                     <a href="#" @click="clickNav('history')" class="nav-a" v-bind:class="{ nav_active: navStatus.historyActive}">
                         <i class="el-icon-time">历史</i></a>
@@ -46,14 +46,14 @@
                 navStatus: {
                     homeActive: false,
                     cateActive: false,
-                    sentenceActive: false,
+                    verseActive: false,
                     historyActive: false,
                     aboutActive: false,
                     adminActive: false
                 },
                 // homeActive: false,
                 // cateActive: false,
-                // sentenceActive: false,
+                // verseActive: false,
                 // historyActive: false,
                 // aboutActive: false,
                 // adminActive: false
@@ -90,7 +90,7 @@
                 this.navStatus = {
                     homeActive: false,
                     cateActive: false,
-                    sentenceActive: false,
+                    verseActive: false,
                     historyActive: false,
                     aboutActive: false,
                     adminActive: false

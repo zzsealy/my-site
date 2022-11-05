@@ -1,12 +1,12 @@
 <template>
     <div>
         <b-container>
-            <textarea class="sentence-input" v-model="sentenceBody" type="text" placeholder="句子" cols="50"></textarea>
+            <textarea class="verse-input" v-model="verseBody" type="text" placeholder="句子" cols="50"></textarea>
             <br>
             <b-form-input class="author-input" v-model="author" type="text" placeholder="作者"></b-form-input>
             <el-select v-model="selected">
                 <el-option 
-                v-for="cate in sentenceCates"
+                v-for="cate in verseCates"
                 :key="cate.name" 
                 :label="cate.name" 
                 :value="cate.id"></el-option>
@@ -19,8 +19,8 @@
                   :value="item.value">
                 </el-option>
             </el-select> -->
-            <b-button v-show="showEditButton" class="edit-button" @click="editSentenceSubmit">提交修改</b-button>
-            <b-button v-show="showCreateButton" class="submit-button" @click="createSentence">提交</b-button>
+            <b-button v-show="showEditButton" class="edit-button" @click="editVerseSubmit">提交修改</b-button>
+            <b-button v-show="showCreateButton" class="submit-button" @click="createVerse">提交</b-button>
             <table>
                 <tr class="table-title">
                     <th>句子</th>
@@ -41,12 +41,12 @@
                     <th>操作</th>
                     <th>操作</th>
                 </tr>
-                <tr :class="sentence.class" v-for="(sentence, index) in sentences" :key="sentence.id">
+                <tr :class="verse.class" v-for="(verse, index) in verses" :key="verse.id">
                     <!-- <td v-for="post in posts" :key="post"></td> -->
-                    <td>{{ sentence.body }}</td>
-                    <td>{{ sentence.author }}</td>
-                    <td>{{ sentence.cate_name }}</td>
-                    <td @click="setEditSentence(sentence.id, sentence.body, sentence.author, sentence.cate)">
+                    <td>{{ verse.body }}</td>
+                    <td>{{ verse.author }}</td>
+                    <td>{{ verse.cate_name }}</td>
+                    <td @click="setEditVerse(verse.id, verse.body, verse.author, verse.cate)">
                         <b-button variant="warning">编辑</b-button>
                     </td>
                     <td @click="delPost(post.id, post.title)">
@@ -60,25 +60,25 @@
 
 <script>
     export default {
-        name: 'AddSentence',
+        name: 'AddVerse',
         data() {
             return {
                 showEditButton: false,
                 showCreateButton: true,
-                sentenceId: '',
-                sentenceBody: '',
+                verseId: '',
+                verseBody: '',
                 author: '',
                 selected: '',
-                sentenceCates: [],
-                sentences: ''
+                verseCates: [],
+                verses: ''
                 // options: [{"value":1},{"value":2}],
                 // value: ''
             }
         },
         methods: {
-            createSentence(body, author, cate='all') {
-                let path = this.$store.state.URL + '/sentence' + '?cate=' + cate;
-                this.$axios.post(path, { 'body': this.sentenceBody, 'author': this.author, 'cate': this.selected })
+            createVerse(body, author, cate='all') {
+                let path = this.$store.state.URL + '/verse' + '?cate=' + cate;
+                this.$axios.post(path, { 'body': this.verseBody, 'author': this.author, 'cate': this.selected })
                     .then((res) => {
                         let data = res.data;
                         if (res.status == 200) {
@@ -86,40 +86,40 @@
                         }
                     })
             },
-            getSentenceCate(){
-                let path = this.$store.state.URL + '/sentence_cates';
+            getVerseCate(){
+                let path = this.$store.state.URL + '/verse_cates';
                 this.$axios.get(path)
                     .then((res) => {
-                        let sentenceCates = res.data;
-                        this.sentenceCates = sentenceCates;
-                        this.selected = sentenceCates[0].id;
+                        let verseCates = res.data;
+                        this.verseCates = verseCates;
+                        this.selected = verseCates[0].id;
                     })
             },
-            getSentence(cate=''){
-                let path = this.$store.state.URL + '/sentences';
+            getVerse(cate=''){
+                let path = this.$store.state.URL + '/verses';
                 this.$axios.get(path)
                     .then((res) => {
-                        let sentences = res.data;
-                        this.sentences = sentences;
+                        let verses = res.data;
+                        this.verses = verses;
                     })
             },
-            setEditSentence(sentenceId, sentenceBody, sentenceAuthor, sentenceCate) {
-                this.sentenceId = sentenceId;
-                this.sentenceBody = sentenceBody;
-                this.author = sentenceAuthor;
-                this.selected = sentenceCate;
+            setEditVerse(verseId, verseBody, verseAuthor, verseCate) {
+                this.verseId = verseId;
+                this.verseBody = verseBody;
+                this.author = verseAuthor;
+                this.selected = verseCate;
                 this.showEditButton = true;
                 this.showCreateButton = false;
             },
-            editSentenceSubmit() {
+            editVerseSubmit() {
                 debugger;
-                let path = this.$store.state.URL + '/sentence/' + this.sentenceId;
-                let postData = {'body': this.sentenceBody, 'author': this.author, 'cate': this.selected}
+                let path = this.$store.state.URL + '/verse/' + this.verseId;
+                let postData = {'body': this.verseBody, 'author': this.author, 'cate': this.selected}
                 this.$axios.put(path, postData)
                     .then((res) => {
                         if(res.status == 200){
                             this.$toasted.success('修改句子成功!');
-                            this.getSentence()
+                            this.getVerse()
                         } else {
                             window.console.log("失败！！！！！！！！！")
                             this.$toasted.error('更新失败')
@@ -129,14 +129,14 @@
         },
 
         created() {
-            this.getSentenceCate();
-            this.getSentence();
+            this.getVerseCate();
+            this.getVerse();
         }
     }
 </script>
 
 <style>
-    .sentence-input {
+    .verse-input {
         height: 100px;
     }
     .author-input {

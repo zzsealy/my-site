@@ -10,9 +10,9 @@ from rest_framework.response import Response
 from backend.apps.accounts.utils import login_require
 
 
-from blog.models import Category, Post as PostModel, Comment, PostImage, Sentence, SentenceCate
-from blog.serializers import CateSerializer, PostSerializer, CommentSerializer, PostImageSerializer, SentenceSerializer,\
-    SentenceCateSerializer
+from blog.models import Category, Post as PostModel, Comment, PostImage, Verse, VerseCate
+from blog.serializers import CateSerializer, PostSerializer, CommentSerializer, PostImageSerializer, VerseSerializer,\
+    VerseCateSerializer
 from accounts.utils import login_expire
 
 
@@ -226,21 +226,21 @@ class TimePostDataView(APIView):
 
 
 
-class SentenceList(APIView):
+class VerseList(APIView):
 
     def get(self, request):
         get_data = request.GET
         cate = get_data.get('cate')
         if cate:
-            sentences = Sentence.objects.filter(cate=cate)
+            verses = Verse.objects.filter(cate=cate)
         else:
-            sentences = Sentence.objects.all()
-        serializer = SentenceSerializer(sentences, many=True)
+            verses = Verse.objects.all()
+        serializer = VerseSerializer(verses, many=True)
         return Response(serializer.data)
 
 
 
-class SentenceView(APIView):
+class VerseView(APIView):
 
     def get(self, request):
         pass
@@ -248,52 +248,52 @@ class SentenceView(APIView):
 
     def post(self, request):
         post_data = request.data
-        serializer = SentenceSerializer(data=post_data)
+        serializer = VerseSerializer(data=post_data)
         if serializer.is_valid():
             serializer.save()
         return Response(status=HTTP_200_OK)
 
     def put(self, request, id):
         post_data = request.data
-        serializer = SentenceSerializer()
+        serializer = VerseSerializer()
         try:
             serializer.update(id, post_data)
             return Response(status=HTTP_200_OK)
         except Exception as e:
-            print("更新sentence错误:", e)
+            print("更新verse错误:", e)
             return Response(status=299)
 
 
 @api_view(['GET'])
-def SentenceCateList(request):
+def VerseCateList(request):
     if request.method == 'GET':
-        sentence_cates = SentenceCate.objects.all()
-        serializer = SentenceCateSerializer(sentence_cates, many=True)
+        verse_cates = VerseCate.objects.all()
+        serializer = VerseCateSerializer(verse_cates, many=True)
         return Response(serializer.data)
 
 
 @api_view(['POST'])
-def SentenceCateCreate(request):
+def VerseCateCreate(request):
     if request.method == 'POST':
         post_data = request.data
-        serializer = SentenceCateSerializer(data=post_data)
+        serializer = VerseCateSerializer(data=post_data)
         if serializer.is_valid():
             serializer.save()
         return Response(status=HTTP_200_OK)
 
 
 @api_view(['PUT']) 
-def SentenceCateEdit(request, id):
+def VerseCateEdit(request, id):
     if request.method == 'PUT':
-        id_cate = SentenceCate.objects.get(id=id)
+        id_cate = VerseCate.objects.get(id=id)
         post_data = request.data
         name = post_data.get('name')
-        cate = SentenceCate.objects.filter(name=name).first() # 如果要修改的分类名字已经存在，就把当前cate下的所有的句子移动到要修改成的分类下。
+        cate = VerseCate.objects.filter(name=name).first() # 如果要修改的分类名字已经存在，就把当前cate下的所有的句子移动到要修改成的分类下。
         if cate:
-            sentences = Sentence.objects.filter(cate=id_cate)
-            for sentence in sentences:
-                sentence.cate = cate
-                sentence.save()
+            verses = Verse.objects.filter(cate=id_cate)
+            for verse in verses:
+                verse.cate = cate
+                verse.save()
             id_cate.delete()
             return Response(status=250)
         else: # 只是修改分类名称

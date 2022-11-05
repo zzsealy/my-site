@@ -41,20 +41,20 @@ class Comment(models.Model):
     class Meta:
         db_table = 'comment'
 
-class SentenceCate(models.Model):
+class VerseCate(models.Model):
     name = models.CharField(max_length=20)
 
     class Meta:
-        db_table = 'sentence_cate'
+        db_table = 'verse_cate'
 
-class Sentence(models.Model):
+class Verse(models.Model):
     body = models.TextField()
     author = models.CharField(blank=True, null=True, max_length=50)
     create_time = models.DateField(auto_now_add=True)
     cate_id = models.IntegerField(default=0)  # 短句的分类id
 
     class Meta:
-        db_table = 'sentence'
+        db_table = 'verse'
 
 
 

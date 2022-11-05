@@ -3,7 +3,7 @@
 from asyncore import read
 from dataclasses import field
 from rest_framework import serializers
-from blog.models import Category, Post, Comment, PostImage, Sentence, SentenceCate
+from blog.models import Category, Post, Comment, PostImage, Verse, VerseCate
 from accounts.models import User
 
 
@@ -45,20 +45,20 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 
-class SentenceSerializer(serializers.ModelSerializer):
+class VerseSerializer(serializers.ModelSerializer):
     cate_name = serializers.ReadOnlyField(source='cate.name')
     class Meta:
-        model = Sentence
+        model = Verse
         fields = "__all__"
     
     def update(self, id, update_info):
-        update_info['cate'] = SentenceCate.objects.get(id=update_info['cate'])
-        Sentence.objects.filter(id=id).update(**update_info)
+        update_info['cate'] = VerseCate.objects.get(id=update_info['cate'])
+        Verse.objects.filter(id=id).update(**update_info)
 
 
-class SentenceCateSerializer(serializers.ModelSerializer):
+class VerseCateSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = SentenceCate
+        model = VerseCate
         fields = "__all__"
 

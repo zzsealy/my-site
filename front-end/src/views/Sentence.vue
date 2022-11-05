@@ -17,7 +17,7 @@
 
 
 export default({
-    name: 'Sentence',
+    name: 'Verse',
     data() {
             return {
         }

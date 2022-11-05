@@ -13,7 +13,7 @@ axios.interceptors.request.use(function (config) {
     // let navStatus = {
     //     homeActive: false,
     //     cateActive: false,
-    //     sentenceActive: false,
+    //     verseActive: false,
     //     historyActive: false,
     //     aboutActive: false,
     //     adminActive: false
