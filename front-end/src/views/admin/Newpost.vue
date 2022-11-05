@@ -34,8 +34,8 @@
           'title': this.postTitle,
           'subhead': this.postSubhead,
           'body': this.postBody,
-          'cate': this.selected,
-          'owner': this.$store.state.user_id
+          'cate_id': this.selected,
+          'owner_id': this.$store.state.user_id
         }
         const path = this.$store.state.URL + '/post';
         this.$axios.post(path, postData)

@@ -27,10 +27,10 @@
               <div slot="title" @click="toSubAdmin('admin-category')">文章类别管理</div>
             </el-menu-item>
             <el-menu-item index="4">
-              <div slot="title" @click="toSubAdmin('new-sentence')">写个句子</div>
+              <div slot="title" @click="toSubAdmin('new-verse')">写个句子</div>
             </el-menu-item>
             <el-menu-item index="5">
-              <div slot="title" @click="toSubAdmin('sentence-cate')">短句分类</div>
+              <div slot="title" @click="toSubAdmin('verse-cate')">短句分类</div>
             </el-menu-item>
 
           </el-menu>

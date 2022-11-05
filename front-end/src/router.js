@@ -3,13 +3,14 @@ import Router from 'vue-router'
 import category from './views/admin/Category.vue'
 import Admin from './views/admin/Admin.vue'
 import Home from './views/Home.vue'
-import Newpost from './views/admin/Newpost'
+import NewPost from './views/admin/NewPost'
 import PostList from './views/admin/PostList'
 import EditPost from './views/admin/EditPost.vue'
 import PostDetail from './views/PostDetail.vue'
 import Record from './views/Record.vue'
-import NewSentence from './views/admin/NewSentence'
-import SentenceCate from './views/admin/sentenceCate'
+import NewVerse from './views/admin/NewVerse'
+import VerseCate from './views/admin/verseCate'
+import Verse from './views/Verse'
 
 
 Vue.use(Router)
@@ -37,6 +38,11 @@ const router = new Router({
       path: '/cate/:cate/page/:page',
       name: 'homeCatePage',
       component: Home
+    },
+    {
+      path: '/verses/',
+      name: 'verse',
+      component: Verse
     },
     {
       path: '/records',
@@ -76,11 +82,11 @@ const router = new Router({
         // when /admin/categories is matched
         // { path: '', name:'admin-info', component: AdminInfo},
         { path: 'categories', name:'admin-category', component: category},
-        { path: 'new-post', name: 'new-post', component: Newpost },
+        { path: 'new-post', name: 'new-post', component: NewPost },
         { path: 'post-list', name: 'post-list', component: PostList },
         { path: 'edit-post/:id', name: 'edit-post', component: EditPost },
-        { path: 'new-sentence', name:'new-sentence', component: NewSentence},
-        { path: 'sentence-cate', name: 'sentence-cate', component: SentenceCate}
+        { path: 'new-verse', name:'new-verse', component: NewVerse},
+        { path: 'verse-cate', name: 'verse-cate', component: VerseCate}
       ],
       meta: {
         requiresAuth: true

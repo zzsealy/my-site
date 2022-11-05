@@ -18,10 +18,10 @@
         </div>
       </form>
       <el-divider></el-divider>
-        <div v-for="cate in sentenceCates" :key="cate.id">
+        <div v-for="cate in verseCates" :key="cate.id">
           {{ cate.name }}
             <b-button @click="
-              setEditSentenceCate(
+              setEditVerseCate(
                 cate.id,
                 cate.name
               )
@@ -36,7 +36,7 @@ export default {
   name: "",
   data() {
     return {
-      sentenceCates: "",
+      verseCates: "",
       newCate: '',
       selected: '',
       showEditButton: false,
@@ -44,15 +44,15 @@ export default {
     };
   },
   methods: {
-    getSentenceCate() {
-      let path = this.$store.state.URL + "/sentence_cates";
+    getVerseCate() {
+      let path = this.$store.state.URL + "/verse_cates";
       this.$axios.get(path).then((res) => {
-        let sentenceCates = res.data;
-        this.sentenceCates = sentenceCates;
+        let verseCates = res.data;
+        this.verseCates = verseCates;
       });
     },
     submit() {
-        let path = this.$store.state.URL + '/sentence_cate';
+        let path = this.$store.state.URL + '/verse_cate';
         this.$axios.post(path, {'name': this.newCate})
             .then((res) => {
                 if (res.status == 200) {
@@ -63,7 +63,7 @@ export default {
     editSubmit(){
         let id = this.selected;
         let name = this.newCate;
-        let path = this.$store.state.URL + '/sentence_cate/' + id;
+        let path = this.$store.state.URL + '/verse_cate/' + id;
         this.$axios.put(path, {'id': id, 'name': name})
             .then((res) => {
                 if (res.status == 200){
@@ -74,7 +74,7 @@ export default {
                 }
             })
     },
-    setEditSentenceCate(cateId, cateName){
+    setEditVerseCate(cateId, cateName){
         this.selected = cateId;
         this.newCate = cateName;
         this.showEditButton = true;
@@ -83,7 +83,7 @@ export default {
   },
 
   mounted() {
-    this.getSentenceCate();
+    this.getVerseCate();
   },
 };
 </script>

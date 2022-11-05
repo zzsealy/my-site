@@ -5,14 +5,14 @@ from django.conf import settings
 from django.utils.decorators import method_decorator
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
-from rest_framework.status import HTTP_203_NON_AUTHORITATIVE_INFORMATION, HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_404_NOT_FOUND
+from rest_framework.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_404_NOT_FOUND
 from rest_framework.response import Response
 from backend.apps.accounts.utils import login_require
 
 
-from blog.models import Category, Post as PostModel, Comment, PostImage, Sentence, SentenceCate
-from blog.serializers import Cateserializer, Postserializer, CommentSerializer, PostImageSerializer, SentenceSerializer,\
-    SentenceCateSerializer
+from blog.models import Category, Post as PostModel, Comment, PostImage, Verse, VerseCate
+from blog.serializers import CateSerializer, PostSerializer, CommentSerializer, PostImageSerializer, VerseSerializer,\
+    VerseCateSerializer
 from accounts.utils import login_expire
 
 
@@ -23,13 +23,13 @@ from accounts.utils import login_expire
 class CateList(APIView):
     def get(self, request):
         cates = Category.objects.all()
-        serializer = Cateserializer(cates, many=True)
+        serializer = CateSerializer(cates, many=True)
         return Response(serializer.data)
 
     @method_decorator(login_expire)
     def post(self, request):
         data = request.data
-        serializer = Cateserializer(data=data)
+        serializer = CateSerializer(data=data)
         
         if login_require(request):
             return Response(status=HTTP_401_UNAUTHORIZED)
@@ -44,7 +44,7 @@ class Cate(APIView):
         if nid:
             cate = Category.objects.filter(id=nid).first()
             if cate:
-                serializer = Cateserializer(cate)
+                serializer = CateSerializer(cate)
                 return Response(data=serializer.data, status=HTTP_200_OK)
             return Response(status=HTTP_404_NOT_FOUND, data={"message": "id不存在"})
         return Response(status=HTTP_200_OK)
@@ -70,7 +70,7 @@ class Cate(APIView):
         data = request.data
         cate = Category.objects.filter(id=nid).first()
         if cate:
-            serializer = Cateserializer(instance=cate, data=data)
+            serializer = CateSerializer(instance=cate, data=data)
             if serializer.is_valid():
                 cate = serializer.save()
             return Response(data={ "message": "修改成功", "name": cate.name }, status=HTTP_200_OK)
@@ -79,7 +79,7 @@ class Cate(APIView):
 
 
 
-class Postlist(APIView):
+class PostList(APIView):
     
     def get(self, request):
         get_data = request.GET
@@ -94,10 +94,10 @@ class Postlist(APIView):
             post_index_start = (page-1)*post_account_each_page
             post_index_end = page*post_account_each_page
             posts = posts[post_index_start: post_index_end]
-        serialzier = Postserializer(posts, many=True)
-        for data in serialzier.data:
+        serializer = PostSerializer(posts, many=True)
+        for data in serializer.data:
             data['created'] = data['created'].replace('T', ' ').split('.')[0]
-        return Response(serialzier.data)
+        return Response(serializer.data)
 
     def post(self, request): # 搜索框的搜索， 查询到是ES。
         try:
@@ -123,16 +123,16 @@ class Post(APIView):
     def get(self, request, id=None):
         if id:
             post = PostModel.objects.filter(id=id).first()
-            seriialzer = Postserializer(post)
-            return Response(seriialzer.data)
+            serializer = PostSerializer(post)
+            return Response(serializer.data)
         return Response(status=HTTP_200_OK)
 
     """
     { 
-        "body": "testbody",
+        "body": "test body",
         "cate": 7,
         "subhead": "test",
-        "title": "testhead",
+        "title": "test head",
         "owner": 1
     }
     """
@@ -141,15 +141,15 @@ class Post(APIView):
         if login_require(request):
             return Response(status=HTTP_401_UNAUTHORIZED)
         data = request.data
-        postserializer = Postserializer(data=data)
-        if postserializer.is_valid():
-            postserializer.save()
-        return Response(status=HTTP_200_OK, data=postserializer.data)
+        post_serializer = PostSerializer(data=data)
+        if post_serializer.is_valid():
+            post_serializer.save()
+        return Response(status=HTTP_200_OK, data=post_serializer.data)
 
 
     def put(self, request, id):
         post = PostModel.objects.filter(id=id).first()
-        serializer = Postserializer(instance=post, data=request.data)
+        serializer = PostSerializer(instance=post, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(status=HTTP_200_OK, data={"message": "修改成功"})
@@ -178,11 +178,11 @@ class PostImageView(APIView):
         image = request.FILES.get('image', None)
         image_name = image.name
         post_name_image = PostImage.objects.filter(name=image_name).first()
-        postimage_instance = PostImage(image=image)
-        link = '/media/' + str(postimage_instance.image)
-        postimage_instance.link = link
-        postimage_instance.name = image_name
-        postimage_instance.save()
+        post_image_instance = PostImage(image=image)
+        link = '/media/' + str(post_image_instance.image)
+        post_image_instance.link = link
+        post_image_instance.name = image_name
+        post_image_instance.save()
         print(request.data)
         return Response({'url': link})
         # return Response({'message': '图片名字已经存在'})
@@ -226,21 +226,21 @@ class TimePostDataView(APIView):
 
 
 
-class SentenceList(APIView):
+class VerseList(APIView):
 
     def get(self, request):
         get_data = request.GET
         cate = get_data.get('cate')
         if cate:
-            sentences = Sentence.objects.filter(cate=cate)
+            verses = Verse.objects.filter(cate=cate)
         else:
-            sentences = Sentence.objects.all()
-        serializer = SentenceSerializer(sentences, many=True)
+            verses = Verse.objects.all()
+        serializer = VerseSerializer(verses, many=True)
         return Response(serializer.data)
 
 
 
-class SentenceView(APIView):
+class VerseView(APIView):
 
     def get(self, request):
         pass
@@ -248,52 +248,57 @@ class SentenceView(APIView):
 
     def post(self, request):
         post_data = request.data
-        serializer = SentenceSerializer(data=post_data)
+        serializer = VerseSerializer(data=post_data)
         if serializer.is_valid():
             serializer.save()
         return Response(status=HTTP_200_OK)
 
     def put(self, request, id):
         post_data = request.data
-        serializer = SentenceSerializer()
+        serializer = VerseSerializer()
         try:
             serializer.update(id, post_data)
             return Response(status=HTTP_200_OK)
         except Exception as e:
-            print("更新sentence错误:", e)
+            print("更新verse错误:", e)
             return Response(status=299)
+    
+    def delete(self, request, id):
+        verse = Verse.objects.get(id=id)
+        verse.delete()
+        return Response(status=200)
 
 
 @api_view(['GET'])
-def SentenceCateList(request):
+def VerseCateList(request):
     if request.method == 'GET':
-        sentence_cates = SentenceCate.objects.all()
-        serializer = SentenceCateSerializer(sentence_cates, many=True)
+        verse_cates = VerseCate.objects.all()
+        serializer = VerseCateSerializer(verse_cates, many=True)
         return Response(serializer.data)
 
 
 @api_view(['POST'])
-def SentenceCateCreate(request):
+def VerseCateCreate(request):
     if request.method == 'POST':
         post_data = request.data
-        serializer = SentenceCateSerializer(data=post_data)
+        serializer = VerseCateSerializer(data=post_data)
         if serializer.is_valid():
             serializer.save()
         return Response(status=HTTP_200_OK)
 
 
 @api_view(['PUT']) 
-def SentenceCateEdit(request, id):
+def VerseCateEdit(request, id):
     if request.method == 'PUT':
-        id_cate = SentenceCate.objects.get(id=id)
+        id_cate = VerseCate.objects.get(id=id)
         post_data = request.data
         name = post_data.get('name')
-        cate = SentenceCate.objects.filter(name=name).first() # 如果要修改的分类名字已经存在，就把当前cate下的所有的句子移动到要修改成的分类下。
+        cate = VerseCate.objects.filter(name=name).first() # 如果要修改的分类名字已经存在，就把当前cate下的所有的句子移动到要修改成的分类下。
         if cate:
-            sentences = Sentence.objects.filter(cate=id_cate)
-            for sentence in sentences:
-                sentence.cate = cate
-                sentence.save()
+            verses = Verse.objects.filter(cate=id_cate)
+            for verse in verses:
+                verse.cate = cate
+                verse.save()
             id_cate.delete()
             return Response(status=250)
         else: # 只是修改分类名称

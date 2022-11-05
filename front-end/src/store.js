@@ -12,7 +12,7 @@ export default new Vuex.Store({
     navStatusState: {
         homeActive: false,
         cateActive: false,
-        sentenceActive: false,
+        verseActive: false,
         historyActive: false,
         aboutActive: false,
         adminActive: false
@@ -40,8 +40,8 @@ export default new Vuex.Store({
           case "cate":
               state.navStatusState.cateActive = true;
               break;
-          case "sentence":
-              state.navStatusState.sentenceActive = true;
+          case "verse":
+              state.navStatusState.verseActive = true;
               break;
           case "history":
               state.navStatusState.historyActive = true;
@@ -58,7 +58,7 @@ export default new Vuex.Store({
     cancelStatus(state, payload){
       state.navStatusState.homeActive = false;
       state.navStatusState.cateActive = false;
-      state.navStatusState.sentenceActive = false;
+      state.navStatusState.verseActive = false;
       state.navStatusState.historyActive = false;
       state.navStatusState.adminActive = false;
       state.navStatusState.aboutActive = false;
