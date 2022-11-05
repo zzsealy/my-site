@@ -49,7 +49,7 @@
                     <td @click="setEditVerse(verse.id, verse.body, verse.author, verse.cate)">
                         <b-button variant="warning">编辑</b-button>
                     </td>
-                    <td @click="delPost(post.id, post.title)">
+                    <td @click="delVerse(verse.id)">
                         <b-button variant="danger">删除</b-button>
                     </td>
                 </tr>
@@ -70,36 +70,50 @@
                 author: '',
                 selected: '',
                 verseCates: [],
-                verses: ''
+                verses: '',
+                mapCateIdCateName: ''
                 // options: [{"value":1},{"value":2}],
                 // value: ''
             }
         },
         methods: {
             createVerse(body, author, cate='all') {
-                let path = this.$store.state.URL + '/verse' + '?cate=' + cate;
-                this.$axios.post(path, { 'body': this.verseBody, 'author': this.author, 'cate': this.selected })
+                let path = this.$store.state.URL + '/verse/';
+                this.$axios.post(path, { 'body': this.verseBody, 'author': this.author, 'cate_id': this.selected })
                     .then((res) => {
                         let data = res.data;
                         if (res.status == 200) {
                             this.$toasted.success('句子发表成功');
+                            window.location.reload();
                         }
                     })
             },
             getVerseCate(){
-                let path = this.$store.state.URL + '/verse_cates';
+                // 获取所有的 句子分类
+                let path = this.$store.state.URL + '/verse_cates/';
                 this.$axios.get(path)
                     .then((res) => {
                         let verseCates = res.data;
                         this.verseCates = verseCates;
-                        this.selected = verseCates[0].id;
+                        this.selected = verseCates[0].id;  // 因为是创建新的句子，给新句子选择的分类直接是第一个
+
+                        let mapCateIdCateName = new Map();
+                        for(let i=0; i < verseCates.length; i++) {
+                            mapCateIdCateName.set(verseCates[i].id, verseCates[i].name)
+                        }
+                        this.mapCateIdCateName = mapCateIdCateName;
                     })
             },
-            getVerse(cate=''){
-                let path = this.$store.state.URL + '/verses';
+            getVerses(cate=''){
+                let path = this.$store.state.URL + '/verses/' + '?cate=' + cate;
                 this.$axios.get(path)
                     .then((res) => {
                         let verses = res.data;
+
+                        for (let i = 0; i < verses.length; i++){
+                            verses[i]['cate_name'] = this.mapCateIdCateName.get(verses[i].cate_id);
+                        } // 把 cate_name 拼进来
+
                         this.verses = verses;
                     })
             },
@@ -112,8 +126,7 @@
                 this.showCreateButton = false;
             },
             editVerseSubmit() {
-                debugger;
-                let path = this.$store.state.URL + '/verse/' + this.verseId;
+                let path = this.$store.state.URL + '/verse/' + this.verseId + '/';
                 let postData = {'body': this.verseBody, 'author': this.author, 'cate': this.selected}
                 this.$axios.put(path, postData)
                     .then((res) => {
@@ -125,12 +138,25 @@
                             this.$toasted.error('更新失败')
                         }
                     })
+            },
+            delVerse (verseId) {
+                let path = this.$store.state.URL + '/verse/' + verseId + '/';
+                this.$axios.delete(path)
+                    .then((res) => {
+                        if( res.status == 200 ) {
+                            this.$toasted.success('删除句子成功!');
+                            window.location.reload();
+                        } else {
+                            this.$toasted.success('删除句子失败!');
+                            this.getVerse()
+                        }
+                    })
             }
         },
 
         created() {
             this.getVerseCate();
-            this.getVerse();
+            this.getVerses();
         }
     }
 </script>

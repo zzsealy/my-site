@@ -46,14 +46,16 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class VerseSerializer(serializers.ModelSerializer):
-    cate_name = serializers.ReadOnlyField(source='cate.name')
+
+
     class Meta:
         model = Verse
         fields = "__all__"
-    
+
     def update(self, id, update_info):
         update_info['cate'] = VerseCate.objects.get(id=update_info['cate'])
         Verse.objects.filter(id=id).update(**update_info)
+    
 
 
 class VerseCateSerializer(serializers.ModelSerializer):

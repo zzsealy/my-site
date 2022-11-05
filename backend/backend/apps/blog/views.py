@@ -262,6 +262,11 @@ class VerseView(APIView):
         except Exception as e:
             print("更新verse错误:", e)
             return Response(status=299)
+    
+    def delete(self, request, id):
+        verse = Verse.objects.get(id=id)
+        verse.delete()
+        return Response(status=200)
 
 
 @api_view(['GET'])
