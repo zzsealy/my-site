@@ -10,6 +10,8 @@
   "dependencies": {
     "@popperjs/core": "^2.10.2",
     "@tinymce/tinymce-vue": "^3.2.8",
+    "@wangeditor/editor": "^5.1.22",
+    "@wangeditor/editor-for-vue": "^1.0.2",
     "axios": "^0.24.0",
     "bootstrap-vue": "^2.21.2",
     "core-js": "^2.6.5",
