@@ -11,30 +11,18 @@
       </div> <br>
 
     </form>
-    <div style="border: 1px solid #ccc;">
-      <Toolbar
-          style="border-bottom: 1px solid #ccc"
-          :editor="editor"
-          :defaultConfig="toolbarConfig"
-          :mode="mode"
-      />
-      <Editor
-          style="height: 500px; overflow-y: hidden;"
-          v-model="html"
-          :defaultConfig="editorConfig"
-          :mode="mode"
-          @onCreated="onCreated"
-      />
-    </div>
+    <MyEditor></MyEditor>
   </div>
 </template>
 
 
 <script>
-  import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
+  import MyEditor from './MyEditor'
   export default {
-    name: "Addpost",
-    components: { Editor, Toolbar },
+    name: "Newpost",
+    components: {
+      MyEditor
+    },
     data() {
       return {
         selected: null,
@@ -44,8 +32,6 @@
         editor: null,
         html: '<p>hello</p>',
         text:'',
-        toolbarConfig: { },
-        editorConfig: { placeholder: '请输入内容...' },
         mode: 'default', // or 'simple'
       };
     },
