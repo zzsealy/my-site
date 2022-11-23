@@ -15,6 +15,10 @@
                 <b-form-input v-model="title" type="text" placeholder="标题"></b-form-input><br>
                 <b-form-input v-model="subhead" type="text" placeholder="摘要"></b-form-input><br>
             </div> <br>
+            <MyEditor
+                :html="html"
+                @getHtml="getHtml"
+            ></MyEditor>
         </form>
     </div>
 
@@ -22,10 +26,12 @@
 
 
 <script>
-    import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
+    import MyEditor from './MyEditor'
     export default {
         name: "EditPost",
-        components: { Editor, Toolbar },
+        components: {
+            MyEditor
+        },
         data() {
             return {
                 selected: null,
@@ -53,6 +59,13 @@
                         }
                     })
             },
+            getHtml(html){
+                this.html = html;
+            },
+            // onChange(editor) {
+            //     const html = editor.getHtml();
+            //     this.html = html;
+            // },
             getAllCate() {
                 const path = this.$store.state.URL + "/categories";
                 this.$axios.get(path)
@@ -99,10 +112,6 @@
 
 
 <style>
-    .mavonEditor {
-        width: 100%;
-        height: 100%;
-    }
 
     .form-header {
         width: 1000px;

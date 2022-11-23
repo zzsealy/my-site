@@ -10,8 +10,11 @@
         <b-form-input v-model="postSubhead" type="text" placeholder="摘要"></b-form-input><br>
       </div> <br>
 
+      <MyEditor
+      :html="html"
+      @getHtml="getHtml"
+      ></MyEditor>
     </form>
-    <MyEditor></MyEditor>
   </div>
 </template>
 
@@ -52,6 +55,9 @@
           })
 
       },
+      getHtml(html){
+                this.html = html;
+            },
       getAllCate(){
         const path = this.$store.state.URL + "/categories";
         this.$axios.get(path)
@@ -83,6 +89,3 @@
     }
   };
 </script>
-
-
-<style src="@wangeditor/editor/dist/css/style.css"></style>
