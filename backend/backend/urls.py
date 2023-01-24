@@ -25,5 +25,6 @@ urlpatterns = [
     path('', include('snippets.urls')),
     path('', include('accounts.urls')),
     path('', include('blog.urls')),
+    path('todo', include('todo.urls')),
     re_path('^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
 ]
