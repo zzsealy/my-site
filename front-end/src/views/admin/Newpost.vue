@@ -10,22 +10,32 @@
         <b-form-input v-model="postSubhead" type="text" placeholder="摘要"></b-form-input><br>
       </div> <br>
 
-      <mavon-editor ref=md v-model="postBody" @imgAdd="$imgAdd" @imgDel="$imgDel" />
+      <MyEditor
+      :html="html"
+      @getHtml="getHtml"
+      ></MyEditor>
     </form>
   </div>
 </template>
 
 
 <script>
+  import MyEditor from './MyEditor'
   export default {
-    name: "Addpost",
+    name: "Newpost",
+    components: {
+      MyEditor
+    },
     data() {
       return {
         selected: null,
         postTitle: '',
         postSubhead: '',
-        postBody: '',
         cates: '',
+        editor: null,
+        html: '<p>hello</p>',
+        text:'',
+        mode: 'default', // or 'simple'
       };
     },
     methods: {
@@ -33,7 +43,7 @@
         let postData = {
           'title': this.postTitle,
           'subhead': this.postSubhead,
-          'body': this.postBody,
+          'body': this.html,
           'cate_id': this.selected,
           'owner_id': this.$store.state.user_id
         }
@@ -45,6 +55,9 @@
           })
 
       },
+      getHtml(html){
+                this.html = html;
+            },
       getAllCate(){
         const path = this.$store.state.URL + "/categories";
         this.$axios.get(path)
@@ -56,58 +69,23 @@
             this.cates = cates
           })
       },
-      $imgAdd(pos, $file){
-            // 第一步.将图片上传到服务器.
-           var formdata = new FormData();
-           formdata.append('image', $file);
-           const imageUrl = this.$store.state.URL + '/postimage'
-           let backendUrl = this.$store.state.URL;
-           this.$axios({
-               url: imageUrl,
-               method: 'post',
-               data: formdata,
-               headers: { 'Content-Type': 'multipart/form-data' },
-           }).then((res) => {
-               // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
-               /**
-               * $vm 指为mavonEditor实例，可以通过如下两种方式获取
-               * 1. 通过引入对象获取: `import {mavonEditor} from ...` 等方式引入后，`$vm`为`mavonEditor`
-               * 2. 通过$refs获取: html声明ref : `<mavon-editor ref=md ></mavon-editor>，`$vm`为 `this.$refs.md`
-               */
-              let url = backendUrl + res.data.url;
-              this.$refs.md.$img2Url(pos, url);
-           })
+      onCreated(editor) {
+            this.editor = Object.seal(editor) // 一定要用 Object.seal() ，否则会报错
         },
-        $imgDel(pos){
-          let name = pos[1].name;
-          let delData = {'name':name}
-          const imageUrl = this.$store.state.URL + '/postimage';
-          this.$axios.delete(imageUrl, {'data': delData})
-            .then((data) => {
-            window.console.log(data.message)
-          })
-        }
     },
     created(){
       this.getAllCate()
+    },
+    mounted() {
+        // 模拟 ajax 请求，异步渲染编辑器
+        setTimeout(() => {
+            this.html = '<p>请输入内容...</p>'
+        }, 1500)
+    },
+    beforeDestroy() {
+        const editor = this.editor
+        if (editor == null) return
+        editor.destroy() // 组件销毁时，及时销毁编辑器
     }
   };
 </script>
-
-
-<style scoped>
-  .mavonEditor {
-    width: 100%;
-    height: 100%;
-  }
-
-  .form-header {
-    width: 1000px;
-    margin: 0 auto;
-  }
-
-  .submit-button {
-    width: 80px;
-    margin: 0 auto;
-  }
-</style>

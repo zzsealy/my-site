@@ -15,24 +15,34 @@
                 <b-form-input v-model="title" type="text" placeholder="标题"></b-form-input><br>
                 <b-form-input v-model="subhead" type="text" placeholder="摘要"></b-form-input><br>
             </div> <br>
-
-            <mavon-editor ref=md v-model="body" @imgAdd="$imgAdd" @imgDel="$imgDel" />
+            <MyEditor
+                :html="html"
+                @getHtml="getHtml"
+            ></MyEditor>
         </form>
     </div>
+
 </template>
 
 
 <script>
+    import MyEditor from './MyEditor'
     export default {
         name: "EditPost",
+        components: {
+            MyEditor
+        },
         data() {
             return {
                 selected: null,
                 title: '',
                 subhead: '',
-                body: '',
                 cate: '',
                 cates: '',
+                editor: null,
+                html: '',
+                text:'',
+                mode: 'default', // or 'simple'
             };
         },
         methods: {
@@ -45,10 +55,17 @@
                             this.title = data.title;
                             this.subhead = data.subhead;
                             this.selected = data.cate;
-                            this.body = data.body;
+                            this.html = data.body;
                         }
                     })
             },
+            getHtml(html){
+                this.html = html;
+            },
+            // onChange(editor) {
+            //     const html = editor.getHtml();
+            //     this.html = html;
+            // },
             getAllCate() {
                 const path = this.$store.state.URL + "/categories";
                 this.$axios.get(path)
@@ -66,7 +83,7 @@
                 let data = {
                     title: this.title,
                     subhead: this.subhead,
-                    body: this.body,
+                    body: this.html,
                     cate: this.selected,
                 } 
                 this.$axios.put(postEditPath, data)
@@ -75,22 +92,26 @@
                             this.$router.push("/admin/post-list")
                         }
                     })
-            }
+            },
+            onCreated(editor) {
+                this.editor = Object.seal(editor) // 一定要用 Object.seal() ，否则会报错
+            },
         },
         created() {
             let id = this.$route.params.id;
             this.getPostDataById(id);
             this.getAllCate()
+        },
+        beforeDestroy() {
+            const editor = this.editor
+            if (editor == null) return
+            editor.destroy() // 组件销毁时，及时销毁编辑器
         }
     }
 </script>
 
 
 <style>
-    .mavonEditor {
-        width: 100%;
-        height: 100%;
-    }
 
     .form-header {
         width: 1000px;

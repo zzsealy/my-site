@@ -68,6 +68,7 @@ export default {
               type: 'success'
             });
             setTimeout(this.$router.push({name:'home'}), 2000);
+            window.location.reload();
           }
           if (res.data.status_code == 203) {
             this.variant = "warning";
