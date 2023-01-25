@@ -70,6 +70,7 @@ MIDDLEWARE = [
 CORS_ORIGIN_WHITELIST = (
  'http://127.0.0.1:8080',
  'http://localhost:8080',
+ 'http://localhost:3000'
 )
 
 CORS_ALLOW_CREDENTIALS = True # 指明在跨域访问中，后端是否支持对cookie的操作。
