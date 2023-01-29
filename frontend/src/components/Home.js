@@ -1,31 +1,59 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import { Button, Toast, Col, Row, Card, Typography } from '@douyinfe/semi-ui';
+
+
 import constant from '../constant'
 
 
-const Todo = () => {
+const Todo = ({ todo }) => {
     return (
-        <p>todo</p>
+        <li>
+            {todo.body}
+       </li>
+   ) 
+}
+
+const TodoList = ({ todoList }) => {
+    const title = todoList.finish_rate + '  ' + todoList.create_datetime
+    const { Text } = Typography;
+    return (
+        <Card title = {title}
+            style={{ maxWidth: 250, display: 'inline-block', }}
+            headerExtraContent={
+                <Text link>
+                    查看详情
+                </Text>
+        }
+        >  
+            <ul>
+                {todoList.child_todo.map(todo => <Todo key={todo.id} todo={todo}/>)}
+            </ul>
+        </Card>
     )
 }
 
 const Home = () => {
-    const [todoList, setTodoList] = useState([])
+    const [todoLists, setTodoLists] = useState([])
 
 
     const totalTodoListHooks = () => {
         const getTodoListPath = `${constant.baseUrl}/todo`
         axios.get(getTodoListPath)
             .then((res) => {
-                setTodoList(res)
+                setTodoLists(res.data)
                 console.log(res);
           })
 
     }
     useEffect(totalTodoListHooks, [])
     return (
-        <div>
-            <h1>hello</h1>
+        <div className='grid'>
+            <Row>
+                <Col span={14} offset={4}>
+                    {todoLists.map(todoList => <TodoList key={todoList.id} todoList={todoList}/>)}
+                </Col>
+            </Row>
         </div>
     )
 }
