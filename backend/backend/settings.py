@@ -118,6 +118,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
+URL_VERIFICATION_LIST = {
+    '/todo': ['GET']
+}
+
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
