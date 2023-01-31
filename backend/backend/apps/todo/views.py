@@ -21,3 +21,10 @@ class TodoLists(APIView):
 
     def post(request):
         pass
+
+class TodoListView(APIView):
+
+    def get(self, request, id):
+        todo_list = TodoList.objects.get(id=id)
+        serializer = TodoSerializer(todo_list)
+        return Response(serializer.data)
