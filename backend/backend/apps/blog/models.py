@@ -29,7 +29,6 @@ class Post(models.Model):
 class PostImage(models.Model):
     post_id = models.CharField(default=None, max_length=10000)  # 我觉得文章不会到1w
     name = models.CharField(default=None, max_length=100)
-    image = models.ImageField()
     link = models.CharField(default=None, max_length=100)
 
     class Meta:

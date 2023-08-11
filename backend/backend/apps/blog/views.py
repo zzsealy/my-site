@@ -13,7 +13,6 @@ from blog.serializers import CateSerializer, PostSerializer, CommentSerializer, 
     VerseCateSerializer
 from accounts.utils import login_expire
 
-from PIL import Image
 
 
 
@@ -169,55 +168,55 @@ class Post(APIView):
 
 
 
-class PostImageView(APIView):
+# class PostImageView(APIView):
 
-    """
-    后台定义前端上传图片到服务端的接口
-    """
-    def post(self, request):
-        image = request.FILES.get('image', None)
-        image_name = image.name
+#     """
+#     后台定义前端上传图片到服务端的接口
+#     """
+#     def post(self, request):
+#         image = request.FILES.get('image', None)
+#         image_name = image.name
 
 
-        post_name_image = PostImage.objects.filter(name=image_name).first()
-        post_image_instance = PostImage(image=image)
-        link = '/media/' + str(post_image_instance.image)
+#         post_name_image = PostImage.objects.filter(name=image_name).first()
+#         post_image_instance = PostImage(image=image)
+#         link = '/media/' + str(post_image_instance.image)
 
         
     
-        post_image_instance.link = link
-        post_image_instance.name = image_name
-        post_image_instance.save()
+#         post_image_instance.link = link
+#         post_image_instance.name = image_name
+#         post_image_instance.save()
 
-        # media_root = settings.MEDIA_ROOT
-        # # pillow 处理照片信息
-        # absolute_img_url = media_root + '/' + image_name
-        # im = Image.open(absolute_img_url)
-        # width = im.width
-        # height = im.height
-        # image = im.resize((int(width/2), int(height/2)))
-        # image.save(absolute_img_url)
+#         # media_root = settings.MEDIA_ROOT
+#         # # pillow 处理照片信息
+#         # absolute_img_url = media_root + '/' + image_name
+#         # im = Image.open(absolute_img_url)
+#         # width = im.width
+#         # height = im.height
+#         # image = im.resize((int(width/2), int(height/2)))
+#         # image.save(absolute_img_url)
 
-        print(request.data)
-        return Response({'url': link})
-        # return Response({'message': '图片名字已经存在'})
+#         print(request.data)
+#         return Response({'url': link})
+#         # return Response({'message': '图片名字已经存在'})
 
-    def delete(self, request):
-        name = request.data.get('name', '')
-        if name:
-            image = PostImage.objects.filter(name=name).last()
-            try:
-                os.remove(settings.MEDIA_ROOT + '/' + image.name)
-                image.delete()
-                return Response({
-                    'status': 200,
-                    'message': '删除成功'
-                })
-            except Exception as e:
-                return Response({
-                    'status': 500,
-                    'message': '发生错误:{}'.format(e)
-                })
+#     def delete(self, request):
+#         name = request.data.get('name', '')
+#         if name:
+#             image = PostImage.objects.filter(name=name).last()
+#             try:
+#                 os.remove(settings.MEDIA_ROOT + '/' + image.name)
+#                 image.delete()
+#                 return Response({
+#                     'status': 200,
+#                     'message': '删除成功'
+#                 })
+#             except Exception as e:
+#                 return Response({
+#                     'status': 500,
+#                     'message': '发生错误:{}'.format(e)
+#                 })
 
 
 class TimePostDataView(APIView):

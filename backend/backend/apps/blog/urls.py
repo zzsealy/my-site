@@ -1,5 +1,5 @@
 from django.urls import path
-from blog.views import CateList, Cate, PostList, PostPaging, Post, PostImageView, TimePostDataView, VerseList, VerseView, \
+from blog.views import CateList, Cate, PostList, PostPaging, Post, TimePostDataView, VerseList, VerseView, \
     VerseCateList, VerseCateCreate, VerseCateEdit
 from rest_framework.urlpatterns import format_suffix_patterns
 
@@ -10,7 +10,7 @@ urlpatterns = format_suffix_patterns([
     path('paging_data', PostPaging.as_view(), name='post_paging'), # 分页数据
     path('post', Post.as_view(), name='add_post_view'),
     path('post/<int:id>/', Post.as_view(), name='post_view'),
-    path('postimage', PostImageView.as_view(), name='postimage-delete'),
+    # path('postimage', PostImageView.as_view(), name='postimage-delete'),
     path('time_post_data', TimePostDataView.as_view(), name='time_post_data'),
     path('verses/', VerseList.as_view(), name='verses'), # 句子过滤分类 所有
     path('verse/', VerseView.as_view(), name='verse'), # 句子 增删改查
