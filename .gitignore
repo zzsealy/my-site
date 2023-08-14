@@ -5,6 +5,7 @@
 
 
 /front-end/node_modules
+/frontend/node_modules
 *db.sqlite3
 *localsetting.py
 *tags
