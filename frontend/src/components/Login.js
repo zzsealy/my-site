@@ -41,18 +41,18 @@ const Login = () => {
     const Login = (event) => {
         event.preventDefault();
         localStorage.removeItem('todo_token')
-        const loginUrl = `${constant.baseUrl}/user/login`
+        const loginUrl = `${constant.baseUrl}/users/login`
         const loginData = {'username': username, 'password': password}
         axios.post(loginUrl, loginData)
             .then((res) => {
-                const code = res.data.code;
-                if (code === 200) {
+                const status_code = res.data.status_code;
+                if (status_code === 200) {
                     const token = res.data.token;
                     localStorage.setItem('todo_token', token)
                     navigate('/')
                     console.log('登录成功')
                 }
-                if (code === 400) { // 验证失败
+                if (status_code === 400) { // 验证失败
                     setShowBanner(true)
                 }
                 console.log('收到登录返回')

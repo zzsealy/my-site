@@ -4,7 +4,7 @@ from asyncore import read
 from dataclasses import field
 from rest_framework import serializers
 from blog.models import Category, Post, Comment, PostImage, Verse, VerseCate
-from accounts.models import User
+from user.models import User
 
 
 class CateSerializer(serializers.ModelSerializer):

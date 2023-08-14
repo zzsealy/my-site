@@ -28,20 +28,20 @@ const Register = () => {
 
     const Register = (event) => {
         event.preventDefault();
-        const registerUrl = `${constant.baseUrl}/user/register`
+        const registerUrl = `${constant.baseUrl}/users/register`
         const registerData = {
             'username': username, 'password': password,
             'passwordRepeat': passwordRepeat, 'name': name
         }
         axios.post(registerUrl, registerData)
             .then((res) => {
-                const code = res.data.code
-                if (code === 200) {
+                const status_code = res.data.status_code
+                if (status_code === 200) {
                     return(
                         navigate('/login')
                     )
                 }
-                if (code === 1001) {
+                if (status_code === 1001) {
                     console.log('账户已存在')
                 }
             })

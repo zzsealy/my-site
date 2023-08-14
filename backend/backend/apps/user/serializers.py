@@ -1,4 +1,4 @@
-from accounts.models import User
+from user.models import User
 from rest_framework import serializers
 from snippets.models import Snippet
 

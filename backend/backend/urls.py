@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('', include('snippets.urls')),
-    path('', include('accounts.urls')),
+    path('', include('user.urls')),
     path('', include('blog.urls')),
     path('todo', include('todo.urls')),
     re_path('^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),

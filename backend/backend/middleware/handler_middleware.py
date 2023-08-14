@@ -11,10 +11,11 @@ from django.http import JsonResponse
 class Middleware(MiddlewareMixin):
 
     def process_request(self, request, **kwargs):
-        login_verify_status = self.verify_login_validity(request)
-        request.user = login_verify_status['user']  # 成功就返回用户的user 否则返回用户的
-        if login_verify_status['result'] is False:
-            return JsonResponse({'status_code': 401})
+        # login_verify_status = self.verify_login_validity(request)
+        # request.user = login_verify_status['user']  # 成功就返回用户的user 否则返回用户的
+        # if login_verify_status['result'] is False:
+        #     return JsonResponse({'status_code': 401})
+        return Response
         # return JsonResponse(data={"susscess":0, "message":"记录事件开始到数据库出错"}, content_type='application/json', status=401)
 
     

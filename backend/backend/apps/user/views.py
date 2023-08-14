@@ -1,6 +1,4 @@
 
-from accounts.models import User
-from .serializers import UserSerializer
 from rest_framework import generics
 from django.contrib.auth import login, logout
 from django.core.exceptions import ObjectDoesNotExist
@@ -14,8 +12,10 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-# Create your views here.
 
+from user.models import User
+from .serializers import UserSerializer
+from .user_dal import user_dal
 
 """
 我们只想将用户展示成只读视图，
@@ -32,25 +32,31 @@ class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+class UserRegister(APIView):
+
+    def post(self, request):
+        print('jinlaile  ========== ')
+        post_data = request.data
+        username = post_data.get('username')
+        password = post_data.get('password')
+        repeat_password = post_data.get('passwordRepeat')
+        if repeat_password != password:
+            return Response( data={ "status_code": 401, "message": "两次密码不一致"})
+        create_info = {'username': username, 'password': password}
+        if user_dal.create_one_obj(create_info=create_info):
+            return Response(data={ "status_code": 200, "message": "创建成功，请登录"})
 
 class LoginView(APIView):
     authentication_classes = (TokenAuthentication,)
     
     def post(self, request, format=None):
-        data = json.loads(request.body.decode('utf-8'))
+        data = request.data
         username = data['username']
         password = data['password']
-        try:
-            user = User.objects.get(username=username)
-        except ObjectDoesNotExist:
-            return Response ( {"status_code": HTTP_203_NON_AUTHORITATIVE_INFORMATION, "message": "用户名密码错误"} )
-        if check_password(password, user.password):
-            Token.objects.filter(user=user).delete()
-            token = Token.objects.create(user=user)
-            token.save()
-            return Response( data={ "status_code": HTTP_200_OK, "message": "登陆成功", 'token': token.key, 'user_id': user.id})
+        if user_dal.check_password(username=username, password=password):
+            return Response( data={ "status_code": HTTP_200_OK, "message": "登陆成功"})
         else:
-            return Response( data={"status_code": HTTP_203_NON_AUTHORITATIVE_INFORMATION, 'message': '账号密码不正确'})
+            return Response( data={"status_code": 400, 'message': '账号密码不正确'})
 
 
 # @login_expire()
@@ -62,7 +68,6 @@ def userLogout(request):
 def getToken(request):
     token = get_token(request)
     return JsonResponse({"token": token})
-
 
 
 

@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'api',
-    'accounts',
+    'user',
     'snippets',
     'blog',
     'todo',
@@ -64,13 +64,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    'handler_middleware.Middleware',
+    # 'handler_middleware.Middleware',
 ]
 
 CORS_ORIGIN_WHITELIST = (
  'http://127.0.0.1:8080',
  'http://localhost:8080',
- 'http://localhost:3000'
+ 'http://localhost:3000',
 )
 
 CORS_ALLOW_CREDENTIALS = True # 指明在跨域访问中，后端是否支持对cookie的操作。
@@ -187,7 +187,6 @@ REST_FRAMEWORK = {
     )
 }
 
-AUTH_USER_MODEL = 'accounts.User'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')     #设置静态文件路径为主目录下的media文件夹
 MEDIA_URL = '/media/'

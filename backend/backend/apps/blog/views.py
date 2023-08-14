@@ -5,13 +5,12 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_404_NOT_FOUND
 from rest_framework.response import Response
-from backend.apps.accounts.utils import login_require
+from user.utils import login_require, login_expire
 
 
 from blog.models import Category, Post as PostModel, Comment, PostImage, Verse, VerseCate
 from blog.serializers import CateSerializer, PostSerializer, CommentSerializer, PostImageSerializer, VerseSerializer,\
     VerseCateSerializer
-from accounts.utils import login_expire
 
 
 
