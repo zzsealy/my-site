@@ -14,10 +14,17 @@ from todo.models import Todo, TodoList
 class TodoLists(APIView):
     
     def get(self, request):
-        todo_lists = TodoList.objects.all()
+        todo_lists = TodoList.objects.all().order_by('-create_datetime')
         serializers = TodoListSerializer(todo_lists, many=True)
         return Response(serializers.data)
 
 
     def post(request):
         pass
+
+class TodoListView(APIView):
+
+    def get(self, request, id):
+        todo_list = TodoList.objects.get(id=id)
+        serializer = TodoSerializer(todo_list)
+        return Response(serializer.data)
