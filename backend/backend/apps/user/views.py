@@ -12,6 +12,7 @@ from .serializers import UserSerializer
 from .user_dal import user_dal
 from user.utils import generation_token
 from backend.utils.constants.status_code import StatusCode
+
 """
 我们只想将用户展示成只读视图，
 因此我们将使用ListAPIview和RetryeveAPIView通用的
@@ -29,12 +30,15 @@ class UserDetail(generics.RetrieveAPIView):
 
 class UserRegister(APIView):
 
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             return Response( data={ "status_code": StatusCode.OK.value, "message": "注册成功, 请登录"})
         else:
-            return Response( data={ "status_code": StatusCode.PASS_NOT_EQUAL, "message": "两次密码不一致"})
+            return Response( data={ "status_code": serializer.error_code, "message": "两次密码不一致"})
 
 class LoginView(APIView):
     

@@ -1,7 +1,7 @@
 
 from django.urls import path
 from django.conf.urls import url
-from .views import UserList, UserDetail, LoginView, userLogout, getToken, UserRegister
+from .views import LoginView, UserRegister
 from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = format_suffix_patterns([

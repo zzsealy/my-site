@@ -2,6 +2,8 @@ from user.models import User
 from rest_framework import serializers
 from django.contrib.auth.hashers import check_password
 from .user_dal import user_dal
+from backend.utils.errors import ValidationErrorNew
+from backend.utils.serializers import ModelSerializer
 from backend.utils.constants.status_code import StatusCode
 
 
@@ -15,9 +17,10 @@ from backend.utils.constants.status_code import StatusCode
 #         model = User
 #         fields = ('id', 'username', 'snippets')
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(ModelSerializer):
     passwordRepeat = serializers.CharField()
     name = serializers.CharField()
+    
     class Meta:
         model = User
         fields = ('username', 'password', 'passwordRepeat', 'name')
@@ -28,8 +31,9 @@ class UserSerializer(serializers.ModelSerializer):
         repeat_password = data.get('passwordRepeat')
         create_info = {'username': username, 'password': password}
         if repeat_password != password:
-            raise serializers.ValidationError(code=StatusCode.PASS_NOT_EQUAL.value)
+            raise ValidationErrorNew(code=StatusCode.PASS_NOT_EQUAL.value)
         if user_dal.create_one_obj(create_info=create_info):
             return data
         else:
-            raise serializers.ValidationError(code=StatusCode.ERROR.value)
+            raise serializers.ValidationError(code=300)
+    
