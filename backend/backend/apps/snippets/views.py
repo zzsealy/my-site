@@ -208,6 +208,8 @@ class SnippetDetail(mixins.RetrieveModelMixin,
 
 
 class SnippetList(generics.ListCreateAPIView):
+    swagger_schema = None
+
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReayOnly)
@@ -217,12 +219,16 @@ class SnippetList(generics.ListCreateAPIView):
 
 
 class SnippetDetail(generics.RetrieveUpdateDestroyAPIView):
+    swagger_schema = None
+
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReayOnly)
 
 
 class SnippetHighlight(generics.GenericAPIView):
+    swagger_schema = None
+
     queryset = Snippet.objects.all()
     renderer_classes = (renderers.StaticHTMLRenderer,)
 

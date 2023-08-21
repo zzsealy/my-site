@@ -1,15 +1,9 @@
-import jwt
 from rest_framework import generics
-from django.contrib.auth import login, logout
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, JsonResponse
+from django.contrib.auth import logout
+from django.http import  JsonResponse
 from django.middleware.csrf import get_token
 import json
-from django.contrib.auth.hashers import check_password
 from rest_framework.status import HTTP_203_NON_AUTHORITATIVE_INFORMATION, HTTP_200_OK
-from rest_framework.authtoken.models import Token
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -36,22 +30,15 @@ class UserDetail(generics.RetrieveAPIView):
 class UserRegister(APIView):
 
     def post(self, request):
-        print('jinlaile  ========== ')
-        post_data = request.data
-        username = post_data.get('username')
-        password = post_data.get('password')
-        repeat_password = post_data.get('passwordRepeat')
-        if repeat_password != password:
-            status_code = StatusCode.PASS_NOT_EQUAL
-            return Response( data={ "status_code": status_code.value, "message": "两次密码不一致"})
-        create_info = {'username': username, 'password': password}
-        if user_dal.create_one_obj(create_info=create_info):
-            return Response(data={ "status_code": StatusCode.OK, "message": "创建成功，请登录"})
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            return Response( data={ "status_code": StatusCode.OK.value, "message": "注册成功, 请登录"})
+        else:
+            return Response( data={ "status_code": StatusCode.PASS_NOT_EQUAL, "message": "两次密码不一致"})
 
 class LoginView(APIView):
-    authentication_classes = (TokenAuthentication,)
     
-    def post(self, request, format=None):
+    def post(self, request):
         data = request.data
         username = data['username']
         password = data['password']
