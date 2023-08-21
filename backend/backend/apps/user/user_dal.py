@@ -18,9 +18,8 @@ class UserDal(BaseDal):
         create_info['password'] = self.generate_password(password=password)
         return super().create_one_obj(create_info, db_select, **kwargs) 
     
-    def check_password(self, username, password):
-        user = self.get_one_by_condition(condition={'username': username}) 
-        if user.get('password') == self.generate_password(password):
+    def check_password(self, hash_password, password):
+        if hash_password == self.generate_password(password):
             return True
         return False
 

@@ -1,9 +1,17 @@
-
-import datetime
+import datetime, jwt
 from django.utils.timezone import localtime
 from django.conf import settings
 from rest_framework.authtoken.models import Token
 
+
+def generation_token(user_id: int) -> str:
+    expire_time = localtime() + settings.TOKEN_AGE
+    token = jwt.encode(
+        payload={'user_id': user_id, 'exp_time': expire_time},
+        key=settings.SECRET_KEY, 
+        algorithm='HS256'
+    )
+    return token
 
 def checkout_token_time(token_key, request): 
     token = Token.objects.filter(key=token_key).first()

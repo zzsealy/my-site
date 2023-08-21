@@ -1,8 +1,9 @@
 import { useState } from "react"
 import axios from 'axios'
 import { useNavigate } from "react-router-dom"
+import { Notification } from "@douyinfe/semi-ui"
 
-import constant from '../constant'
+import {constant, statusCode} from '../constant'
 
 
 const Register = () => {
@@ -12,18 +13,35 @@ const Register = () => {
     const [passwordRepeat, setPasswordRepeat] = useState('')
     const [name, setName] = useState('')
 
-    const loginStyle = {
-        width: '200px',
-        margin: '0 auto',
+    const opts = {
+        duration: 3,
+        position: 'topRight',
+        content: '',
+        title: '',
+    }
+    
+    const registerTitle = {
+    }
 
+    const loginStyle = {
+        display: 'flex',
+        justifyContent: 'center', // 水平局中
+        alignItems: 'center',
+        height: '100vh'
     }
 
     const loginButtonStyle = {
         margin: '10px 0px 0px 20px',
     }
 
+    const formStyle = {
+        flexDirection: 'column', // 切换为列布局
+        alignItems: 'centent'
+    }
+
     const inputStyle = {
-        margin: '0px 0px 0px 20px'
+        margin: '0px 0px 0px 20px',
+        color: '#B5AFAD'
     }
 
     const Register = (event) => {
@@ -36,13 +54,14 @@ const Register = () => {
         axios.post(registerUrl, registerData)
             .then((res) => {
                 const status_code = res.data.status_code
-                if (status_code === 200) {
+                debugger;
+                if (status_code === statusCode.OK) {
                     return(
                         navigate('/login')
                     )
                 }
-                if (status_code === 1001) {
-                    console.log('账户已存在')
+                if (status_code === statusCode.PASS_NOT_EQUAL) {
+                    Notification.error({...opts,  position: 'top', title: '两次密码不一致', content: '请重新输入'})
                 }
             })
             .catch((error) => {
@@ -72,8 +91,8 @@ const Register = () => {
 
     return (
         <div style={loginStyle}>
-            <h1>注册</h1>
-            <form>
+            <form style={formStyle}>
+                <div><h1 style={registerTitle}>注册</h1></div>
                 <div style={inputStyle}><strong>账号:</strong> <input onChange={handleUsername}></input></div>
                 <div style={inputStyle}><strong>密码:</strong> <input type='password' onChange={handlePassword}></input></div>
                 <div style={inputStyle}><strong>重复密码:</strong> <input type='password' onChange={handlePasswordRepeat}></input></div>

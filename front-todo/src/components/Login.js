@@ -2,7 +2,7 @@ import { useState } from "react"
 import axios from 'axios'
 import { useNavigate, Link } from "react-router-dom"
 
-import constant from '../constant'
+import {constant} from '../constant'
 import { Banner } from '@douyinfe/semi-ui';
 
 
@@ -73,13 +73,13 @@ const Login = () => {
         <div style={loginStyle}>
             <h1>登录</h1>
             {showBanner? LoginBanner: null}
-            <form>
-                <div style={inputStyle}><strong>账号:</strong> <input onChange={handleUsername}></input></div>
-                <div style={inputStyle} ><strong>密码:</strong> <input type='password' onChange={handlePassword}></input></div>
-                <br></br>
-                <button style={loginButtonStyle} onClick={Login}>登录</button>
-                <button style={loginButtonStyle} ><Link to='/register'>注册</Link></button>
-            </form>
+                <form>
+                    <div style={inputStyle}><strong>账号:</strong> <input onChange={handleUsername}></input></div>
+                    <div style={inputStyle} ><strong>密码:</strong> <input type='password' onChange={handlePassword}></input></div>
+                    <br></br>
+                    <button style={loginButtonStyle} onClick={Login}>登录</button>
+                    <button style={loginButtonStyle} ><Link to='/register'>注册</Link></button>
+                </form>
         </div>
     )
 }

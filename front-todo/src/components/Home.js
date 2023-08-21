@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import axios from 'axios'
 import { Button, Col, Row, Card, Pagination, CardGroup, DatePicker, Divider, Banner, Select } from '@douyinfe/semi-ui';
 import { useNavigate  } from 'react-router-dom';
-import constant from '../constant'
+import {constant} from '../constant'
 import { requestConfig } from '../utils'
 
 

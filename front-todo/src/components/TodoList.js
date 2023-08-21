@@ -4,7 +4,7 @@ import { useNavigate  } from 'react-router-dom';
 import { useState, useEffect } from 'react'
 import { Button, Toast, Col, Row, Avatar, Input, Checkbox, Layout, Popconfirm, Select, Divider } from '@douyinfe/semi-ui';
 import { requestConfig } from '../utils'
-import constant from '../constant'
+import {constant} from '../constant'
 
 const tagMapping = {
     'short': '短期目标',

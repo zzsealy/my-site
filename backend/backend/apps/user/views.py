@@ -1,4 +1,4 @@
-
+import jwt
 from rest_framework import generics
 from django.contrib.auth import login, logout
 from django.core.exceptions import ObjectDoesNotExist
@@ -16,7 +16,8 @@ from rest_framework.views import APIView
 from user.models import User
 from .serializers import UserSerializer
 from .user_dal import user_dal
-
+from user.utils import generation_token
+from backend.utils.constants.status_code import StatusCode
 """
 我们只想将用户展示成只读视图，
 因此我们将使用ListAPIview和RetryeveAPIView通用的
@@ -41,10 +42,11 @@ class UserRegister(APIView):
         password = post_data.get('password')
         repeat_password = post_data.get('passwordRepeat')
         if repeat_password != password:
-            return Response( data={ "status_code": 401, "message": "两次密码不一致"})
+            status_code = StatusCode.PASS_NOT_EQUAL
+            return Response( data={ "status_code": status_code.value, "message": "两次密码不一致"})
         create_info = {'username': username, 'password': password}
         if user_dal.create_one_obj(create_info=create_info):
-            return Response(data={ "status_code": 200, "message": "创建成功，请登录"})
+            return Response(data={ "status_code": StatusCode.OK, "message": "创建成功，请登录"})
 
 class LoginView(APIView):
     authentication_classes = (TokenAuthentication,)
@@ -53,10 +55,12 @@ class LoginView(APIView):
         data = request.data
         username = data['username']
         password = data['password']
-        if user_dal.check_password(username=username, password=password):
+        user = user_dal.get_one_by_condition(condition={'username': username}) 
+        if user and user_dal.check_password(hash_password=user.get('password'), password=password):
             return Response( data={ "status_code": HTTP_200_OK, "message": "登陆成功"})
         else:
             return Response( data={"status_code": 400, 'message': '账号密码不正确'})
+    
 
 
 # @login_expire()

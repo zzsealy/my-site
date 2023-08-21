@@ -16,7 +16,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.views.static import serve
-from backend.settings import MEDIA_ROOT
 
 
 urlpatterns = [
@@ -26,5 +25,4 @@ urlpatterns = [
     path('', include('user.urls')),
     path('', include('blog.urls')),
     path('todo', include('todo.urls')),
-    re_path('^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
 ]
