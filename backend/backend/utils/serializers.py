@@ -15,8 +15,16 @@ class ModelSerializer(serializers.ModelSerializer):
                 self._validated_data = self.run_validation(self.initial_data)
             except ValidationError as exc:
                 codes = exc.get_codes()
-                for name, code_list in codes.items():
-                    self.error_code = code_list[0]
+                # for name, code_list in codes.items():
+                #     self.error_code = code_list[0]
+                full_detail = exc.get_full_details()
+                for _, error_dict_list in full_detail.items():
+                    for error_dic in error_dict_list:
+                        for k, v in error_dic.items():
+                            if k == 'message':
+                                self.error_message = v.__str__()
+                            if k == 'code':
+                                self.error_code = v
                 self._validated_data = {}
                 self._errors = exc.detail
             else:

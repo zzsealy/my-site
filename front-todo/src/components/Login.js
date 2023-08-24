@@ -1,9 +1,9 @@
 import { useState } from "react"
 import axios from 'axios'
 import { useNavigate, Link } from "react-router-dom"
-
+import { Input } from '@douyinfe/semi-ui';
 import {constant} from '../constant'
-import { Banner } from '@douyinfe/semi-ui';
+import { Banner, Button} from '@douyinfe/semi-ui';
 
 
 
@@ -25,17 +25,51 @@ const Login = () => {
     )
 
     const loginStyle = {
-        width: '200px',
-        margin: '0 auto',
+        display: 'flex',
+        justifyContent: 'center', // 水平局中
+        alignItems: 'center',
+        height: '100vh'
 
+    }
+
+    const formStyle = {
+        flexDirection: 'column', // 切换为列布局
+        alignItems: 'centent'
+    }
+
+    const todoTitle = {
+        position: 'absolute',
+        fontSize: '1.8rem',
+        top: '80px',
+        left: '100px',
+        background: "url('./favicon.ico') no-repeat ",
+        width: '200px',
+        height: '100px',
+        paddingLeft: '60px',
+        paddingTop: '10px'
     }
 
     const loginButtonStyle = {
+        border: '1px solid black',
         margin: '10px 0px 0px 20px',
+        width: '100px',
+        height: '24px',
     }
 
     const inputStyle = {
-        margin: '0px 0px 0px 20px'
+        width: '240px',
+        height: '24px'
+    }
+
+    const loginTitle = {
+        textAlign: 'center',
+        fontSize: '3rem',
+        marginBottom: '-2px'
+    }
+
+    const inputAndLableStyle = {
+        margin: '0px 0px 10px 20px',
+        color: '#B5AFAD'
     }
 
     const Login = (event) => {
@@ -71,14 +105,25 @@ const Login = () => {
 
     return (
         <div style={loginStyle}>
-            <h1>登录</h1>
-            {showBanner? LoginBanner: null}
-                <form>
-                    <div style={inputStyle}><strong>账号:</strong> <input onChange={handleUsername}></input></div>
-                    <div style={inputStyle} ><strong>密码:</strong> <input type='password' onChange={handlePassword}></input></div>
+            <span style={todoTitle}>待办事项！</span>
+            {/* {showBanner? LoginBanner: null} */}
+                <form style={formStyle}>
+                    <div><h1 style={loginTitle}>登录</h1></div>
+                    <div style={inputAndLableStyle}>
+                        <div>
+                            <strong>账号:</strong>
+                        </div>
+                        <Input style={inputStyle} onChange={handleUsername}></Input>
+                    </div>
+                    <div style={inputAndLableStyle}>
+                        <div>
+                            <strong>密码:</strong>
+                        </div>
+                        <Input style={inputStyle} type='password' onChange={handlePassword}></Input>
+                    </div>
                     <br></br>
-                    <button style={loginButtonStyle} onClick={Login}>登录</button>
-                    <button style={loginButtonStyle} ><Link to='/register'>注册</Link></button>
+                        <Button style={loginButtonStyle} onClick={Login}>登录</Button>
+                        <Button style={loginButtonStyle} ><Link to='/register'>注册</Link></Button>
                 </form>
         </div>
     )

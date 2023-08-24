@@ -31,9 +31,9 @@ class UserSerializer(ModelSerializer):
         repeat_password = data.get('passwordRepeat')
         create_info = {'username': username, 'password': password}
         if repeat_password != password:
-            raise ValidationErrorNew(code=StatusCode.PASS_NOT_EQUAL.value)
+            raise serializers.ValidationError(code=StatusCode.PASS_NOT_EQUAL.value, detail='两次密码输入不一致， 请重试')
         if user_dal.create_one_obj(create_info=create_info):
             return data
         else:
-            raise serializers.ValidationError(code=300)
+            raise serializers.ValidationError(code=StatusCode.ERROR.value, detail='发生错误')
     

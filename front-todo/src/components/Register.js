@@ -2,6 +2,7 @@ import { useState } from "react"
 import axios from 'axios'
 import { useNavigate } from "react-router-dom"
 import { Notification } from "@douyinfe/semi-ui"
+import { Input } from '@douyinfe/semi-ui';
 
 import {constant, statusCode} from '../constant'
 
@@ -19,11 +20,25 @@ const Register = () => {
         content: '',
         title: '',
     }
+    const todoTitle = {
+        position: 'absolute',
+        fontSize: '1.8rem',
+        top: '80px',
+        left: '100px',
+        background: "url('./favicon.ico') no-repeat ",
+        width: '200px',
+        height: '100px',
+        paddingLeft: '60px',
+        paddingTop: '10px'
+    }
     
     const registerTitle = {
+        textAlign: 'center',
+        fontSize: '3rem',
+        marginBottom: '-2px'
     }
 
-    const loginStyle = {
+    const registerStyle = {
         display: 'flex',
         justifyContent: 'center', // 水平局中
         alignItems: 'center',
@@ -32,6 +47,8 @@ const Register = () => {
 
     const loginButtonStyle = {
         margin: '10px 0px 0px 20px',
+        width: '240px',
+        height: '24px'
     }
 
     const formStyle = {
@@ -39,10 +56,16 @@ const Register = () => {
         alignItems: 'centent'
     }
 
-    const inputStyle = {
-        margin: '0px 0px 0px 20px',
+    const inputAndLableStyle = {
+        margin: '0px 0px 10px 20px',
         color: '#B5AFAD'
     }
+
+    const inputStyle = {
+        width: '240px',
+        height: '24px',
+    }
+
 
     const Register = (event) => {
         event.preventDefault();
@@ -54,7 +77,6 @@ const Register = () => {
         axios.post(registerUrl, registerData)
             .then((res) => {
                 const status_code = res.data.status_code
-                debugger;
                 if (status_code === statusCode.OK) {
                     return(
                         navigate('/login')
@@ -62,6 +84,8 @@ const Register = () => {
                 }
                 if (status_code === statusCode.PASS_NOT_EQUAL) {
                     Notification.error({...opts,  position: 'top', title: '两次密码不一致', content: '请重新输入'})
+                } else {
+                    Notification.error({...opts,  position: 'top', title: '发生错误', content: ''})
                 }
             })
             .catch((error) => {
@@ -90,13 +114,22 @@ const Register = () => {
     }
 
     return (
-        <div style={loginStyle}>
+        <div style={registerStyle}>
+            <span style={todoTitle}>待办事项！</span>
             <form style={formStyle}>
                 <div><h1 style={registerTitle}>注册</h1></div>
-                <div style={inputStyle}><strong>账号:</strong> <input onChange={handleUsername}></input></div>
-                <div style={inputStyle}><strong>密码:</strong> <input type='password' onChange={handlePassword}></input></div>
-                <div style={inputStyle}><strong>重复密码:</strong> <input type='password' onChange={handlePasswordRepeat}></input></div>
-                <div style={inputStyle}><strong>名字:</strong> <input onChange={handleName} placeholder='输入一个昵称'></input></div>
+                <div style={inputAndLableStyle}>
+                    <div><small>账号:</small></div>
+                     <Input showClear style={inputStyle} onChange={handleUsername}></Input></div>
+                <div style={inputAndLableStyle}>
+                    <div><small>密码:</small></div>
+                     <Input showClear style={inputStyle} type='password' onChange={handlePassword}></Input></div>
+                <div style={inputAndLableStyle}>
+                    <div><small>重复密码:</small></div>
+                    <Input showClear style={inputStyle} type='password' onChange={handlePasswordRepeat}></Input></div>
+                <div style={inputAndLableStyle}>
+                    <div><small>名字:</small></div>
+                    <Input showClear style={inputStyle} onChange={handleName} placeholder='输入一个昵称'></Input></div>
                 <br></br>
                 <button style={loginButtonStyle} onClick={Register}>注册</button>
             </form>

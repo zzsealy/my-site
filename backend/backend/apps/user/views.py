@@ -38,7 +38,7 @@ class UserRegister(APIView):
         if serializer.is_valid():
             return Response( data={ "status_code": StatusCode.OK.value, "message": "注册成功, 请登录"})
         else:
-            return Response( data={ "status_code": serializer.error_code, "message": "两次密码不一致"})
+            return Response( data={ "status_code": serializer.error_code, "message": serializer.error_message})
 
 class LoginView(APIView):
     
