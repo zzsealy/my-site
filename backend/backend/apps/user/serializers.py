@@ -3,19 +3,11 @@ from rest_framework import serializers
 from django.contrib.auth.hashers import check_password
 from .user_dal import user_dal
 from backend.utils.errors import ValidationErrorNew
-from backend.utils.serializers import ModelSerializer
+from backend.utils.serializers import ModelSerializer, Serializer
 from backend.utils.constants.status_code import StatusCode
+from user.utils import generation_token
 
 
-# class UserSerializer(serializers.ModelSerializer):
-#     """
-#     因为'snippets' 在用户模型中是一个反向关联关系。在使用 ModelSerializer 类时它默认不会被包含，所以我们需要为它添加一个显式字段。
-#     """
-#     snippets = serializers.PrimaryKeyRelatedField(many=True, queryset=Snippet.objects.all())
-
-#     class Meta:
-#         model = User
-#         fields = ('id', 'username', 'snippets')
 
 class UserSerializer(ModelSerializer):
     passwordRepeat = serializers.CharField()
@@ -23,17 +15,43 @@ class UserSerializer(ModelSerializer):
     
     class Meta:
         model = User
-        fields = ('username', 'password', 'passwordRepeat', 'name')
+        fields = ('email', 'password', 'passwordRepeat', 'name')
+    
+    def create(self, validated_data):
+        email = validated_data.get('email')
+        password = validated_data.get('password')
+        name = validated_data.get('name')
+        create_info = {'email':email, 'password': password, 'nick_name': name}
+        return user_dal.create_one_obj(create_info=create_info)
+    
+    def validate_email(self, email):
+        user_email = user_dal.get_info_filters(filters={'email': email})
+        if user_email:
+            raise ValidationErrorNew(code=StatusCode.EMAIL_EXIST.value, detail='此邮箱已经被注册')
+        return email
+
     
     def validate(self, data):
-        username = data.get('username')
         password = data.get('password')
         repeat_password = data.get('passwordRepeat')
-        create_info = {'username': username, 'password': password}
+        email = data.get('email')
         if repeat_password != password:
             raise serializers.ValidationError(code=StatusCode.PASS_NOT_EQUAL.value, detail='两次密码输入不一致， 请重试')
-        if user_dal.create_one_obj(create_info=create_info):
-            return data
-        else:
-            raise serializers.ValidationError(code=StatusCode.ERROR.value, detail='发生错误')
+        return data
     
+
+class UserLoginSerializer(Serializer):
+    email = serializers.CharField()
+    password = serializers.CharField()
+    
+    def validate(self, attrs):
+
+        email = attrs.get('email')
+        password = attrs.get('password')
+        user = user_dal.get_one_by_condition(condition={'email': email}) 
+        if not user:
+            raise serializers.ValidationError(code=StatusCode.USER_NOT_EXIST.value)
+        if user_dal.check_password(hash_password=user.get('password'), password=password):
+            token = generation_token(user_id=user.get('id'))
+            return token
+        raise serializers.ValidationError(code=StatusCode.PASSWORD_ERROR.value)

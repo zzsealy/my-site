@@ -9,7 +9,7 @@ import {constant, statusCode} from '../constant'
 
 const Register = () => {
     const navigate = useNavigate();
-    const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [passwordRepeat, setPasswordRepeat] = useState('')
     const [name, setName] = useState('')
@@ -71,7 +71,7 @@ const Register = () => {
         event.preventDefault();
         const registerUrl = `${constant.baseUrl}/users/register`
         const registerData = {
-            'username': username, 'password': password,
+            'email': email, 'password': password,
             'passwordRepeat': passwordRepeat, 'name': name
         }
         axios.post(registerUrl, registerData)
@@ -84,6 +84,8 @@ const Register = () => {
                 }
                 if (status_code === statusCode.PASS_NOT_EQUAL) {
                     Notification.error({...opts,  position: 'top', title: '两次密码不一致', content: '请重新输入'})
+                } else if (status_code === statusCode.EMAIL_EXIST){
+                    Notification.error({...opts,  position: 'top', title: '邮箱已经存在', content: ''})
                 } else {
                     Notification.error({...opts,  position: 'top', title: '发生错误', content: ''})
                 }
@@ -93,23 +95,19 @@ const Register = () => {
             })
     }
 
-    const handleUsername = (event) => {
-        let username = event.target.value
-        setUsername(username)
+    const handleEmail = (email) => {
+        setEmail(email)
     }
 
-    const handlePassword = (event) => {
-        let password = event.target.value
+    const handlePassword = (password) => {
         setPassword(password)
     }
 
-    const handlePasswordRepeat = (event) => {
-        let passwordRepeat = event.target.value
+    const handlePasswordRepeat = (passwordRepeat) => {
         setPasswordRepeat(passwordRepeat)
     }
 
-    const handleName = (event) => {
-        let name = event.target.value
+    const handleName = (name) => {
         setName(name)
     }
 
@@ -119,17 +117,21 @@ const Register = () => {
             <form style={formStyle}>
                 <div><h1 style={registerTitle}>注册</h1></div>
                 <div style={inputAndLableStyle}>
-                    <div><small>账号:</small></div>
-                     <Input showClear style={inputStyle} onChange={handleUsername}></Input></div>
+                    <div><small>邮箱:</small></div>
+                     <Input showClear style={inputStyle} onChange={handleEmail}></Input>
+                </div>
                 <div style={inputAndLableStyle}>
                     <div><small>密码:</small></div>
-                     <Input showClear style={inputStyle} type='password' onChange={handlePassword}></Input></div>
+                     <Input showClear style={inputStyle} type='password' onChange={handlePassword}></Input>
+                </div>
                 <div style={inputAndLableStyle}>
                     <div><small>重复密码:</small></div>
-                    <Input showClear style={inputStyle} type='password' onChange={handlePasswordRepeat}></Input></div>
+                    <Input showClear style={inputStyle} type='password' onChange={handlePasswordRepeat}></Input>
+                </div>
                 <div style={inputAndLableStyle}>
                     <div><small>名字:</small></div>
-                    <Input showClear style={inputStyle} onChange={handleName} placeholder='输入一个昵称'></Input></div>
+                    <Input showClear style={inputStyle} onChange={handleName} placeholder='输入一个昵称'></Input>
+                </div>
                 <br></br>
                 <button style={loginButtonStyle} onClick={Register}>注册</button>
             </form>

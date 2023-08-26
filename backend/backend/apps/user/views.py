@@ -8,11 +8,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from user.models import User
-from .serializers import UserSerializer
-from .user_dal import user_dal
-from user.utils import generation_token
+from .serializers import UserSerializer, UserLoginSerializer
 from backend.utils.constants.status_code import StatusCode
-
 """
 我们只想将用户展示成只读视图，
 因此我们将使用ListAPIview和RetryeveAPIView通用的
@@ -30,39 +27,26 @@ class UserDetail(generics.RetrieveAPIView):
 
 class UserRegister(APIView):
 
-    def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
 
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
-            return Response( data={ "status_code": StatusCode.OK.value, "message": "注册成功, 请登录"})
+            user_instance = serializer.create(validated_data=serializer.validated_data)
+            if user_instance:
+                return Response( data={ "status_code": StatusCode.OK.value, "message": "注册成功, 请登录"})
+            else:
+                return Response( data={ "status_code": StatusCode.ERROR.value, "message": '发生错误'})
         else:
-            return Response( data={ "status_code": serializer.error_code, "message": serializer.error_message})
+            return Response( data={ "status_code": serializer.error_code, "message": serializer.error_message })
+    
 
 class LoginView(APIView):
     
     def post(self, request):
         data = request.data
-        username = data['username']
-        password = data['password']
-        user = user_dal.get_one_by_condition(condition={'username': username}) 
-        if user and user_dal.check_password(hash_password=user.get('password'), password=password):
-            return Response( data={ "status_code": HTTP_200_OK, "message": "登陆成功"})
+        serializer = UserLoginSerializer(data=data)
+        if serializer.is_valid():
+            return Response(data={'status_code': StatusCode.OK.value, 'message': '登陆成功', 'token': serializer.validated_data})
         else:
-            return Response( data={"status_code": 400, 'message': '账号密码不正确'})
-    
-
-
-# @login_expire()
-def userLogout(request):
-    logout(request)
-    return JsonResponse( { "status_code": HTTP_200_OK, "message": "success"})
-
-
-def getToken(request):
-    token = get_token(request)
-    return JsonResponse({"token": token})
-
-
+            return Response( data={"status_code": serializer.error_code, 'message': serializer.error_message })
 

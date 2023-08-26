@@ -10,7 +10,7 @@ import { Banner, Button} from '@douyinfe/semi-ui';
 
 const Login = () => {
     const navigate = useNavigate();
-    const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [showBanner, setShowBanner] = useState(false)
 
@@ -76,7 +76,7 @@ const Login = () => {
         event.preventDefault();
         localStorage.removeItem('todo_token')
         const loginUrl = `${constant.baseUrl}/users/login`
-        const loginData = {'username': username, 'password': password}
+        const loginData = {'email': email, 'password': password}
         axios.post(loginUrl, loginData)
             .then((res) => {
                 const status_code = res.data.status_code;
@@ -93,13 +93,11 @@ const Login = () => {
             })
     }
 
-    const handleUsername = (event) => {
-        let username = event.target.value
-        setUsername(username)
+    const handelEmail = (email) => {
+        setEmail(email)
     }
 
-    const handlePassword = (event) => {
-        let password = event.target.value
+    const handlePassword = (password) => {
         setPassword(password)
     }
 
@@ -111,9 +109,9 @@ const Login = () => {
                     <div><h1 style={loginTitle}>登录</h1></div>
                     <div style={inputAndLableStyle}>
                         <div>
-                            <strong>账号:</strong>
+                            <strong>邮箱:</strong>
                         </div>
-                        <Input style={inputStyle} onChange={handleUsername}></Input>
+                        <Input style={inputStyle} onChange={handelEmail}></Input>
                     </div>
                     <div style={inputAndLableStyle}>
                         <div>
