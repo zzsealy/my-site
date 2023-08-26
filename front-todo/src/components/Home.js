@@ -164,15 +164,14 @@ const Home = () => {
         }
         axios.post(todoListPath, postData, config)
             .then((res) => {
-                const code = res.data.code;
-                if (code === 200) {
+                const status_code = res.data.status_code;
+                if (status_code === 200) {
                     setCount(count+1)
                 }
-                if (code === 401) {
+                if (status_code === 401) {
                     navigate('/login')
                 }
-                if (code === 400) {
-                    debugger
+                if (status_code === 400) {
                     setShowBanner(true)
                 }
             })

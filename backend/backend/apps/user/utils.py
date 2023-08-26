@@ -13,6 +13,10 @@ def generation_token(user_id: int) -> str:
     )
     return token
 
+def verify_bearer_token(token):
+    result = jwt.decode(token, settings.SECRET_KEY, algorithms='HS256')
+    return result
+
 def checkout_token_time(token_key, request): 
     token = Token.objects.filter(key=token_key).first()
     today = localtime()

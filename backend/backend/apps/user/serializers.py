@@ -50,8 +50,8 @@ class UserLoginSerializer(Serializer):
         password = attrs.get('password')
         user = user_dal.get_one_by_condition(condition={'email': email}) 
         if not user:
-            raise serializers.ValidationError(code=StatusCode.USER_NOT_EXIST.value)
+            raise serializers.ValidationError(code=StatusCode.USER_NOT_EXIST.value, detail='邮箱不存在')
         if user_dal.check_password(hash_password=user.get('password'), password=password):
             token = generation_token(user_id=user.get('id'))
             return token
-        raise serializers.ValidationError(code=StatusCode.PASSWORD_ERROR.value)
+        raise serializers.ValidationError(code=StatusCode.PASSWORD_ERROR.value, detail='密码错误')

@@ -19,8 +19,9 @@ class TodoLists(APIView):
         return Response(serializers.data)
 
 
-    def post(request):
-        pass
+    def post(self, request):
+        data = request.data
+        return Response()
 
 class TodoListView(APIView):
 

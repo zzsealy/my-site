@@ -2,10 +2,9 @@ import { useState } from "react"
 import axios from 'axios'
 import { useNavigate, Link } from "react-router-dom"
 import { Input } from '@douyinfe/semi-ui';
-import {constant} from '../constant'
+import {constant, statusCode} from '../constant'
 import { Banner, Button} from '@douyinfe/semi-ui';
-
-
+import { Notification } from "@douyinfe/semi-ui"
 
 
 const Login = () => {
@@ -13,6 +12,13 @@ const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [showBanner, setShowBanner] = useState(false)
+
+    const opts = {
+        duration: 3,
+        position: 'top',
+        content: '',
+        title: '',
+    }
 
     const changeShowBanner = () => {
         setShowBanner(!showBanner)
@@ -80,16 +86,14 @@ const Login = () => {
         axios.post(loginUrl, loginData)
             .then((res) => {
                 const status_code = res.data.status_code;
-                if (status_code === 200) {
+                if (status_code === statusCode.OK) {
                     const token = res.data.token;
                     localStorage.setItem('todo_token', token)
                     navigate('/')
                     console.log('登录成功')
+                } else {
+                    Notification.error({...opts, title:res.data.message})
                 }
-                if (status_code === 400) { // 验证失败
-                    setShowBanner(true)
-                }
-                console.log('收到登录返回')
             })
     }
 

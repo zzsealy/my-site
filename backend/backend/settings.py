@@ -64,7 +64,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    # 'handler_middleware.Middleware',
+    'handler_middleware.Middleware',
 ]
 
 CORS_ORIGIN_WHITELIST = (
@@ -118,8 +118,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-URL_VERIFICATION_LIST = {
-    '/todo': ['GET']
+URL_NOT_VERIFICATION_LIST = {
+    '/users/register': ['GET'],
+    '/users/login': ['POST']
 }
 
 
