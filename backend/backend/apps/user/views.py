@@ -41,13 +41,9 @@ class LoginView(APIView):
     @swagger_auto_schema(request_body=UserLoginSerializer, responses={})
     def post(self, request):
         """
-        **登陆接口**
-        email 邮箱
-        password 密码
-
         **status_code**
         4004 邮箱不存在
-        4004 密码不对
+        4003 密码不对
         """
         data = request.data
         serializer = UserLoginSerializer(data=data)
