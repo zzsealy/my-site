@@ -9,5 +9,5 @@ urlpatterns = format_suffix_patterns([
     # path('get-token', getToken, name='get_token'),
     # path('users/logout', userLogout, name="logout"),
     path('users/login', LoginView.as_view(), name="login"),
-    path('users/register$', UserRegister.as_view(), name='user_register')
+    path('users/register', UserRegister.as_view(), name='user_register')
 ])

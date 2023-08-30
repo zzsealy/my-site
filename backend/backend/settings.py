@@ -120,7 +120,10 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 URL_NOT_VERIFICATION_LIST = {
     '/users/register': ['GET'],
-    '/users/login': ['POST']
+    '/users/login': ['POST'],
+    '/doces': ['GET'],
+    '/swagger/': ['GET']
+
 }
 
 

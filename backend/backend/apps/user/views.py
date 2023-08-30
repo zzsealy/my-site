@@ -1,12 +1,8 @@
 from rest_framework import generics
-from django.contrib.auth import logout
-from django.http import  JsonResponse
-from django.middleware.csrf import get_token
-import json
-from rest_framework.status import HTTP_203_NON_AUTHORITATIVE_INFORMATION, HTTP_200_OK
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 from user.models import User
 from .serializers import UserSerializer, UserLoginSerializer
 from backend.utils.constants.status_code import StatusCode
@@ -27,7 +23,7 @@ class UserDetail(generics.RetrieveAPIView):
 
 class UserRegister(APIView):
 
-
+    @swagger_auto_schema(request_body=UserSerializer)
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
@@ -42,7 +38,17 @@ class UserRegister(APIView):
 
 class LoginView(APIView):
     
+    @swagger_auto_schema(request_body=UserLoginSerializer, responses={})
     def post(self, request):
+        """
+        **登陆接口**
+        email 邮箱
+        password 密码
+
+        **status_code**
+        4004 邮箱不存在
+        4004 密码不对
+        """
         data = request.data
         serializer = UserLoginSerializer(data=data)
         if serializer.is_valid():

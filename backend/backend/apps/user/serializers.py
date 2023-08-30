@@ -41,8 +41,11 @@ class UserSerializer(ModelSerializer):
     
 
 class UserLoginSerializer(Serializer):
-    email = serializers.CharField()
-    password = serializers.CharField()
+    email = serializers.CharField(label='文章目录')
+    password = serializers.CharField(help_text='文章sss')
+
+    # class Meta:
+    #     sw
     
     def validate(self, attrs):
 
