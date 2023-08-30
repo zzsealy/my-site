@@ -20,8 +20,15 @@ class TodoLists(APIView):
 
 
     def post(self, request):
+        user_id = request.user_id
         data = request.data
-        return Response()
+        data['user_id'] = user_id
+        data['expect_finish_date'] = data.pop('dateString')
+        serializer = TodoListSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response()
+        return Response({'status_code': serializer.error_code, 'message': serializer.error_message})
 
 class TodoListView(APIView):
 
