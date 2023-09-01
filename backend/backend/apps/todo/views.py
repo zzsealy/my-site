@@ -4,8 +4,9 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_404_NOT_FOUND
 from rest_framework.response import Response
+from backend.utils.constants.status_code import StatusCode
 
-from todo.serializers import TodoSerializer, TodoListSerializer
+from todo.serializers import TodoSerializer, TodoListSerializer, GetTodoListSerializer
 
 from todo.models import Todo, TodoList
 # Create your views here.
@@ -14,9 +15,9 @@ from todo.models import Todo, TodoList
 class TodoLists(APIView):
     
     def get(self, request):
-        todo_lists = TodoList.objects.all().order_by('-create_datetime')
-        serializers = TodoListSerializer(todo_lists, many=True)
-        return Response(serializers.data)
+        todo_lists = TodoList.objects.filter(user_id=request.user_id).order_by('-create_datetime')
+        serializers = GetTodoListSerializer(todo_lists, many=True)
+        return Response({'status_code':StatusCode.OK.value, 'todo_list':serializers.data, 'todo_list_num': len(todo_lists)})
 
 
     def post(self, request):

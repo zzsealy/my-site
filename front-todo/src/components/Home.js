@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import axios from 'axios'
 import { Button, Col, Row, Card, Pagination, CardGroup, DatePicker, Divider, Banner, Select } from '@douyinfe/semi-ui';
 import { useNavigate  } from 'react-router-dom';
-import {constant} from '../constant'
+import {statusCode, constant} from '../constant'
 import { requestConfig } from '../utils'
 
 
@@ -26,8 +26,8 @@ const Todo = ({ todo }) => {
 const TodoList = ({ todoList }) => {
     const title = `${todoList.title}`
     let blankLi = []
-    if (todoList.childTodo.length < 4) {
-        for (let i = todoList.childTodo.length; i < 4; i++){
+    if (todoList.child_todo.length < 4) {
+        for (let i = todoList.child_todo.length; i < 4; i++){
             blankLi.push({'id': i, 'content': ''})
         }
     }
@@ -37,9 +37,9 @@ const TodoList = ({ todoList }) => {
             shadows='hover'
         >  
             <ul>
-                {todoList.childTodo.slice(0, 3).map(todo => <Todo key={todo.id} todo={todo} />)}
+                {todoList.child_todo.slice(0, 3).map(todo => <Todo key={todo.id} todo={todo} />)}
                 {blankLi.map(todo => <Todo key={todo.id} todo={todo} />)}
-                {todoList.childTodo.length > 3 ? 
+                {todoList.child_todo.length > 3 ? 
                     '....' : ''
                 }
             </ul>
@@ -107,13 +107,13 @@ const Home = () => {
         const config = requestConfig()
         axios.get(getTodoListPath, config)
             .then((res) => {
-                const code = res.data.code;
-                if (code === 200) {
-                    setTodoLists(res.data.todoList)
-                    setTodoListNum(res.data.todoListNum)
+                const status_code = res.data.status_code;
+                if (status_code === statusCode.OK) {
+                    setTodoLists(res.data.todo_list)
+                    setTodoListNum(res.data.todo_list_num)
                     console.log(res);
                 } 
-                if (code === 401) {
+                if (status_code === statusCode.AUTH_PASS) {
                     navigate('/login')
                 }
             })

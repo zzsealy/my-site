@@ -6,7 +6,6 @@ from django.forms import model_to_dict
 
 
 class Todo(models.Model):
-    id = models.IntegerField(db_index=True, primary_key=True)
     create_datetime = models.DateTimeField()
     is_finish = models.IntegerField(default=0) # 0未完成，1完成
     finish_time = models.DateTimeField(blank=True)
@@ -15,7 +14,6 @@ class Todo(models.Model):
 
 
 class TodoList(models.Model):  # 与todo是一对多关系
-    id = models.IntegerField(db_index=True, primary_key=True)
     user_id = models.IntegerField() # 用户id
     title = models.CharField(default='未填写标题', max_length=200)
     create_datetime = models.DateTimeField(auto_now=True, help_text='创建时间')

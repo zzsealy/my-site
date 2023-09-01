@@ -18,7 +18,7 @@ class TodoListSerializer(ModelSerializer):
     expect_finish_date = serializers.CharField()
     class Meta:
         model = TodoList
-        fields = ('user_id', 'title', 'expect_finish_date', 'tag')
+        fields = ('id', 'user_id', 'title', 'expect_finish_date', 'tag')
     
     def validate_tag(self, tag):
         value = TagConstant[tag.upper()].value
@@ -31,6 +31,13 @@ class TodoListSerializer(ModelSerializer):
     def validate(self, attrs):
         return super().validate(attrs)
     
+
+class GetTodoListSerializer(Serializer):
+    id = serializers.IntegerField()
+    tag = serializers.CharField()
+    child_todo = serializers.SerializerMethodField()
+    title = serializers.CharField()
+
     
-    def create(self, validated_data):
-        return super().create(validated_data)
+    def get_child_todo(self, obj):
+        return []
