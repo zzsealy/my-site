@@ -95,15 +95,15 @@ const TodoList = () => {
         const getPath = `${constant.baseUrl}/todo/todo_lists/${params.id}`
         axios.get(getPath, config)
             .then((res) => {
-                if (res.data.code === 200) {
-                    setTodoList(res.data.todoList)
-                    setTodos(res.data.todoList.childTodo)
-                    setDateString(res.data.dateString)
-                    setTag(res.data.tag)
+                if (res.data.status_code === 200) {
+                    setTodoList(res.data.todo_list)
+                    setTodos(res.data.todo_list.child_todo)
+                    setDateString(res.data.todo_list.date_string)
+                    setTag(res.data.todo_list.tag)
                     setNewTodo('')
-                    document.title = res.data.todoList.title 
+                    document.title = res.data.todo_list.title 
                 }
-                if (res.data.code === 401) {
+                if (res.data.status_code === 401) {
                     navigate('/login')
                 }
             })

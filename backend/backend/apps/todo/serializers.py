@@ -37,7 +37,15 @@ class GetTodoListSerializer(Serializer):
     tag = serializers.CharField()
     child_todo = serializers.SerializerMethodField()
     title = serializers.CharField()
+    expect_finish_date = serializers.DateTimeField()
 
     
     def get_child_todo(self, obj):
         return []
+    
+    def to_representation(self, instance):
+        rep = super().to_representation(instance=instance)
+        rep['date_string'] = instance.expect_finish_date.strftime("%Y-%m-%d")
+        rep['tag'] = TagConstant(instance.tag).name.lower()
+        return rep
+    

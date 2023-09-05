@@ -14,10 +14,15 @@ from todo.models import Todo, TodoList
 
 class TodoLists(APIView):
     
-    def get(self, request):
-        todo_lists = TodoList.objects.filter(user_id=request.user_id).order_by('-create_datetime')
-        serializers = GetTodoListSerializer(todo_lists, many=True)
-        return Response({'status_code':StatusCode.OK.value, 'todo_list':serializers.data, 'todo_list_num': len(todo_lists)})
+    def get(self, request, id=None):
+        if id:
+            todo_list = TodoList.objects.get(id=id)
+            serializers = GetTodoListSerializer(todo_list)
+            return Response({'status_code':StatusCode.OK.value, 'todo_list':serializers.data})
+        else:
+            todo_lists = TodoList.objects.filter(user_id=request.user_id).order_by('-create_datetime')
+            serializers = GetTodoListSerializer(todo_lists, many=True)
+            return Response({'status_code':StatusCode.OK.value, 'todo_list':serializers.data, 'todo_list_num': len(todo_lists)})
 
 
     def post(self, request):
