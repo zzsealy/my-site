@@ -29,7 +29,7 @@ const SingleTodo = ({ todo, userInfo, count, setCount }) => {
         const changeTodoStatusPath = `${constant.baseUrl}/todo/todo/${todoId}`
         axios.put(changeTodoStatusPath, {}, config)
             .then((res) => {
-                if(res.data.code === 200) {
+                if(res.data.status_code === 200) {
                     setCount(count+1) // 更新列表
                 }
             })
@@ -50,7 +50,7 @@ const SingleTodo = ({ todo, userInfo, count, setCount }) => {
         const delTodoPath = `${constant.baseUrl}/todo/todo/${todoId}`
         axios.delete(delTodoPath, config)
             .then((res) => {
-                if(res.data.code === 200) {
+                if(res.data.status_code === 200) {
                     setCount(count+1) // 更新列表
                 }
             })
@@ -64,11 +64,11 @@ const SingleTodo = ({ todo, userInfo, count, setCount }) => {
         >
             <Avatar style={{ 'display': 'inline-block', 'color' :'red','backgroundColor': '#fde3cf' }}  alt={userInfo.name}>{userInfo.name}</Avatar>
                 {
-                    todo.isFinish
+                    todo.is_finish
                         ? <h3 style={{ color: 'rgba(var(--semi-grey-7), 1)', fontWeight: 600, 'textDecoration': 'line-through', 'display':'inline-block', 'marginLeft': '10px' }}>{todo.content}</h3>
                         : <h3 style={{ color: 'rgba(var(--semi-grey-3), 1)', fontWeight: 600, 'display':'inline-block', 'marginLeft': '10px' }}>{todo.content}</h3>
             }
-            {todo.isFinish
+            {todo.is_finish
                 ? <Checkbox style={{ 'display':'inline-block', 'float': 'right' }} defaultChecked onChange={checked => handleFinishTodoCheck({ checked, todo })}></Checkbox>
                 : <Checkbox style={{ 'display':'inline-block', 'float': 'right'}} onChange={checked => handleFinishTodoCheck({ checked, todo })}></Checkbox>
             }
@@ -111,13 +111,13 @@ const TodoList = () => {
     useEffect(getTodoListHook, [count])
 
     const getUserInfoDataHook = () => {
-        const getUserInfoPath = `${constant.baseUrl}/user/user_info`
+        const getUserInfoPath = `${constant.baseUrl}/users/user_info`
         axios.get(getUserInfoPath, config)
             .then((res) => {
-                if (res.data.code === 200) {
-                    setUserInfo(res.data.userInfo)
+                if (res.data.status_code === 200) {
+                    setUserInfo(res.data)
                 }
-                if (res.data.code === 401) {
+                if (res.data.status_code === 401) {
                     navigate('/login')
                 }
             })
@@ -139,9 +139,9 @@ const TodoList = () => {
         const config = requestConfig()
         axios.post(createTodoPath, {'todoContent': value}, config)
             .then((res) => {
-                if(res.data.code === 200){
-                    setTodoList(res.data.todoList)
-                    setTodos(res.data.todoList.childTodo)
+                if(res.data.status_code === 200){
+                    setTodoList(res.data.todo_list)
+                    setTodos(res.data.todo_list.child_todo)
                     setCount(count+1)
                 }
             })
@@ -164,7 +164,7 @@ const TodoList = () => {
             const todoListPath = `${constant.baseUrl}/todo/todo_lists/${params.id}`
             axios.put(todoListPath, { "type": type }, config)
                 .then((res) => {
-                    if (res.data.code === 200) {
+                    if (res.data.status_code === 200) {
                         Toast.success('关闭成功！');
                         setCount(count + 1)  // 重新获取todoList， 不能创建新的todo了
                     }
@@ -174,7 +174,7 @@ const TodoList = () => {
             const todoListPath = `${constant.baseUrl}/todo/todo_lists/${params.id}`
             axios.put(todoListPath, { "type": type }, config)
                 .then((res) => {
-                    if (res.data.code === 200) {
+                    if (res.data.status_code === 200) {
                         setCount(count + 1)  // 重新获取todoList， 不能创建新的todo了
                         navigate('/')
                     }
@@ -184,7 +184,7 @@ const TodoList = () => {
             const todoListPath = `${constant.baseUrl}/todo/todo_lists/${params.id}`
             axios.put(todoListPath, { "type": type, "tag": tag }, config)
                 .then((res) => {
-                    if (res.data.code === 200) {
+                    if (res.data.status_code === 200) {
                         setCount(count + 1)  // 重新获取todoList， 不能创建新的todo了
                         navigate('/')
                     }

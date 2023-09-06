@@ -52,3 +52,10 @@ class LoginView(APIView):
         else:
             return Response( data={"status_code": serializer.error_code, 'message': serializer.error_message })
 
+
+class UserInfo(APIView):
+    
+    def get(self, request):
+        user_id = request.user_id
+        user = User.objects.get(id=user_id)
+        return Response(data={'status_code':StatusCode.OK.value, 'id':user.id, 'name': user.nick_name})

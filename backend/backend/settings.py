@@ -73,6 +73,8 @@ CORS_ORIGIN_WHITELIST = (
  'http://localhost:3000',
 )
 
+CSRF_TRUSTED_ORIGINS = ['https://*.mydomain.com','http://localhost:3000']
+
 CORS_ALLOW_CREDENTIALS = True # 指明在跨域访问中，后端是否支持对cookie的操作。
 CORS_ALLOW_METHODS = (
  'DELETE',

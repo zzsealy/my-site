@@ -8,7 +8,7 @@ from django.forms import model_to_dict
 class Todo(models.Model):
     create_datetime = models.DateTimeField()
     is_finish = models.IntegerField(default=0) # 0未完成，1完成
-    finish_time = models.DateTimeField(blank=True)
+    finish_time = models.DateTimeField(null=True, blank=True)
     body = models.TextField() # 待办事项的具体内容
     list_id = models.IntegerField(blank=True)  # 属于那个待办事项的列表
 

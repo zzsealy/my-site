@@ -1,4 +1,5 @@
 from datetime import datetime
+from django.forms.models import model_to_dict
 
 from todo.models import Todo, TodoList
 from backend.utils.serializers import ModelSerializer, Serializer
@@ -30,6 +31,22 @@ class TodoListSerializer(ModelSerializer):
     
     def validate(self, attrs):
         return super().validate(attrs)
+
+class ChangeTodoListSerializer(ModelSerializer):
+    tag = serializers.CharField()
+
+    class Meta:
+        model = TodoList
+        fields = ('tag',)
+    
+    def validate_tag(self, tag):
+        return TagConstant[tag.upper()].value
+
+
+class TodoSerializer(ModelSerializer):
+    class Meta:
+        model = Todo
+        fields = '__all__'
     
 
 class GetTodoListSerializer(Serializer):
@@ -41,7 +58,13 @@ class GetTodoListSerializer(Serializer):
 
     
     def get_child_todo(self, obj):
-        return []
+        list_id = obj.id
+        sub_todo = Todo.objects.filter(list_id=list_id)
+        sub_todo_list = [model_to_dict(todo) for todo in sub_todo]
+        for todo in sub_todo_list:
+            todo['is_finish'] = True if todo['is_finish'] else False
+            todo['content'] = todo.pop('body')
+        return sub_todo_list
     
     def to_representation(self, instance):
         rep = super().to_representation(instance=instance)
