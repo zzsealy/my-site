@@ -135,9 +135,9 @@ const TodoList = () => {
     const handleEnterPress = (event) => {
         const value = event.target.value
         console.log(value)
-        const createTodoPath = `${constant.baseUrl}/todo/todo_lists/${params.id}`
+        const createTodoPath = `${constant.baseUrl}/todo/todo/`
         const config = requestConfig()
-        axios.post(createTodoPath, {'todoContent': value}, config)
+        axios.post(createTodoPath, {'list_id': params.id,'todoContent': value}, config)
             .then((res) => {
                 if(res.data.status_code === 200){
                     setTodoList(res.data.todo_list)
