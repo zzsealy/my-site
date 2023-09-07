@@ -45,7 +45,7 @@ urlpatterns = [
     path('', include('user.urls')),
     path('', include('blog.urls')),
     path('todo/', include('todo.urls')),
-    path('todo/', include((api_router.urls, 'todo'), namespace='views')),
+    path('todos/', include((api_router.urls, 'todo'), namespace='todo_views')),
     path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),

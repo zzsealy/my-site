@@ -47,7 +47,7 @@ const SingleTodo = ({ todo, userInfo, count, setCount }) => {
 
     const deleteTodo = (todo) => {
         const todoId = todo.id;
-        const delTodoPath = `${constant.baseUrl}/todo/todo/${todoId}`
+        const delTodoPath = `${constant.baseUrl}/todos/todo/${todoId}/`
         axios.delete(delTodoPath, config)
             .then((res) => {
                 if(res.data.status_code === 200) {
@@ -135,7 +135,7 @@ const TodoList = () => {
     const handleEnterPress = (event) => {
         const value = event.target.value
         console.log(value)
-        const createTodoPath = `${constant.baseUrl}/todo/todo/`
+        const createTodoPath = `${constant.baseUrl}/todos/todo/`
         const config = requestConfig()
         axios.post(createTodoPath, {'list_id': params.id,'todoContent': value}, config)
             .then((res) => {

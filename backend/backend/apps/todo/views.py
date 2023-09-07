@@ -49,9 +49,9 @@ class TodoLists(APIView):
 
 
 
-class ChildTodoViewset(viewsets.GenericViewSet):
+class ChildTodoViewset(mixins.DestroyModelMixin, viewsets.GenericViewSet):
 
-    queryset = ''
+    queryset = Todo.objects.all()
 
     def get_queryset(self):
         return super().get_queryset()
@@ -76,8 +76,14 @@ class ChildTodoViewset(viewsets.GenericViewSet):
         serializer = TodoSerializer(data=create_info)
         if serializer.is_valid():
             if serializer.save():
-                todo_list = TodoList.objects.get(id=id)
+                todo_list = TodoList.objects.get(id=list_id)
                 one_todo_list_serializer = GetTodoListSerializer(todo_list)
             return Response({'status_code': StatusCode.OK.value, 'todo_list': one_todo_list_serializer.data, 'message': '创建成功'})
         return Response({'status_code': serializer.error_code, 'message': serializer.error_message})
+    
+    
+    def destroy(self, request, *args, **kwargs):
+        super().destroy(request, args, kwargs)
+        return Response({'status_code': StatusCode.OK.value})
+
     
