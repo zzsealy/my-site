@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate  } from 'react-router-dom';
 import { useState, useEffect } from 'react'
-import { Button, Toast, Col, Row, Avatar, Input, Checkbox, Layout, Popconfirm, Select, Divider } from '@douyinfe/semi-ui';
+import { Button, Toast, Col, Row, Avatar, Input, Checkbox, Layout, Popconfirm, Select, Divider, Notification} from '@douyinfe/semi-ui';
 import { requestConfig } from '../utils'
 import {constant} from '../constant'
 
@@ -11,6 +11,13 @@ const tagMapping = {
     'long': '长期目标',
     'week': '周目标',
     'month': '月目标'
+}
+
+const opts = {
+    duration: 3,
+    position: 'topRight',
+    content: '',
+    title: '',
 }
 
 const SingleTodo = ({ todo, userInfo, count, setCount }) => {
@@ -26,11 +33,16 @@ const SingleTodo = ({ todo, userInfo, count, setCount }) => {
     const handleFinishTodoCheck = ({ checked, todo }) => {
         // const checkStatus = checked.target.checked;
         const todoId = todo.id
-        const changeTodoStatusPath = `${constant.baseUrl}/todo/todo/${todoId}`
-        axios.put(changeTodoStatusPath, {}, config)
+        const changeTodoStatusPath = `${constant.baseUrl}/todos/todo/${todoId}/`
+        axios.put(changeTodoStatusPath, {'list_id': `${todo.list_id}`}, config)
             .then((res) => {
                 if(res.data.status_code === 200) {
                     setCount(count+1) // 更新列表
+                    if(todo.is_finish === false) {
+                        Notification.success({...opts, title: '完成！'})
+                    } else {
+                        Notification.error({...opts, title: '取消完成！'})
+                    }
                 }
             })
         console.log('checked:', checked)
@@ -52,6 +64,7 @@ const SingleTodo = ({ todo, userInfo, count, setCount }) => {
             .then((res) => {
                 if(res.data.status_code === 200) {
                     setCount(count+1) // 更新列表
+                    Notification.success({...opts, title: '删除成功'})
                 }
             })
     }
@@ -143,6 +156,7 @@ const TodoList = () => {
                     setTodoList(res.data.todo_list)
                     setTodos(res.data.todo_list.child_todo)
                     setCount(count+1)
+                    Notification.info({...opts, position:'top', title: '创建成功', content: '要按时完成哦'})
                 }
             })
     }

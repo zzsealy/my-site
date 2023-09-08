@@ -70,5 +70,6 @@ class GetTodoListSerializer(Serializer):
         rep = super().to_representation(instance=instance)
         rep['date_string'] = instance.expect_finish_date.strftime("%Y-%m-%d")
         rep['tag'] = TagConstant(instance.tag).name.lower()
+        rep['can_change'] = True if instance.is_close == 0 else False
         return rep
     

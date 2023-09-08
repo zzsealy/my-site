@@ -43,7 +43,7 @@ const TodoList = ({ todoList }) => {
                     '....' : ''
                 }
             </ul>
-                {todoList.canChange === true ? <p style={{'float': 'right', 'color': 'rgba(var(--semi-lime-5), 1)'}}>进行</p>
+                {todoList.can_change === true ? <p style={{'float': 'right', 'color': 'rgba(var(--semi-lime-5), 1)'}}>进行</p>
                     : <p style={{'float': 'right', 'color': 'rgba(var(--semi-yellow-4), 1)', }}>关闭</p>}
             <small style={{'color': 'rgba(var(--semi-grey-4), 1)'}}>{`完成时间 ${todoList.finishDate}`}</small>
         </Card>

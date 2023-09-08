@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from backend.utils.constants.status_code import StatusCode
+from backend.utils.constants.todo_constant import TagConstant
 
 from todo.serializers import TodoSerializer, TodoListSerializer, GetTodoListSerializer, ChangeTodoListSerializer
 
@@ -20,7 +21,12 @@ class TodoLists(APIView):
             serializers = GetTodoListSerializer(todo_list)
             return Response({'status_code':StatusCode.OK.value, 'todo_list':serializers.data})
         else:  # 获取todo_list列表
-            todo_lists = TodoList.objects.filter(user_id=request.user_id).order_by('-create_datetime')
+            tag = request.query_params.get('tag')
+            if tag is None:
+                todo_lists = TodoList.objects.filter(user_id=request.user_id).order_by('-create_datetime')
+            else:
+                tag = TagConstant[tag.upper()].value
+                todo_lists = TodoList.objects.filter(user_id=request.user_id, tag=tag).order_by('-create_datetime')
             serializers = GetTodoListSerializer(todo_lists, many=True)
             return Response({'status_code':StatusCode.OK.value, 'todo_list':serializers.data, 'todo_list_num': len(todo_lists)})
 
@@ -49,12 +55,18 @@ class TodoLists(APIView):
 
 
 
-class ChildTodoViewset(mixins.DestroyModelMixin, viewsets.GenericViewSet):
+class ChildTodoViewset(
+                       mixins.DestroyModelMixin,
+                       viewsets.GenericViewSet):
 
-    queryset = Todo.objects.all()
 
     def get_queryset(self):
-        return super().get_queryset()
+        list_id = self.request.data.get('list_id')
+        if list_id is not None:
+            queryset = Todo.objects.filter(list_id=list_id)
+        else:
+            queryset = Todo.objects.all()
+        return queryset
 
     def list(self, request, list_id):
         queryset = Todo.objects.filter(list_id=list_id)
@@ -84,6 +96,12 @@ class ChildTodoViewset(mixins.DestroyModelMixin, viewsets.GenericViewSet):
     
     def destroy(self, request, *args, **kwargs):
         super().destroy(request, args, kwargs)
+        return Response({'status_code': StatusCode.OK.value})
+
+    def update(self, request, *args, **kwargs):
+        obj = self.get_object()
+        obj.is_finish = 0 if obj.is_finish == 1 else 1
+        obj.save()
         return Response({'status_code': StatusCode.OK.value})
 
     
