@@ -33,15 +33,24 @@ class TodoListSerializer(ModelSerializer):
         return super().validate(attrs)
 
 class ChangeTodoListSerializer(ModelSerializer):
-    tag = serializers.CharField()
+    tag = serializers.CharField(required=False)
+    type = serializers.CharField(required=False)
 
     class Meta:
         model = TodoList
-        fields = ('tag',)
+        fields = ('tag', 'type')
     
     def validate_tag(self, tag):
         return TagConstant[tag.upper()].value
-
+    
+    def validate_type(self, type):
+        if type == 'close':
+            return 1
+        return 0 
+    
+    def validate(self, attrs):
+        attrs['is_close'] = attrs.pop('type')
+        return attrs
 
 class TodoSerializer(ModelSerializer):
     class Meta:

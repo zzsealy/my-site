@@ -186,7 +186,7 @@ const TodoList = () => {
         }
         if (type === 'del') {  // 删除
             const todoListPath = `${constant.baseUrl}/todo/todo_lists/${params.id}`
-            axios.put(todoListPath, { "type": type }, config)
+            axios.delete(todoListPath, config)
                 .then((res) => {
                     if (res.data.status_code === 200) {
                         setCount(count + 1)  // 重新获取todoList， 不能创建新的todo了

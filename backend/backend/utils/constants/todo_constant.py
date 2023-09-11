@@ -8,3 +8,11 @@ class TagConstant(Enum):
     MONTH = 1
     SHORT = 2
     LONG = 3
+
+class StatusConstant(Enum):
+    """
+    0: 进行中
+    1: 完成
+    """
+    PROCESS = 0
+    FINISH = 1

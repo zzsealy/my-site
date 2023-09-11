@@ -202,7 +202,7 @@ const Home = () => {
                                 <TodoList key={todoList.id} todoList={todoList} />
                             </div>)}
                     </CardGroup>
-                    <Pagination onPageChange={handleClickPage} total={todoListNum} pageSize={12} style={{ marginBottom: 12 }}></Pagination>
+                    <Pagination onPageChange={handleClickPage} total={todoListNum} pageSize={18} style={{ marginBottom: 12 }}></Pagination>
                 </Col>
                 <Col span={1} offset={1}>
                         <Select onChange={handleFilterTag} placeholder='标签' style={{'width': '100px'}} optionList={filterTagDropDown} validateStatus='warning'></Select>        
