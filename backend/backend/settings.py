@@ -12,8 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 from .localsetting import *
-import os
-import sys
+import os, json, sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,12 +42,13 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
     'django_extensions',
+    'django.contrib.staticfiles',  # required for serving swagger ui's css/js files
+    'drf_yasg',
     'rest_framework',
     'rest_framework.authtoken',
     'api',
-    'accounts',
+    'user',
     'snippets',
     'blog',
     'todo',
@@ -70,7 +70,10 @@ MIDDLEWARE = [
 CORS_ORIGIN_WHITELIST = (
  'http://127.0.0.1:8080',
  'http://localhost:8080',
+ 'http://localhost:3000',
 )
+
+CSRF_TRUSTED_ORIGINS = ['https://*.mydomain.com','http://localhost:3000']
 
 CORS_ALLOW_CREDENTIALS = True # 指明在跨域访问中，后端是否支持对cookie的操作。
 CORS_ALLOW_METHODS = (
@@ -116,6 +119,14 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'backend.wsgi.application'
+
+URL_NOT_VERIFICATION_LIST = {
+    '/users/register': ['POST'],
+    '/users/login': ['POST'],
+    '/doces': ['GET'],
+    '/swagger/': ['GET']
+
+}
 
 
 # Database
@@ -182,12 +193,8 @@ REST_FRAMEWORK = {
     )
 }
 
-AUTH_USER_MODEL = 'accounts.User'
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')     #设置静态文件路径为主目录下的media文件夹
-MEDIA_URL = '/media/'
-
-NEEDVERIFICATIONLIST = {
-
+SWAGGER_SETTINGS = {
+    'DEFAULT_MODEL_RENDERING': 'example'
 }
-
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')     #设置静态文件路径为主目录下的media文件夹
+# MEDIA_URL = '/media/'

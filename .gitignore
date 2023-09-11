@@ -1,9 +1,12 @@
 */venv
+/venv
 /.vscode
+/.idea
 *.pyc
 
 
 /front-end/node_modules
+/front-todo/node_modules
 *db.sqlite3
 *localsetting.py
 *tags
