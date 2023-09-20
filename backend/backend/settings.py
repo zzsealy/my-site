@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'blog',
     'todo',
     'corsheaders',
+    'django_filters'
 ]
 
 MIDDLEWARE = [

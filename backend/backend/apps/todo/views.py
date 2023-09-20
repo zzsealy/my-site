@@ -9,12 +9,16 @@ from backend.utils.constants.status_code import StatusCode
 from backend.utils.constants.todo_constant import TagConstant, StatusConstant
 
 from todo.serializers import TodoSerializer, TodoListSerializer, GetTodoListSerializer, ChangeTodoListSerializer
-
+from todo.filters import TodoListFilter
 from todo.models import Todo, TodoList
 # Create your views here.
 
 
-class TodoLists(APIView):
+class TodoLists(viewsets.ModelViewSet):
+    queryset = TodoList.objects.all()
+    serializer_class = TodoListSerializer
+    lookup_field = 'id'
+    filterset_class = TodoListFilter
     
     def get(self, request, id=None):
         if id:  # 获取单独的todo_list
@@ -77,7 +81,8 @@ class TodoLists(APIView):
 class ChildTodoViewset(
                        mixins.DestroyModelMixin,
                        viewsets.GenericViewSet):
-
+    serializer_class = TodoSerializer
+    lookup_field = 'id'
 
     def get_queryset(self):
         list_id = self.request.data.get('list_id')
@@ -92,9 +97,9 @@ class ChildTodoViewset(
         serializer = TodoSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    def delete(self, request, id):
-        Todo.objects.get(id=id).delete()
-        return Response({'status_code': StatusCode.OK.value, 'message': '修改成功'})
+    # def delete(self, request, id):
+    #     Todo.objects.get(id=id).delete()
+    #     return Response({'status_code': StatusCode.OK.value, 'message': '修改成功'})
     
     def create(self, request):
         data = request.data
@@ -104,6 +109,7 @@ class ChildTodoViewset(
             'list_id': list_id,
             'create_datetime': datetime.datetime.now()
         }
+        serializer = self.get_serializer(data=create_info)
         serializer = TodoSerializer(data=create_info)
         if serializer.is_valid():
             if serializer.save():
