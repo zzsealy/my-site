@@ -2,14 +2,14 @@ import os, datetime
 from django.conf import settings
 from django.core.paginator import Paginator
 from rest_framework import viewsets, mixins
-from rest_framework.views import APIView
-from rest_framework.decorators import api_view
+# from rest_framework.views import APIView
+# from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from backend.utils.constants.status_code import StatusCode
 from backend.utils.constants.todo_constant import TagConstant, StatusConstant
 
-from todo.serializers import TodoSerializer, TodoListSerializer, GetTodoListSerializer, ChangeTodoListSerializer
-from todo.filters import TodoListFilter
+from todo.serializers import TodoSerializer, TodoListSerializer, GetTodoListSerializer
+from todo.filters import TodoListFilter, TodoFilter
 from todo.models import Todo, TodoList
 # Create your views here.
 
@@ -19,29 +19,20 @@ class TodoLists(viewsets.ModelViewSet):
     serializer_class = TodoListSerializer
     lookup_field = 'id'
     filterset_class = TodoListFilter
+
+    def get_queryset(self, user_id=None):
+        return self.queryset.filter(user_id=user_id)
     
-    def get(self, request, id=None):
-        if id:  # 获取单独的todo_list
-            todo_list = TodoList.objects.get(id=id)
-            serializers = GetTodoListSerializer(todo_list)
-            return Response({'status_code':StatusCode.OK.value, 'todo_list':serializers.data})
-        else:  # 获取todo_list列表
-            tag = request.query_params.get('tag')
-            status = request.query_params.get('status')
-            todo_lists = TodoList.objects.filter(user_id=request.user_id).order_by('-create_datetime')
-            total_lists_num = len(todo_lists)
-            if tag:
-                tag = TagConstant[tag.upper()].value
-                todo_lists = todo_lists.filter(user_id=request.user_id, tag=tag).order_by('-create_datetime')
-            if status:
-                status = StatusConstant[status.upper()].value
-                todo_lists = todo_lists.filter(user_id=request.user_id, is_close=status).order_by('-create_datetime')
-            total_lists_num = len(todo_lists)
-            page = request.query_params.get('page')
-            if page:
-                todo_lists = self.chunk_todo_list(todo_lists=todo_lists, page=page)
-            serializers = GetTodoListSerializer(todo_lists, many=True)
-            return Response({'status_code':StatusCode.OK.value, 'todo_list':serializers.data, 'todo_list_num': total_lists_num})
+    def list(self, request):
+        queryset = self.filter_queryset(self.get_queryset(user_id=request.user_id))
+        serializer = self.get_serializer(queryset, many=True)
+        todo_lists = serializer.data
+        total_lists_num = len(todo_lists)
+        page = request.query_params.get('page', 1)
+        if page:
+            todo_lists = self.chunk_todo_list(todo_lists=todo_lists, page=page)
+        serializers = GetTodoListSerializer(todo_lists, many=True)
+        return Response({'status_code':StatusCode.OK.value, 'todo_list':serializers.data, 'todo_list_num': total_lists_num})
 
     def chunk_todo_list(self, todo_lists:[list], page: int):
         paginator = Paginator(todo_lists, 18)
@@ -50,28 +41,24 @@ class TodoLists(viewsets.ModelViewSet):
         except:
             return todo_lists
 
-    def post(self, request, id=None):
-        user_id = request.user_id
-        data = request.data
-        data['user_id'] = user_id
-        data['expect_finish_date'] = data.pop('dateString')
-        serializer = TodoListSerializer(data=request.data)
+    def create(self, request):
+        serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response()
+            return Response({'status_code':StatusCode.OK.value})
         return Response({'status_code': serializer.error_code, 'message': serializer.error_message})
     
-    def put(self, request, id=None):
-        if id:  # 修改todo_list的标签
-            post_data = request.data
-            todo_list = TodoList.objects.get(id=id)
-            serializer = ChangeTodoListSerializer(instance=todo_list, data=post_data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response({'status_code': StatusCode.OK.value, 'message': '修改成功'})
-            return Response({'status_code': serializer.error_code, 'message': serializer.error_message})
+    def update(self, request, id=None):
+        queryset = self.get_queryset(user_id=request.user_id)
+        instance = queryset.get(id=id)
+        post_data = request.data
+        serializer = self.get_serializer(instance=instance, data=post_data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'status_code': StatusCode.OK.value, 'message': '修改成功'})
+        return Response({'status_code': serializer.error_code, 'message': serializer.error_message})
     
-    def delete(self, request, id):
+    def destroy(self, request, id):
         TodoList.objects.get(id=id).delete()
         return Response({'status_code': StatusCode.OK.value, 'message': '删除成功'})
 
@@ -82,19 +69,17 @@ class ChildTodoViewset(
                        mixins.DestroyModelMixin,
                        viewsets.GenericViewSet):
     serializer_class = TodoSerializer
+    filterset_class = TodoFilter
     lookup_field = 'id'
+    http_method_names = ['get', 'post', 'put', 'delete']
 
     def get_queryset(self):
-        list_id = self.request.data.get('list_id')
-        if list_id is not None:
-            queryset = Todo.objects.filter(list_id=list_id)
-        else:
-            queryset = Todo.objects.all()
+        queryset = Todo.objects.all()
         return queryset
 
-    def list(self, request, list_id):
-        queryset = Todo.objects.filter(list_id=list_id)
-        serializer = TodoSerializer(queryset, many=True)
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
     # def delete(self, request, id):
@@ -104,13 +89,13 @@ class ChildTodoViewset(
     def create(self, request):
         data = request.data
         list_id = data.get('list_id')
-        create_info = {
+        create_info = { 
             'body': data.get('todoContent'),
             'list_id': list_id,
             'create_datetime': datetime.datetime.now()
         }
         serializer = self.get_serializer(data=create_info)
-        serializer = TodoSerializer(data=create_info)
+        # serializer = TodoSerializer(data=create_info)
         if serializer.is_valid():
             if serializer.save():
                 todo_list = TodoList.objects.get(id=list_id)

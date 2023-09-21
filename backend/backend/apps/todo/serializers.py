@@ -15,11 +15,17 @@ class TodoSerializer(Serializer):
 
 
 class TodoListSerializer(ModelSerializer):
-    tag = serializers.CharField()
-    expect_finish_date = serializers.CharField()
+    user_id = serializers.IntegerField(required=False)
+    tag = serializers.CharField(required=False)
+    expect_finish_date = serializers.DateField(format='%Y-%m-%d', required=False)
+    is_close = serializers.CharField(required=False)
     class Meta:
         model = TodoList
-        fields = ('id', 'user_id', 'title', 'expect_finish_date', 'tag')
+        fields = ('id', 'user_id', 'title', 'expect_finish_date', 'tag', 'is_close')
+    
+    def validate_user_id(self, obj):
+        request = self.context.get('request')
+        return request.user_id
     
     def validate_tag(self, tag):
         value = TagConstant[tag.upper()].value
@@ -27,30 +33,35 @@ class TodoListSerializer(ModelSerializer):
         
     
     def validate_expect_finish_date(self, value):
-        return datetime.strptime(value, "%Y-%m-%d")
+        return value
+
+    def validate_is_close(self, value):
+        return value
     
     def validate(self, attrs):
+        request = self.context.get('request')
+        attrs['user_id'] = request.user_id
         return super().validate(attrs)
 
-class ChangeTodoListSerializer(ModelSerializer):
-    tag = serializers.CharField(required=False)
-    type = serializers.CharField(required=False)
+# class ChangeTodoListSerializer(ModelSerializer):
+#     tag = serializers.CharField(required=False)
+#     type = serializers.CharField(required=False)
 
-    class Meta:
-        model = TodoList
-        fields = ('tag', 'type')
+#     class Meta:
+#         model = TodoList
+#         fields = ('tag', 'type')
     
-    def validate_tag(self, tag):
-        return TagConstant[tag.upper()].value
+#     def validate_tag(self, tag):
+#         return TagConstant[tag.upper()].value
     
-    def validate_type(self, type):
-        if type == 'close':
-            return 1
-        return 0 
+#     def validate_type(self, type):
+#         if type == 'close':
+#             return 1
+#         return 0 
     
-    def validate(self, attrs):
-        attrs['is_close'] = attrs.pop('type')
-        return attrs
+#     def validate(self, attrs):
+#         attrs['is_close'] = attrs.pop('type')
+#         return attrs
 
 class TodoSerializer(ModelSerializer):
     class Meta:
@@ -63,11 +74,10 @@ class GetTodoListSerializer(Serializer):
     tag = serializers.CharField()
     child_todo = serializers.SerializerMethodField()
     title = serializers.CharField()
-    expect_finish_date = serializers.DateTimeField()
 
     
     def get_child_todo(self, obj):
-        list_id = obj.id
+        list_id = obj.get('id')
         sub_todo = Todo.objects.filter(list_id=list_id)
         sub_todo_list = [model_to_dict(todo) for todo in sub_todo]
         for todo in sub_todo_list:
@@ -77,8 +87,8 @@ class GetTodoListSerializer(Serializer):
     
     def to_representation(self, instance):
         rep = super().to_representation(instance=instance)
-        rep['date_string'] = instance.expect_finish_date.strftime("%Y-%m-%d")
-        rep['tag'] = TagConstant(instance.tag).name.lower()
-        rep['can_change'] = True if instance.is_close == 0 else False
+        rep['date_string'] = instance.get('expect_finish_date')
+        rep['tag'] = TagConstant(int(instance.get('tag'))).name.lower()
+        rep['can_change'] = True if instance.get('is_close') == 0 else False
         return rep
     

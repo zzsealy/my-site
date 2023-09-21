@@ -159,7 +159,7 @@ const Home = () => {
         const config = requestConfig()
         const postData = {
             'title': todoListTitle,
-            'dateString': dateString,
+            'expect_finish_date': dateString,
             'tag': tag,
         }
         axios.post(todoListPath, postData, config)
